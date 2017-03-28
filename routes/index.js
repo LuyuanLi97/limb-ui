@@ -2,16 +2,23 @@ var api = require('./api');
 
 module.exports = function(app) {
     // render
-    app.get('/', function(req, res) {
+    app.get('/', function(req, res, next) {
         res.render('index');
     });
-    app.get('/partials/:name', function(req, res) {
+
+    // :后面作为一个可变的参数传进去，由req进行访问
+    app.get('/partials/:name', function(req, res, next) {
         var name = req.params.name;
+        console.log("partials:"+name+"has been request!");
         res.render('partials/' + name);
+        console.log("par");
     });
+
     // 优化路由
     app.use(function(req, res, next) {
+        console.log("req.path:");
         console.log(req.path);
+        // 路由中含有api
         if (req.path.indexOf('/api') >= 0) {
             next();
         } else if (req.path.length >= 2) {
@@ -33,9 +40,9 @@ module.exports = function(app) {
     app.get('/api/myprofile', api.myprofile);
     app.get('/api/settings', api.settings);
     app.get('/api/checkSignin', api.checkSignin);
-    app.get('test.json', function(req, res) {
-        console.log("get('./test.json')");
-    })
+    // app.get('test.json', function(req, res) {
+    //     console.log("get('./test.json')");
+    // })
 
     // otherwise
     // app.get('*', function(req, res) {
