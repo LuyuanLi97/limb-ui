@@ -41,7 +41,8 @@ exports.signup = function(req, res) {
         password: password,
         name: "",
         description: "",
-        avatar: ""
+        avatar: "",
+        type: "user"
     };
 
     // 用户信息写入数据库
@@ -95,6 +96,14 @@ exports.signout = function(req, res, next) {
     res.redirect('/');
 };
 
+exports.browse = function(req, res, next) {
+    UserModel.getUsers()
+        .then(users => {
+            console.log(users);
+            res.json(users);
+        });
+};
+
 exports.myprofile = function(req, res, next) {
     if (!!req.session.user) {
         UserModel.getUserByEmail(req.session.user.email)
@@ -106,6 +115,17 @@ exports.myprofile = function(req, res, next) {
                 });
             });
     }
+};
+
+exports.browse.user = function(req, res, next) {
+    UserModel.getUserByName(req.params.userName)
+        .then(user => {
+            res.json({
+                'name': user.name,
+                'email': user.email,
+                'description': user.description,
+            });
+        });
 };
 
 exports.settings = function(req, res, next) {

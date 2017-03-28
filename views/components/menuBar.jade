@@ -2,11 +2,17 @@
     nav.navbar.navbar-inverse(role='navigation')
         // Brand and toggle get grouped for better mobile display
         .navbar-header
-            button.navbar-toggle(type='button', data-toggle='collapse', data-target='#bs-example-navbar-collapse-1')
-                span.sr-only Toggle navigation
+            .menuToggle.visible-xs(type='button', ng-click='collapseList = !collapseList', data-toggle='collapse', data-target='#bs-example-navbar-collapse-1')
+                span.fui-list(ng-hide='collapseList')
+                span.fui-cross(ng-show='collapseList')
             a.navbar-brand(href='/') 
-                img(src='img/leaf.png', height='26px', width='26px')
+                img(src='img/leaf.png')
                 | &nbsp; Leaf &nbsp;
+            .phoneSearchBar.visible-xs
+                form
+                    input.form-control.phoneSearchBarFormCtrl(type='search', placeholder='Search Leaf', ng-model='search', ng-show='clickSearch')
+                    a(href='/browse', ng-click='clickSearch = !clickSearch')
+                        span.fui-search
         // Collect the nav links, forms, and other content for toggling
         #bs-example-navbar-collapse-1.collapse.navbar-collapse
             ul.nav.navbar-nav.navbar-left
@@ -16,21 +22,21 @@
                         b.caret
                     ul.dropdown-menu
                         li
-                            a(href='/browse/all') all
+                            a(href='/browse', ng-click='ngfilter-menu = "all"') all
                         li
-                            a(href='/browse/leaf') leaf
+                            a(href='/browse', ng-click='ngfilter-menu = "leaf"') leaf
                         li
-                            a(href='/browse/document') document
+                            a(href='/browse', ng-click='ngfilter-menu = "document"') document
                         li
-                            a(href='/browse/user') user
+                            a(href='/browse', ng-click='ngfilter-menu = "user"') user
                         li
-                            a(href='/browse/local') local
-            form.navbar-form.navbar-left(role='search')
+                            a(href='/browse', ng-click='ngfilter-menu = "local"') local
+            form.navbar-form.navbar-left(role='search').hidden-xs
                 .form-group.has-feedback
                     .input-group
                         input.form-control(type='search', placeholder='Search Leaf', ng-model='search')
                         span.input-group-btn
-                            a.btn(href='/browse/all')
+                            a.btn(href='/browse')
                                 span.fui-search
             ul.nav.navbar-nav.navbar-right
                 li.dropdown
@@ -48,7 +54,8 @@
                             a(href='/leaf') delete this leaf
                         li.divider
                         li
-                            a(href='/leaf') recently opened
+                            a(href='/leaf') recently opened &nbsp;
+                                span.label.label-info 5
                 li.dropdown(ng-controller='checkSigninCtrl', ng-model='signedin')
                     a.dropdown-toggle(href='', data-toggle='dropdown')
                         span.fui-user
@@ -57,13 +64,11 @@
                         li
                             a(href='/myprofile') my profile
                         li
-                            a(href='/myleaves') my leaves
+                            a(href='/mymessages') my messages &nbsp;
+                                span.label.label-info 3
                         li
-                            a(href='/mystars') my stars
-                        li
-                            a(href='/mymessages') my messages
-                        li
-                            a(href='/requests') requests
+                            a(href='/requests') requests &nbsp;
+                                span.label.label-info 1
                         li.divider
                         li
                             a(href='/settings') settings

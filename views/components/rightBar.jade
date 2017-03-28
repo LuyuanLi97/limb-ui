@@ -1,75 +1,113 @@
-.sidebars
-    .rightbar.bg-default(style='right: 0px;').palette-silver
-        form.form-horizontal(role='form')
-            .form-group
-                h1#cnode_name.text-center Current
-            .form-group
-                .panel.panel-primary
-                    .panel-heading
-                        h3.panel-title.text-center 描述
-                    .panel-body
-                        dl
-                            dt title
-                            dd content
-                        script(type='text/javascript').
-                            $(function() {
-                            $('#tags_1').tagsInput({width:'auto'});
-                            });
-                        .tagsinput-primary
-                            input.tagsinput(name='tagsinput', data-role='tagsinput', value='公开, 未完成, school')
-            .form-group
-                .panel.panel-primary
-                    .panel-heading
-                        h3.panel-title.text-center 资料
-                    .panel-body
-                        #accordion.panel-group(role='tablist', aria-multiselectable='true')
-                            .panel.panel-default
-                                #headingOne.panel-heading(role='tab')
-                                    h4.panel-title
-                                        a(data-toggle='collapse', data-parent='#accordion', href='#collapseOne', aria-expanded='true', aria-controls='collapseOne') 日期: 2016年11月25日
-                                #collapseOne.panel-collapse.collapse.in(role='tabpanel', aria-labelledby='headingOne')
-                                    .panel-body file #1
-                            .panel.panel-default
-                                #headingTwo.panel-heading(role='tab')
-                                    h4.panel-title
-                                        a.collapsed(data-toggle='collapse', data-parent='#accordion', href='#collapseTwo', aria-expanded='false', aria-controls='collapseTwo') 日期: 2016年11月26日
-                                #collapseTwo.panel-collapse.collapse(role='tabpanel', aria-labelledby='headingTwo')
-                                    .panel-body file #2
-                            .panel.panel-default
-                                #headingThree.panel-heading(role='tab')
-                                    h4.panel-title
-                                        a.collapsed(data-toggle='collapse', data-parent='#accordion', href='#collapseThree', aria-expanded='false', aria-controls='collapseThree') 日期: 2016年12月01日
-                                #collapseThree.panel-collapse.collapse(role='tabpanel', aria-labelledby='headingThree')
-                                    .panel-body file #3
-            .form-group
-                .panel.panel-primary
-                    .panel-heading
-                        h3.panel-title.text-center 计划
-                    .panel-body
-                        .table-responsive
-                            table.table.table-hover
-                                thead
-                                    tr
-                                        th 任务
-                                        th 截止时间
-                                        th 完成情况
-                                tbody
-                                    tr
-                                        td
-                                            button.btn.btn-success(type='button', data-toggle='modal', data-target='#myModal') 第一次课后作业
-                                        td 2015年11月11日
-                                        td 已完成
-                                    tr
-                                        td
-                                            button.btn(type='button', data-toggle='modal', data-target='#myModal') 实验一
-                                        td 2016年12月30日
-                                        td 未完成
-            .form-group
-                .panel.panel-primary
-                    .panel-heading
-                        h3.panel-title.text-center 记录
-                    .panel-body
-                        textarea.form-control(rows='10', cols='50', autofocus='', placeholder='在这里写下笔记')
+#leaf-right-bar
+    #authorInfoContainer
+        a#authorInfoBtn.btn.btn-inverse(type='button', ng-click='spanAuthor = !spanAuthor', data-toggle='collapse', data-target='#authorInfo', aria-expanded='false', aria-controls='authorInfo') 
+            span.fui-plus(ng-hide="spanAuthor") &nbsp;SHOW AUTHOR
+            span.fui-cross(ng-show="spanAuthor") &nbsp;HIDE AUTHOR
+        //- a#goToLeafBtn.btn.btn-inverse(href="#menu").visible-xs       
+        //-     span.icon-double-angle-up.visible-xs 
+        center#authorInfo.collapse
+            br
+            img#myicon(src='img/avatar.png', alt='icon')
+            h5 
+                a(href='/browse/user/chroslen') Larry
+            p sophomore, at SYSU.
+            a 4 leaves - 
+            span
+                a 3 tags
+            br
+            a 
+                span.fui-github GitHub &nbsp;
+            a 
+                span.fui-mail larry@gmail.com
+            br
+            br
+    ol.breadcrumb
+        li
+            a(href='#') 作业汇总
+        li
+            a(href='#') web2.0
+        li.active 课程作业
+    .tagsinput-primary
+        input.tagsinput(name='tagsinput', data-role='tagsinput', value='未完成, school')
+
+    form.form-horizontal(role='form')
+
+        .form-group.rightBar-card
+            .panel.panel-primary
+                .panel-heading
+                    h3.panel-title 描述
+                    .topRightBtn.topRightBtn-2(type='submit', ng-click='editDescription = !editDescription' data-toggle='collapse', data-target='#updateDescription', aria-expanded='false', aria-controls='updateDescription')
+                        span.fui-check(ng-show="editDescription")
+                    .topRightBtn.topRightBtn-1(type='button', ng-click='editDescription = !editDescription' data-toggle='collapse', data-target='#updateDescription', aria-expanded='false', aria-controls='updateDescription')
+                        span.glyphicon.glyphicon-edit(ng-hide="editDescription")
+                        span.fui-cross(ng-show="editDescription")
+                .panel-body
+                    center#updateDescription.collapse
+                        textarea.form-control(rows='3', autofocus='', ng-model="description", placeholder='description') {{description}}
+                .panel-body(ng-hide="editDescription")
+                    p {{description}}
+
+        .form-group.rightBar-card
+            .panel.panel-primary
+                .panel-heading
+                    h3.panel-title 笔记
+                    .topRightBtn.topRightBtn-2(type='submit', ng-click='editNotes = !editNotes' data-toggle='collapse', data-target='#updateNotes', aria-expanded='false', aria-controls='updateNotes')
+                        span.fui-check(ng-show="editNotes")
+                    .topRightBtn.topRightBtn-1(type='button', ng-click='editNotes = !editNotes' data-toggle='collapse', data-target='#updateNotes', aria-expanded='false', aria-controls='updateNotes')
+                        span.glyphicon.glyphicon-edit(ng-hide="editNotes")
+                        span.fui-cross(ng-show="editNotes")
+                .panel-body
+                    center#updateNotes.collapse
+                        textarea.form-control(rows='7', autofocus='', ng-model="notes", placeholder='在这里写下笔记') 
+                    p(ng-hide="editNotes") {{notes}} 
+        .form-group.rightBar-card
+            .panel.panel-primary
+                .panel-heading
+                    h3.panel-title 资料
+                    .topRightBtn.topRightBtn-1(type='button', ng-click='spanUploadFiles = !spanUploadFiles' data-toggle='collapse', data-target='#uploadFiles', aria-expanded='false', aria-controls='uploadFiles')
+                        span.fui-plus(ng-hide="spanUploadFiles")
+                        span.fui-cross(ng-show="spanUploadFiles")
+                .panel-body
+                    .table-responsive
+                        table.table
+                            thead
+                                tr
+                                    th #
+                                    th Name
+                                    th Date Modified
+                                    th Size
+                            tbody
+                                tr
+                                    th(scope='row') 1
+                                    td 
+                                        a(type='button', data-toggle='collapse', data-target='#file1', aria-expanded='false', aria-controls='file1')
+                                            | Mark.doc
+                                        #file1.collapse
+                                            .btn 预览
+                                            .btn 下载
+                                    td 13,Mar, 2017
+                                    td 2Mb
+                                tr
+                                    th(scope='row') 2
+                                    td 
+                                        a(type='button', data-toggle='collapse', data-target='#file2', aria-expanded='false', aria-controls='file2')
+                                            | Jacob.css
+                                        #file2.collapse
+                                            .btn 预览
+                                            .btn 下载
+                                    td 13,Mar, 2017
+                                    td 2kb
+                                tr
+                                    th(scope='row') 3
+                                    td 
+                                        a(type='button', data-toggle='collapse', data-target='#file3', aria-expanded='false', aria-controls='file3')
+                                            | Larry.rmvb
+                                        #file3.collapse
+                                            .btn 预览
+                                            .btn 下载
+                                    td 15,Mar, 2017
+                                    td 234Mb
+                    center#uploadFiles.collapse
                         .row(style='padding:5px 16px 5px 16px;')
                             input#input-700.file-loading(name='kartik-input-700[]', type='file', multiple='')
                             script.
@@ -78,35 +116,55 @@
                                 uploadAsync: true,
                                 maxFileCount: 5
                                 });
-            .form-group
-                .panel.panel-primary(style='overflow: auto; height: 360px;')
-                    .panel-heading
-                        h3.panel-title.text-center 留言
-                    .panel-body
-                        #qdiscuss
-                            textarea#mesg.message.form-control(contenteditable='true')
-                            .But
-                                span.submit 发表
-                        #msgpad.msgCon
-            br
-            br
-            br
 
-// 模态框（Modal）
-#myModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
-    .modal-dialog
-        .modal-content
-            .modal-header
-                button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
-                h4#myModalLabel.modal-title 尝试写一个微信小程序
-            .modal-body 小程序开发上手极其简单，我们一起开发一个集新闻阅读与电影影讯为一体的小程序，做完这个项目，你就能掌握小程序全部的常用组件、API和开发技巧，开发出你想要的小程序
-            .modal-footer
-                button.btn.btn-default(type='button', data-dismiss='modal') 未完成
-                button.btn.btn-primary(type='button') 已完成
-        // /.modal-content
-        // /.modal-dialog
-        // /.modal
-        // jQuery (necessary for Bootstrap's JavaScript plugins)
-        script(src='https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js')
-        // Include all compiled plugins (below), or include individual files as needed
-        script(src='js/bootstrap.min.js')
+        .form-group.rightBar-card
+            .panel.panel-primary
+                .panel-heading
+                    h3.panel-title 计划
+                    .topRightBtn.topRightBtn-1
+                        span.fui-plus
+                .panel-body
+                    .table-responsive
+                        table.table
+                            thead
+                                tr
+                                    th 状态
+                                    th 任务
+                                    th 截止时间
+                            tbody
+                                tr
+                                    td 
+                                        input(type='checkbox', value='', data-toggle='checkbox')
+                                    td  
+                                        a(type='button', data-toggle='collapse', data-target='#planOne', aria-expanded='false', aria-controls='planOne') 
+                                            span 第一次课后作业
+                                        #planOne.collapse
+                                            p 第一次课后作业
+                                    td 2015年11月11日
+                                tr
+                                    td 
+                                        input(type='checkbox', value='', data-toggle='checkbox')
+                                    td
+                                        a(type='button', data-toggle='collapse', data-target='#planTwo', aria-expanded='false', aria-controls='planTwo') 
+                                            span 实验一
+                                        #planTwo.collapse
+                                            p 实验一
+                                    td 2016年12月30日
+
+
+        .form-group.rightBar-card
+            .panel.panel-primary(style='overflow: auto; height: 360px;')
+                .panel-heading
+                    h3.panel-title 留言
+                .panel-body
+                    #qdiscuss
+                        textarea#mesg.message.form-control(contenteditable='true')
+                        .But
+                            span.submit 发表
+                    #msgpad.msgCon
+        br
+        center            
+            span.buttomEditButton.fui-plus
+            span.buttomEditButton.fui-gear
+        br
+        br

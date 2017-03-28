@@ -5,10 +5,11 @@ head
     meta(charset='utf-8')
     title(ng-bind="title + ' | Leaf'") Leaf
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    link(rel='shortcut icon', type="image/x-icon", href='img/favicon.ico')
     // Loading Bootstrap
     link(href='Flat-UI-master/dist/css/vendor/bootstrap/css/bootstrap.min.css', rel='stylesheet')
+    link(rel='stylesheet', type='text/css', href='Font-Awesome-3.2.1/css/font-awesome.min.css')
     // Loading Flat UI
-    link(rel='shortcut icon', type="image/x-icon", href='img/favicon.ico')
     link(href='Flat-UI-master/dist/css/flat-ui.css', rel='stylesheet')
     link(href='css/menuBar.css', rel='stylesheet')    
     link(href='css/base.css', rel='stylesheet')
@@ -27,11 +28,11 @@ head
     script(src='Flat-UI-master/dist/js/vendor/video.js')
     script(src='Flat-UI-master/dist/js/flat-ui.min.js')
     script(type='text/javascript', src='angular-toastr/angular-toastr.tpls.js')    
+    script(type='text/javascript', src='js/menuBar.js')
 
 body
     include components/menuBar
 
-    //- include partials/leaf
-    div.view-frame(ng-view)
+    #ngview.view-frame(ng-view)
 
-    include components/footer
+    //- include components/footer

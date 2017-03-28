@@ -4,9 +4,8 @@ html, body {
     padding: 0;
 }
 
-#footer {
-    height: 100px;
+#ngview {
     width: 100%;
-    bottom: -100px;
-    position: absolute;
+    height: calc(100% - 53px);
+    overflow: scroll;
 }

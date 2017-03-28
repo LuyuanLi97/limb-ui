@@ -1,0 +1,57 @@
+#browse-main {
+    position: relative;
+    height: 100% !important;
+    min-height: 100% !important;
+}
+
+.browse-results {
+    position: relative;
+    min-height: 100% !important;
+}
+
+#filtersAndSearch {
+    height: 120px;
+    position: relative;
+    background-color: #D6D0CE;
+}
+
+#filtersBtn {
+    position: absolute;
+    left: 30px;
+    top: 100px;
+    z-index: 100;
+}
+
+#browseTitle {
+    position: absolute;
+    left: 20px;
+    top: 15px;
+}
+
+#browseIntroduction {
+    position: absolute;
+    font-size: 16px;
+    left: 20px;
+    top: 60px;
+    opacity: 0.5;
+}
+
+#ngview {
+    background-color: #ecf0f1;
+}
+
+.browse-card {
+    background-color: white;
+    transition-duration: 1s;
+}
+
+.browse-card:hover {
+    transform: translate(0px, -3px);
+    box-shadow: 0px 2px 10px black;
+    transition-duration: 0s;
+}
+
+li a span {
+    position: absolute;
+    right: 7px;
+}

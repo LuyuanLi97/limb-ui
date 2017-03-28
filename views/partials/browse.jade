@@ -1,62 +1,120 @@
-.col-xs-6.col-sm-3
-    br
-    ul#nav-tabs-wrapper.nav.nav-tabs.nav-pills.nav-stacked.well
-        li.active
-            a(ng-click='_all()') all
-        li
-            a(ng-click='_leaf()') leaf
-        li
-            a(ng-click='_document()') document
-        li
-            a(ng-click='_user()') user
-        li
-            a(ng-click='_local()') local
+link(rel='stylesheet', href='css/browse.css')
 
-    script(type='text/javascript').
-        $('#nav-tabs-wrapper > li a').click(function(e) {
-            var $this = $(this);
-            $this.parent().siblings().removeClass('active').end().addClass('active');
-            e.preventDefault();
-        });
+#filtersAndSearch.container-fluit
+    p#browseTitle.lead Lots of Leaves, one Tree
+    p#browseIntroduction {{users.length}} users, {{leaves.length}} leaves
+    a#filtersBtn.btn.btn-inverse(type='button', ng-click="withFilters = !withFilters", data-toggle='collapse', data-target='#filtersList', aria-expanded='false', aria-controls='filtersList')
+        span.fui-plus(ng-show="withFilters") &nbsp;SHOW FILTERS
+        span.fui-cross(ng-hide="withFilters") &nbsp;HIDE FILTERS
 
-.col-xs-12.col-sm-9.palette-silver
-    br
-    .col-xs-6.col-sm-6.col-md-4(ng-repeat='user in users | filter : type | filter : search')
-        .tile
-            a(href='/myprofile')
-                h3.tile-title {{user.name}}
+#browse-main.palette-clouds
+    .row.browse-results
+        .col-xs-12.col-sm-3
+            #filtersList.collapse.in
+                br
+                ul#nav-tabs-wrapper.nav.nav-tabs.nav-pills.nav-stacked.well
+
+                    li(ng-hide="ngfilter == 'all' || ngfilter-menu == 'all'")
+                        a(ng-click='ngfilter = "all"', ng-init='ngfilter="all"') all
+                            span.badge {{filteredUsers.length + filteredLeaves.length + filteredDocs.length}}
+                    li.active(ng-show="ngfilter == 'all' || ngfilter-menu == 'all'")
+                        a(ng-click='ngfilter = "all"', ng-init='ngfilter="all"') all
+                            span.badge {{filteredUsers.length + filteredLeaves.length + filteredDocs.length}}
+
+                    li(ng-hide="ngfilter == 'leaf' || ngfilter-menu == 'leaf'")
+                        a(ng-click='ngfilter = "leaf"') leaf
+                            span.badge {{filteredLeaves.length}}
+                    li.active(ng-show="ngfilter == 'leaf' || ngfilter-menu == 'leaf'")
+                        a(ng-click='ngfilter = "leaf"') leaf
+                            span.badge {{filteredLeaves.length}}
+
+                    li(ng-hide="ngfilter == 'document' || ngfilter-menu == 'document'")
+                        a(ng-click='ngfilter = "document"') document
+                            span.badge {{filteredDocs.length}}            
+                    li.active(ng-show="ngfilter == 'document' || ngfilter-menu == 'document'")
+                        a(ng-click='ngfilter = "document"') document
+                            span.badge {{filteredDocs.length}}
+
+                    li(ng-hide="ngfilter == 'user' || ngfilter-menu == 'user'")
+                        a(ng-click='ngfilter = "user"') user 
+                            span.badge {{filteredUsers.length}}
+                    li.active(ng-show="ngfilter == 'user' || ngfilter-menu == 'user'")
+                        a(ng-click='ngfilter = "user"') user 
+                            span.badge {{filteredUsers.length}}
+
+                    li(ng-hide="ngfilter == 'local' || ngfilter-menu == 'local'")
+                        a(ng-click='ngfilter = "local"') local
+                    li.active(ng-show="ngfilter == 'local' || ngfilter-menu == 'local'")
+                        a(ng-click='ngfilter = "local"') local
+
+        // with filter list
+        .col-xs-12.col-sm-9(ng-hide="withFilters")
             br
-            p {{user.age}} years old.
-            span.label.label-info user
+            .col-xs-6.col-sm-6.col-md-4(ng-repeat='leaf in leaves | filter : search as filteredLeaves', ng-show="ngfilter == 'all' || ngfilter == 'leaf'")
+                a(href='/leaf')
+                    .tile.browse-card
+                        h3.tile-title {{leaf.topic}}
+                        br
+                        span.label.label-success leaf
 
-    .col-xs-6.col-sm-6.col-md-4(ng-repeat='leaf in leaves | filter : type | filter : search')
-        .tile
-            a(href='/leaf')
-                h3.tile-title {{leaf.topic}}
+            .col-xs-6.col-sm-6.col-md-4(ng-repeat='document in documents | filter : search as filteredDocs', ng-show="ngfilter == 'all' || ngfilter == 'document'")
+                a(href='/leaf')
+                    .tile.browse-card
+                        h3.tile-title {{document.documentName}}
+                        br
+                        span.label.label-warning document
+
+            .col-xs-6.col-sm-6.col-md-4(ng-repeat='user in users | filter : search as filteredUsers', ng-show="ngfilter == 'all' || ngfilter == 'user'")
+                a(href='/browse/user/{{user.name}}')
+                    .tile.browse-card
+                        h3.tile-title {{user.name}}
+                        br
+                        p {{user.description}}
+                        span.label.label-info user
+
+        // without filter list
+        .col-xs-12.col-sm-12(ng-show="withFilters")
             br
-            span.label.label-success leaf
+            .col-xs-6.col-sm-6.col-md-4(ng-repeat='leaf in leaves | filter : search as filteredLeaves', ng-if="ngfilter == 'all' || ngfilter == 'leaf'")
+                .tile.browse-card
+                    a(href='/leaf')
+                        h3.tile-title {{leaf.topic}}
+                    br
+                    span.label.label-success leaf
 
-    .col-xs-6.col-sm-6.col-md-4(ng-repeat='document in documents | filter : type | filter : search')
-        .tile
-            a(href='/leaf')
-                h3.tile-title {{document.documentName}}
-            br
-            span.label.label-warning document
+            .col-xs-6.col-sm-6.col-md-4(ng-repeat='document in documents | filter : search as filteredDocs', ng-if="ngfilter == 'all' || ngfilter == 'document'")
+                .tile.browse-card
+                    a(href='/leaf')
+                        h3.tile-title {{document.documentName}}
+                    br
+                    span.label.label-warning document
 
-    // 页面导航栏
-    .col-xs-12.col-sm-9.col-md-9
-        ul.pagination
-            li.previous
-                a.fui-arrow-left(href='#fakelink')
-            li.active
-                a(href='#fakelink') 1
-            li
-                a(href='#fakelink') 2
-            li
-                a(href='#fakelink') 3
-            li
-                a(href='#fakelink') 4
-            li
-                a(href='#fakelink') 5
-            li.next
-                a.fui-arrow-right(href='#fakelink')
+            .col-xs-6.col-sm-6.col-md-4(ng-repeat='user in users | filter : search as filteredUsers', ng-if="ngfilter == 'all' || ngfilter == 'user'")
+                .tile.browse-card
+                    a(href='/browse/user/{{user.name}}')
+                        h3.tile-title {{user.name}}
+                    br
+                    p {{user.description}}
+                    span.label.label-info user
+
+        // 页面导航栏
+        .col-xs-12
+            center
+                ul.pagination
+                    li.previous
+                        a.fui-arrow-left(href='#fakelink')
+                    li.active
+                        a(href='#fakelink') 1
+                    li
+                        a(href='#fakelink') 2
+                    li
+                        a(href='#fakelink') 3
+                    li
+                        a(href='#fakelink') 4
+                    li
+                        a(href='#fakelink') 5
+                    li.next
+                        a.fui-arrow-right(href='#fakelink')
+                br
+                br
+    include ../components/footer

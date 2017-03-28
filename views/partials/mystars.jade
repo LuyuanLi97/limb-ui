@@ -1,1 +1,69 @@
 h1 my stars
+script(language='javascript').
+    var oL,oT,oW,oH;
+    var oMX,oMY;
+    var obj,element;
+    var minW=100;
+    var maxW=5000;
+    var resizable=false;
+    function doMove(e){
+    if(!e)e=window.event;
+    obj=e.srcElement || e.target;
+    var mX=e.pageX || e.clientX;
+    if(resizable){
+    w=oW;
+    w=oW + mX - oMX;
+    //tt.value=event.clientX;
+    if(w<minW){w=minW;}
+    if(w>maxW){w=maxW;}
+    ResizeTo(w);
+    return(true);
+    }
+    var cc="";
+    if(obj.title && obj.title=="oWin"){
+    l=0;
+    w=parseInt(obj.offsetWidth);
+    if(Math.abs(l+w-mX)<5)cc+="e";
+    if(cc!=""){
+    obj.style.cursor=cc+"-resize";
+    return(true);
+    }
+    }
+    if(obj.style.cursor!="default"){
+    obj.style.cursor="default";
+    }
+    }
+    function doDown(e){
+    if(obj.style.cursor!="default"){//开始改变大小
+    //记录鼠标位置和层位置和大小;
+    if(!e)e=window.event;
+    obj=e.srcElement || e.target;
+    element=obj;
+    oMX=e.pageX || e.clientX;
+    oW=parseInt(element.offsetWidth);
+    //改变风格;
+    resizable=true;
+    return(true);
+    }
+    }
+    function doUp(){
+    if(resizable){
+    element.style.cursor="default";
+    resizable = false;
+    return(false);
+    }
+    }
+    function ResizeTo(w){
+    var w=isNaN(w)?minW:parseInt(w);
+    var w=w<minW?minW:w;
+    element.width=w;
+    }
+table(width='100%', border='0', cellspacing='0', cellpadding='0', height='200px')
+    tr
+        td(bgcolor='#CCCCCC', width='60%', title='oWin')
+        td(bgcolor='#848484')
+            //- .container
+script(language='javascript').
+    document.onmousemove=doMove;
+    document.onmousedown=doDown;
+    document.onmouseup=doUp;

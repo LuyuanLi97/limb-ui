@@ -10,49 +10,23 @@
   <script type="text/javascript" src="./echarts-all.js"></script>
   <script type="text/javascript" src="./bootstrap.min.js"></script>
   <script type="text/javascript" src="./main.js"></script>
+  <script type="text/javascript" src="./flat-ui.js"></script>
   <link rel="stylesheet" href="./main.css">
   <link rel="stylesheet" href="./bootstrap.min.css">
-  <link rel="stylesheet" href="./bootstrap-theme.min.css">
+  <!--<link rel="stylesheet" href="./bootstrap-theme.min.css">-->
+  <link rel="stylesheet" href="./flat-ui.css">
 </head>
 
 <body>
-  <button id="up">上移</button>
-  <button id="down">下移</button>
-  <div class="dropdown">
-    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-      Dropdown
-      <span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-      <li id="create">
-        <a>创建子节点</a>
-        <input type="text" id="createContent">
-        <input type="submit" value="确定">
-      </li>
-      <li id="delete">
-        <a>删除该节点</a>
-        <input type="submit" value="确定">
-      </li>
-      <li id="SBContent">
-        <a>展开/收缩</a>
-      </li>
-      <li id="copyContent">
-        <a>复制</a>
-      </li>
-      <li id="pasteToContent">
-        <a>粘贴</a>
-      </li>
-      <li role="separator" class="divider"></li>
-      <li id="detail">
-        <a href="#">详情内容</a>
-      </li>
-    </ul>
-  </div>
-  <input type="submit" value="保存" id="save" />
-  <div id="parent">
-    <div id="main">
-      </dsiv>
-    </div>
+  <button id="up" type="button" class="btn btn-primary btn-sm">上移</button>
+  <button id="down" type="button" class="btn btn-primary btn-sm">下移</button>
+  <button id="create" type="button" class="btn btn-primary btn-sm">创建子节点</button>
+  <button id="delete" type="button" class="btn btn-primary btn-sm">删除节点</button>
+  <button id="SBContent" type="button" class="btn btn-primary btn-sm">展开/收缩</button>
+  <button id="copyContent" type="button" class="btn btn-primary btn-sm">复制</button>
+  <button id="pasteToContent" type="button" class="btn btn-primary btn-sm">粘贴</button>
+  <button id="detail" type="button" class="btn btn-primary btn-sm">详情</button>
+  <button id="save" type="button" class="btn btn-primary btn-sm">保存</button>
 </body>
 
 </html>

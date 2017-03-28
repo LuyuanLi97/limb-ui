@@ -1,14 +1,13 @@
 ul#nav-tabs-wrapper.nav.nav-tabs.nav-pills.nav-stacked.well
-    li.active(ng-click="_profile()")
-        a(href='#') Profile
-    li(ng-click="_account()")
-        a(href='#') Account
-    li(ng-click="_email()")
-        a(href='#') Email
-
-script(type='text/javascript').
-    $('#nav-tabs-wrapper > li a').click(function(e) {
-        var $this = $(this);
-        $this.parent().siblings().removeClass('active').end().addClass('active');
-        e.preventDefault();
-    });
+    li(ng-hide="ngfilter=='profile'")
+        a(ng-click='ngfilter = "profile"', ng-init='ngfilter="profile"') Profile
+    li.active(ng-show="ngfilter=='profile'")
+        a(ng-click='ngfilter = "profile"', ng-init='ngfilter="profile"') Profile
+    li(ng-hide="ngfilter=='account'")
+        a(ng-click='ngfilter = "account"') Account    
+    li.active(ng-show="ngfilter=='account'")
+        a(ng-click='ngfilter = "account"') Account
+    li(ng-hide="ngfilter=='email'")
+        a(ng-click='ngfilter = "email"') Email
+    li.active(ng-show="ngfilter=='email'")
+        a(ng-click='ngfilter = "email"') Email

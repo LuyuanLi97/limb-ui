@@ -1,0 +1,46 @@
+#main-intro {
+    background: #495a80 !important;
+}
+
+#welcome {
+    margin-top: 30px;
+}
+
+.vertical-align {
+    display: flex;
+    align-items: center;
+}
+
+.login-screen {
+    min-height: 300px;
+    margin-top: 50px;
+}
+
+.login-screen.screen-xs {
+    min-height: 120px;
+    margin-top: 0;
+}
+
+.login-form {
+    background: transparent;
+}
+
+h2 {
+    font-weight: 200;
+    color: white;
+}
+
+h2 small {
+    color: gray;
+    margin-left: 10px;
+}
+
+p.lead {
+    color: #ded9d9;
+}
+
+.main-part {
+    height: 70%;
+}
+
+#main-part1 {}

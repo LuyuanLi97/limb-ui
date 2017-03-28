@@ -37,7 +37,9 @@ module.exports = function(app) {
     app.post('/api/updateAccount', api.updateAccount);
     app.post('/api/updateAvatar', api.updateAvatar);
     app.get('/api/signout', api.signout);
+    app.get('/api/browse', api.browse);
     app.get('/api/myprofile', api.myprofile);
+    app.get('/api/browse/user/:userName', api.browse.user);
     app.get('/api/settings', api.settings);
     app.get('/api/checkSignin', api.checkSignin);
     // app.get('test.json', function(req, res) {
