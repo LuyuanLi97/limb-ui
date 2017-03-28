@@ -23,7 +23,7 @@ small, small a {
     transition-delay: 0.1s;
 }
 
-small:hover, small a:hover {
+small a:hover {
     color: #16a085;
     border-bottom: 1px #16a085 solid;
     transition-delay: 0s;

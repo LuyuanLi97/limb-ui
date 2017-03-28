@@ -6,7 +6,7 @@
 
 .navbar {
     min-height: 53px;
-    font-size: 16px;
+    font-size: 0px;
     border: none;
     border-radius: 0px;
     margin-bottom: 0px;
@@ -92,7 +92,7 @@
     color: #1abc9c;
     right: 30px;
     height: 36px;
-    width: 180px;
+    width: 150px;
 }
 
 .phoneSearchBar a {
@@ -105,20 +105,46 @@
 
 /*search bar end*/
 
+
+/*search bar on biger screen start*/
+
 .navbar-inverse .navbar-form .form-control, .navbar-inverse .navbar-form .select2-search input[type="text"] {
     border: none;
     border-radius: 0px;
     border-bottom: 1px gray solid;
     background: transparent;
-    color: #1abc9c;
+    color: gray;
 }
 
-.input-group-btn {
+input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+    color: gray !important;
+}
+
+input:-moz-placeholder, textarea:-moz-placeholder {
+    color: gray !important;
+}
+
+input::-moz-placeholder, textarea::-moz-placeholder {
+    color: gray !important;
+}
+
+input:-ms-input-placeholder, textarea:-ms-input-placeholder {
+    color: gray !important;
+}
+
+.browseIconBg {
+    display: table-cell;
+    position: relative;
+    left: 8px;
+    bottom: 8px;
     opacity: 0;
     transition: 0.5s;
 }
 
-.input-group input:focus+.input-group-btn {
+.input-group input:focus+.browseIconBg {
     opacity: 1;
     transition: 0.1s;
 }
+
+
+/*search bar on biger screen end*/
