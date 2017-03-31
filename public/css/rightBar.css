@@ -9,12 +9,6 @@
     z-index: 100 !important;
 }
 
-@media only screen and (max-width: 500px) {
-    #leaf-right-bar {
-        box-shadow: none;
-    }
-}
-
 .panel {
     margin-bottom: 0px;
 }
@@ -164,3 +158,13 @@ ol li:last-child a:hover {
 
 
 /*panel-body padding end*/
+
+@media only screen and (max-width: 500px) {
+    #leaf-right-bar {
+        box-shadow: none;
+    }
+    .breadcrumb, .tagsinput-primary, .form-horizontal .form-group {
+        margin-left: 6px;
+        margin-right: 6px;
+    }
+}
