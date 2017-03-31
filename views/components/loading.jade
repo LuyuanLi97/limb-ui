@@ -1,0 +1,24 @@
+doctype html
+html
+  head
+    link(rel='stylesheet', type='text/css', href='abc.css')
+    link(rel='stylesheet', type='text/css', href='demo.css')
+    link(rel='stylesheet', type='text/css', href='../loaders.css')
+  body
+    main
+      .loaders
+        #loading.loader
+          .loader-inner.ball-grid-pulse
+            div
+            div
+            div
+            div
+            div
+            div
+            div
+            div
+            div
+    script.
+      document.addEventListener('DOMContentLoaded', function () {
+      document.querySelector('main').className += 'loaded';
+      });
