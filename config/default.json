@@ -1,6 +1,6 @@
 {
     "app": "leaf",
-    "port": 8080,
+    "port": 80,
     "session": {
           "secret": "recommand 128 bytes random string", // 128 个字符的随机字符串
           "cookie": {
