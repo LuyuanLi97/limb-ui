@@ -1,14 +1,21 @@
-link(rel='stylesheet', href='css/new_function.css')
-.container
-    .row
-        h2 ng-repeat recursive list example
-        |         
-        ul
-            li(ng-repeat='item in tree', ng-include="'treeItem'")
+//- link(rel='stylesheet', href='css/new_function.css')
+link(rel='stylesheet', type='text/css', href='css/loader.css')
+link(rel='stylesheet', type='text/css', href='css/loading.css')
+link(rel='stylesheet', type='text/css', href='css/loaders.css')
 
-script#treeItem(type='text/ng-template').
-    <h1>{{item.name}}</h1>
-    <ul ng-if="item.children">
-    <li ng-repeat="item in item.children" ng-include="'treeItem'">
-    </li>
-    </ul>
+.loaders
+    #loading.loader
+        .loader-inner.ball-grid-pulse
+            div
+            div
+            div
+            div
+            div
+            div
+            div
+            div
+            div
+script.
+    document.addEventListener('DOMContentLoaded', function () {
+    document.querySelector('main').className += 'loaded';
+    });

@@ -5,7 +5,6 @@ var UserModel = require('../models/users');
 
 // Sign up
 exports.signup = function(req, res) {
-    console.log(req.body);
     var email = req.body.email;
     var password = req.body.password;
 
@@ -38,11 +37,7 @@ exports.signup = function(req, res) {
     // 待写入数据库的用户信息
     var user = {
         email: email,
-        password: password,
-        name: "",
-        description: "",
-        avatar: "",
-        type: "user"
+        password: UserModel.createHashPassword(password),
     };
 
     // 用户信息写入数据库
@@ -61,7 +56,6 @@ exports.signup = function(req, res) {
 
 // Sign in
 exports.signin = function(req, res) {
-    console.log(req.body);
     var email = req.body.email;
     var password = req.body.password;
 
@@ -71,7 +65,7 @@ exports.signin = function(req, res) {
                 if (!user) {
                     throw new Error('用户不存在');
                 }
-                if (password !== user.password) {
+                if (!UserModel.validHashPassword(password, user.password)) {
                     throw new Error('邮箱或密码错误');
                 }
             } catch (e) {

@@ -1,14 +1,10 @@
-doctype html
-html
-  head
-    link(rel='stylesheet', type='text/css', href='abc.css')
-    link(rel='stylesheet', type='text/css', href='demo.css')
-    link(rel='stylesheet', type='text/css', href='../loaders.css')
-  body
-    main
-      .loaders
-        #loading.loader
-          .loader-inner.ball-grid-pulse
+link(rel='stylesheet', type='text/css', href='css/loader.css')
+link(rel='stylesheet', type='text/css', href='css/loading.css')
+link(rel='stylesheet', type='text/css', href='css/loaders.css')
+
+.loaders
+    #loading.loader
+        .loader-inner.ball-grid-pulse
             div
             div
             div
@@ -18,7 +14,7 @@ html
             div
             div
             div
-    script.
-      document.addEventListener('DOMContentLoaded', function () {
-      document.querySelector('main').className += 'loaded';
-      });
+script.
+    document.addEventListener('DOMContentLoaded', function () {
+    document.querySelector('main').className += 'loaded';
+    });
