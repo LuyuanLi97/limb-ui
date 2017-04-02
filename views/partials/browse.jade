@@ -65,7 +65,7 @@ link(rel='stylesheet', href='css/browse.css')
                 .grid-item.animate-repeat(ng-repeat='user in users | filter : search as filteredUsers', ng-if="ngfilter == 'all' || ngfilter == 'user'")
                     a(href='/browse/user/{{user.email}}')
                         .browse-card
-                            img(src="img/avatar.png")
+                            img(src="{{user.avatar}}")
                             h3 {{user.name}}
                             p {{user.description}}
                             span.label.label-info user
@@ -89,7 +89,7 @@ link(rel='stylesheet', href='css/browse.css')
                 .grid-item.animate-repeat(ng-repeat='user in users | filter : search as filteredUsers', ng-if="ngfilter == 'all' || ngfilter == 'user'")
                     a(href='/browse/user/{{user.email}}')
                         .browse-card
-                            img(src="img/avatar.png")
+                            img(src="{{user.avatar}}")
                             h3 {{user.name}}
                             p {{user.description}}
                             span.label.label-info user

@@ -1,6 +1,26 @@
 var api = require('./api');
 
+// multer
+var multer = require('multer');
+var storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, './public/uploads/');
+        // var year = new Date().getFullYear();
+        // var month = new Date().getMonth();
+        // var date = new Date().getDate();
+        // cb(null, './uploads/' + year.toString() + '/' + month.toString() + '/' + date.toString() + '/');
+    },
+    filename: function(req, file, cb) {
+        var fileFormat = (file.originalname).split(".");
+        cb(null, file.originalname + '-' + Date.now() + "." + fileFormat[fileFormat.length - 1]);
+    }
+});
+var upload = multer({
+    storage: storage
+});
+
 module.exports = function(app) {
+    // app.post('/multer', upload.single('file'));
     // render
     app.get('/', function(req, res) {
         res.render('index');
@@ -28,7 +48,7 @@ module.exports = function(app) {
     app.post('/api/signin', api.signin);
     app.post('/api/updateProfile', api.updateProfile);
     app.post('/api/updateAccount', api.updateAccount);
-    app.post('/api/updateAvatar', api.updateAvatar);
+    app.post('/api/updateAvatar', upload.single('file'), api.updateAvatar);
     app.get('/api/signout', api.signout);
     app.get('/api/browse', api.browse);
     app.get('/api/myprofile', api.myprofile);

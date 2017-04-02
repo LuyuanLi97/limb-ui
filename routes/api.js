@@ -104,6 +104,7 @@ exports.myprofile = function(req, res, next) {
             .then(user => {
                 res.json({
                     'name': user.name,
+                    'avatar': user.avatar,
                     'email': user.email,
                     'description': user.description,
                 });
@@ -116,6 +117,7 @@ exports.browse.user = function(req, res, next) {
         .then(user => {
             res.json({
                 'name': user.name,
+                'avatar': user.avatar,
                 'email': user.email,
                 'description': user.description,
             });
@@ -128,6 +130,7 @@ exports.settings = function(req, res, next) {
             .then(user => {
                 res.json({
                     'name': user.name,
+                    'avatar': user.avatar,
                     'email': user.email,
                     'description': user.description,
                 });
@@ -137,19 +140,24 @@ exports.settings = function(req, res, next) {
 
 exports.checkSignin = function(req, res, next) {
     if (!!req.session.user) {
-        return res.json({
-            'signedin': true
-        });
+        UserModel.getUserByEmail(req.session.user.email)
+            .then(user => {
+                console.log('avatar:' + user.avatar);
+                res.json({
+                    'signedin': true,
+                    'userAvatar': user.avatar
+                });
+            });
     } else {
         return res.json({
-            'signedin': false
+            'signedin': false,
+            'userAvatar': 'img/avatar.png'
         })
     };
 };
 
 // Update profile
 exports.updateProfile = function(req, res, next) {
-    console.log(req.body);
     var MyUser = User;
     if (req.body.name) {
         MyUser.update({
@@ -185,7 +193,13 @@ exports.updateProfile = function(req, res, next) {
 
 // Update avatar
 exports.updateAvatar = function(req, res, next) {
-    console.log(req.body);
+    var relativeAddress = 'uploads/' + req.file.filename;
+    var MyUser = User;
+    MyUser.update({
+        email: req.session.user.email
+    }, {
+        avatar: relativeAddress
+    }, function(error) {});
 };
 
 // Update Account
@@ -348,7 +362,7 @@ exports.getNodeData = function(req, res, next) {
                 mail: 'larry@gmail.com'
             },
             nodeString: ['作业汇总'],
-            tags: 'sophomore,tag,bug',
+            tags: 'tags',
             description: "大二上的所有作业",
             notes: "# notes \n这是`根节点`，没有选中其他节点就会显示跟节点的数据。",
             documents: [{

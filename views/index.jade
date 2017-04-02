@@ -33,7 +33,7 @@ head
     script(type='text/javascript', src='angular-toastr/angular-toastr.tpls.js')    
     script(type='text/javascript', src='js/menuBar.js')
 
-body(ng-controller='checkSigninCtrl', ng-model='signedin')
+body
     include components/menuBar
 
-    #ngview.view-frame(ng-view)(class='{{ngViewClass}}')
+    #ngview.view-frame(ng-view, class='{{ngViewClass}}')
