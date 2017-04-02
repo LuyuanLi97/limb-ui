@@ -3,56 +3,6 @@
 function IndexCtrl($scope, $http, $location, $rootScope, toastr) {
     $scope.ngViewClass = 'page-home';
     $rootScope.$broadcast('authenticationChanged');
-    $scope.switchToSignup = function() {
-        $scope.toSignup = true;
-        $rootScope.title = 'Register';
-    };
-    $scope.switchToSignin = function() {
-        $scope.toSignup = false;
-        $rootScope.title = 'Signin';
-    };
-    $scope.signup = function() {
-        swal({
-            title: $scope.formData.email + " ?",
-            text: "Please check your email again. \n",
-            type: "info",
-            showCancelButton: true,
-            confirmButtonColor: "#8cd4f5",
-            confirmButtonText: "Yes, register!",
-            closeOnConfirm: false,
-            html: false
-        }, function() {
-            $http.post('/api/signup', $scope.formData)
-                .then(function(data) {
-                    if (data.data.status) {
-                        $rootScope.$broadcast('authenticationChanged');
-                        swal('注册成功!', 'Hi, ' + data.data.email + '!\nLeaf已向您发送一封验证邮件，为了您的安全，请尽快完成验证。\n接下来将自动为您登陆.', 'success');
-                        $location.path('/myprofile');
-                    } else {
-                        swal('注册失败!', data.data.message, 'error');
-                    }
-                }, function(error) {
-                    swal('注册失败!', '未知错误', 'error');
-                    console.log('Error: ' + error);
-                });
-        });
-    };
-    $scope.signin = function() {
-        $http.post('/api/signin', $scope.formData)
-            .then(function(data) {
-                if (data.data.status) {
-                    $rootScope.$broadcast('authenticationChanged');
-                    // swal('登陆成功!', 'Hi, ' + data.data.email + ' !', 'success');
-                    toastr.success('Sign in Success!');
-                    $location.path('/myprofile');
-                } else {
-                    swal('登陆失败!', data.data.message, 'error');
-                }
-            }, function(error) {
-                swal('登陆失败!', '未知错误', 'error');
-                console.log('Error: ' + error);
-            });
-    };
 }
 
 function SignupCtrl($scope, $http, $location, $rootScope, toastr) {
@@ -168,6 +118,7 @@ function MyprofileCtrl($scope, $http, $rootScope) {
     $http.get('/api/myprofile')
         .then(function(data) {
             $scope.name = data.data.name;
+            $scope.avatar = data.data.avatar;
             $scope.email = data.data.email;
             $scope.description = data.data.description;
         }, function(error) {
@@ -181,6 +132,7 @@ function BrowseUserCtrl($scope, $http, $rootScope, $routeParams) {
     $http.get('/api/browse/user/' + $routeParams.userEmail)
         .then(function(data) {
             $scope.name = data.data.name;
+            $scope.avatar = data.data.avatar;
             $scope.email = data.data.email;
             $scope.description = data.data.description;
         }, function(error) {
@@ -199,6 +151,7 @@ function SettingsCtrl($scope, $http, $rootScope) {
     $http.get('/api/settings')
         .then(function(data) {
             $scope.name = data.data.name;
+            $scope.avatar = data.data.avatar;
             $scope.email = data.data.email;
             $scope.description = data.data.description;
         }, function(error) {
@@ -206,13 +159,14 @@ function SettingsCtrl($scope, $http, $rootScope) {
         });
 };
 
-app.controller('updateProfileCtrl', function($http, $rootScope, $scope) {
+app.controller('updateProfileCtrl', function($http, $rootScope, $location, $scope) {
     $scope.updateProfile = function() {
         console.log($scope.formData);
         $http.post('/api/updateProfile', $scope.formData)
             .then(function(data) {
                 toastr.success('Update Profile Success!');
             });
+        $location.path('/myprofile');
     };
 });
 
@@ -222,9 +176,24 @@ app.controller('updateAccountCtrl', function($http, $rootScope, $scope) {
     };
 });
 
-app.controller('updateAvatarCtrl', function($http, $rootScope, $scope) {
-    $scope.updateAvatar = function() {
-        $http.post('/api/updateAvatar', $scope.formData);
+app.controller('updateAvatarCtrl', function($http, $rootScope, $location, $scope) {
+    $scope.uploadFile = function() {
+        var file = $scope.myFile;
+        var uploadUrl = "/api/updateAvatar";
+        var fd = new FormData();
+        fd.append('file', file);
+        $http.post(uploadUrl, fd, {
+                transformRequest: angular.identity,
+                headers: {
+                    'Content-Type': undefined
+                }
+            })
+            .then(function() {
+                console.log("success!!");
+                $location.path('/myprofile');
+            }, function() {
+                console.log("error!!");
+            });
     };
 });
 
@@ -261,7 +230,8 @@ function SignoutCtrl($scope, $http, $location, $rootScope, toastr) {
     });
 };
 
-function LeafCtrl($scope, $http, $location) {
+function LeafCtrl($scope, $rootScope, $http, $location) {
+    $rootScope.$broadcast('authenticationChanged');
     // 几组 node id
     $scope.nodes = ['root', 'web2.0', '课程作业', '模电homework'];
 
@@ -291,6 +261,7 @@ app.controller('checkSigninCtrl', function($http, $rootScope, $scope) {
         $http.get('/api/checkSignin')
             .then(function(data) {
                 $scope.signedin = data.data.signedin;
+                $scope.userAvatar = data.data.userAvatar;
             }, function(error) {
                 console.log('Error: ' + error);
             });
@@ -343,4 +314,21 @@ function AboutCtrl($scope, $http, $routeParams) {
     $scope.ngViewClass = 'page-about';
 };
 
-function new_functionCtrl($scope, $http, $routeParams) {}
+// to upload file using angular
+app.directive('fileModel', ['$parse', function($parse) {
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs) {
+            var model = $parse(attrs.fileModel);
+            var modelSetter = model.assign;
+
+            element.bind('change', function() {
+                scope.$apply(function() {
+                    modelSetter(scope, element[0].files[0]);
+                });
+            });
+        }
+    };
+}]);
+
+function new_functionCtrl($scope, $http, $location, $routeParams) {}

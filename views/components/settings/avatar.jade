@@ -1,8 +1,9 @@
 hr
 | Profile Picture
 br
-img#myicon(src='img/avatar.png', alt='icon')
-
-form(action='', method='post', enctype='multipart/form-data')
-    input.btn(type='file', name='uploadFile')
-    input.btn.btn-success(type='submit', ng-click="updateAvatar()",  value='Upload new picture')
+img.bg#myicon(src='{{avatar}}', alt='icon')
+form(ng-controller='updateAvatarCtrl')
+    input(type='file', file-model='myFile')
+    br
+    br
+    button(ng-click='uploadFile()') Upload new picture

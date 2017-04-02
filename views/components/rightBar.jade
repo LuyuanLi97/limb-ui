@@ -22,6 +22,13 @@
             br
             br
 
+    //- 几个节点例子
+    br
+    a(ng-repeat='node in nodes')
+        button.btn-sm(ng-click='getNodeData(node)') {{node}}
+    br
+    small 试着点击以上几个节点，默认为 root 节点
+
     //-路径
     ol.breadcrumb
         li.animate-repeat(ng-repeat='node in nodeData.nodeString')

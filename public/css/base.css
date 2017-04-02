@@ -9,3 +9,14 @@ html, body {
     height: calc(100% - 53px);
     overflow: scroll;
 }
+
+
+/*my profile and setting*/
+
+img.bg {
+    width: 100%;
+    max-width: 400px;
+}
+
+
+/*my profile and setting end*/
