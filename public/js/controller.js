@@ -1,33 +1,42 @@
 "use strict";
 
+/*
+    主页面登录注册
+*/
 function IndexCtrl($scope, $http, $location, $rootScope, toastr) {
-    $scope.switchToSignup = function() {
+    // rootScope里面的变量可以在不同的controller里面通用，而且可以在外面通过$root.变量名访问得到
+    $rootScope.switchToSignup = function() {
         $scope.toSignup = true;
         $rootScope.title = 'Register';
     };
-    $scope.switchToSignin = function() {
+
+    $rootScope.switchToSignin = function() {
         $scope.toSignup = false;
         $rootScope.title = 'Signin';
     };
-    $scope.signup = function() {
+
+    $rootScope.signup = function() {
         swal({
             title: $scope.formData.email + " ?",
-            text: "Please check your email again. \n",
-            type: "info",
+            text: "Please check your email againdasdsa \n",
+            type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#8cd4f5",
             confirmButtonText: "Yes, register!",
             closeOnConfirm: false,
-            html: false
-        }, function() {
+            html: false,
+        }, function() {  //  最后执行的回调函数
+            // 现在路由归AngularJs接管，这里手动post数据
             $http.post('/api/signup', $scope.formData)
-                .then(function(data) {
-                    if (data.data.status) {
+                .then(function(response) {
+                    if (response.data.status) {
+                        // 向子节点的controller传递值
                         $rootScope.$broadcast('authenticationChanged');
-                        swal('注册成功!', 'Hi, ' + data.data.email + '!\nLeaf已向您发送一封验证邮件，为了您的安全，请尽快完成验证。\n接下来将自动为您登陆.', 'success');
+                        swal('注册成功!', 'Hi, ' + response.data.email + '!\nLeaf已向您发送一封验证邮件，为了您的安全，请尽快完成验证。\n接下来将自动为您登陆.', 'success');
+                        // 类似重定向
                         $location.path('/myprofile');
                     } else {
-                        swal('注册失败!', data.data.message, 'error');
+                        swal('注册失败!', response.data.message, 'error');
                     }
                 }, function(error) {
                     swal('注册失败!', '未知错误', 'error');
@@ -35,24 +44,33 @@ function IndexCtrl($scope, $http, $location, $rootScope, toastr) {
                 });
         });
     };
-    $scope.signin = function() {
+
+    $rootScope.signin = function() {
         $http.post('/api/signin', $scope.formData)
-            .then(function(data) {
-                if (data.data.status) {
+            .then(function(response) {
+                if (response.data.status) {
                     $rootScope.$broadcast('authenticationChanged');
-                    // swal('登陆成功!', 'Hi, ' + data.data.email + ' !', 'success');
+                    // swal('登陆成功!', 'Hi, ' + response.data.email + ' !', 'success');
                     toastr.success('Sign in Success!');
                     $location.path('/myprofile');
                 } else {
-                    swal('登陆失败!', data.data.message, 'error');
+                    swal('登录失败!', response.data.message, 'error');
                 }
             }, function(error) {
-                swal('登陆失败!', '未知错误', 'error');
+                swal('登录失败!', '未知错误', 'error');
                 console.log('Error: ' + error);
             });
     };
+
+    $scope.signup = $rootScope.signup;
+    $scope.signin = $rootScope.signin;
+    $scope.switchToSignup = $rootScope.switchToSignup;
+    $scope.switchToSignin = $rootScope.switchToSignin;
 }
 
+/*
+    注册页面
+*/
 function SignupCtrl($scope, $http, $location, $rootScope, toastr) {
     $scope.switchToSignin = function() {
         $scope.toSignin = true;
@@ -62,50 +80,13 @@ function SignupCtrl($scope, $http, $location, $rootScope, toastr) {
         $scope.toSignin = false;
         $rootScope.title = 'Register';
     };
-    $scope.signup = function() {
-        swal({
-            title: $scope.formData.email + " ?",
-            text: "Please check your email again. \n",
-            type: "info",
-            showCancelButton: true,
-            confirmButtonColor: "#8cd4f5",
-            confirmButtonText: "Yes, register!",
-            closeOnConfirm: false,
-            html: false
-        }, function() {
-            $http.post('/api/signup', $scope.formData)
-                .then(function(data) {
-                    if (data.data.status) {
-                        $rootScope.$broadcast('authenticationChanged');
-                        swal('注册成功!', 'Hi, ' + data.data.email + '!\nLeaf已向您发送一封验证邮件，为了您的安全，请尽快完成验证。\n接下来将自动为您登陆.', 'success');
-                        $location.path('/myprofile');
-                    } else {
-                        swal('注册失败!', data.data.message, 'error');
-                    }
-                }, function(error) {
-                    swal('注册失败!', '未知错误', 'error');
-                    console.log('Error: ' + error);
-                });
-        });
-    };
-    $scope.signin = function() {
-        $http.post('/api/signin', $scope.formData)
-            .then(function(data) {
-                if (data.data.status) {
-                    $rootScope.$broadcast('authenticationChanged');
-                    // swal('登陆成功!', 'Hi, ' + data.data.email + ' !', 'success');
-                    toastr.success('Sign in Success!');
-                    $location.path('/myprofile');
-                } else {
-                    swal('登陆失败!', data.data.message, 'error');
-                }
-            }, function(error) {
-                swal('登陆失败!', '未知错误', 'error');
-                console.log('Error: ' + error);
-            });
-    };
+    $scope.signup = $rootScope.signup;
+    $scope.signin = $rootScope.signin;
 };
 
+/*
+    登录页面
+*/
 function SigninCtrl($scope, $http, $location, $rootScope, toastr) {
     $scope.switchToSignup = function() {
         $scope.toSignup = true;
@@ -115,70 +96,37 @@ function SigninCtrl($scope, $http, $location, $rootScope, toastr) {
         $scope.toSignup = false;
         $rootScope.title = 'Signin';
     };
-    $scope.signup = function() {
-        swal({
-            title: $scope.formData.email + " ?",
-            text: "Please check your email again. \n",
-            type: "info",
-            showCancelButton: true,
-            confirmButtonColor: "#8cd4f5",
-            confirmButtonText: "Yes, register!",
-            closeOnConfirm: false,
-            html: false
-        }, function() {
-            $http.post('/api/signup', $scope.formData)
-                .then(function(data) {
-                    if (data.data.status) {
-                        $rootScope.$broadcast('authenticationChanged');
-                        swal('注册成功!', 'Hi, ' + data.data.email + '!\nLeaf已向您发送一封验证邮件，为了您的安全，请尽快完成验证。\n接下来将自动为您登陆.', 'success');
-                        $location.path('/myprofile');
-                    } else {
-                        swal('注册失败!', data.data.message, 'error');
-                    }
-                }, function(error) {
-                    swal('注册失败!', '未知错误', 'error');
-                    console.log('Error: ' + error);
-                });
-        });
-    };
-    $scope.signin = function() {
-        $http.post('/api/signin', $scope.formData)
-            .then(function(data) {
-                if (data.data.status) {
-                    $rootScope.$broadcast('authenticationChanged');
-                    // swal('登陆成功!', 'Hi, ' + data.data.email + ' !', 'success');
-                    toastr.success('Sign in Success!');
-                    $location.path('/myprofile');
-                } else {
-                    swal('登陆失败!', data.data.message, 'error');
-                }
-            }, function(error) {
-                swal('登陆失败!', '未知错误', 'error');
-                console.log('Error: ' + error);
-            });
-    };
+    $scope.signup = $rootScope.signup;
+    $scope.signin = $rootScope.signin;
 };
 
+/*
+    获取用户资料
+*/
 function MyprofileCtrl($scope, $http, $rootScope) {
     $rootScope.$broadcast('authenticationChanged');
     $http.get('/api/myprofile')
-        .then(function(data) {
-            $scope.name = data.data.name;
-            $scope.email = data.data.email;
-            $scope.description = data.data.description;
+        .then(function(response) {
+            $scope.name = response.data.name;
+            $scope.email = response.data.email;
+            $scope.description = response.data.description;
         }, function(error) {
+            // 重定向到错误页面
+            // $location.url('error');
             console.log('Error: ' + error);
         });
 };
 
-// Browse
+/*
+    未知
+*/
 function BrowseUserCtrl($scope, $http, $rootScope, $routeParams) {
     $rootScope.$broadcast('authenticationChanged');
     $http.get('/api/browse/user/' + $routeParams.userName)
-        .then(function(data) {
-            $scope.name = data.data.name;
-            $scope.email = data.data.email;
-            $scope.description = data.data.description;
+        .then(function(response) {
+            $scope.name = response.data.name;
+            $scope.email = response.data.email;
+            $scope.description = response.data.description;
         }, function(error) {
             console.log('Error: ' + error);
         });
@@ -193,10 +141,10 @@ function HelpCtrl($scope, $http, $rootScope) {};
 function SettingsCtrl($scope, $http, $rootScope) {
     $rootScope.$broadcast('authenticationChanged');
     $http.get('/api/settings')
-        .then(function(data) {
-            $scope.name = data.data.name;
-            $scope.email = data.data.email;
-            $scope.description = data.data.description;
+        .then(function(response) {
+            $scope.name = response.data.name;
+            $scope.email = response.data.email;
+            $scope.description = response.data.description;
         }, function(error) {
             console.log('Error: ' + error);
         });

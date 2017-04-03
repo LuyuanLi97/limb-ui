@@ -5,6 +5,7 @@ var UserModel = require('../models/users');
 
 // Sign up
 exports.signup = function(req, res) {
+    console.log("req.body: \n");
     console.log(req.body);
     var email = req.body.email;
     var password = req.body.password;
@@ -61,6 +62,7 @@ exports.signup = function(req, res) {
 
 // Sign in
 exports.signin = function(req, res) {
+    console.log("req.body: \n");
     console.log(req.body);
     var email = req.body.email;
     var password = req.body.password;
@@ -80,7 +82,7 @@ exports.signin = function(req, res) {
                     'message': e.message
                 });
             }
-            console.log('登陆成功');
+            console.log(user.name+'已登陆');
             delete user.password;
             req.session.user = user;
             return res.json({
@@ -99,6 +101,7 @@ exports.signout = function(req, res, next) {
 exports.browse = function(req, res, next) {
     UserModel.getUsers()
         .then(users => {
+            console.log("users: \n");
             console.log(users);
             res.json(users);
         });
@@ -155,6 +158,7 @@ exports.checkSignin = function(req, res, next) {
 
 // Update profile
 exports.updateProfile = function(req, res, next) {
+    console.log("req.body: \n");
     console.log(req.body);
     var MyUser = User;
     if (req.body.name) {

@@ -14,7 +14,7 @@ module.exports = function(app) {
         console.log("par");
     });
 
-    // 优化路由
+    // 解决直接访问路由出现404错误的问题
     app.use(function(req, res, next) {
         console.log("req.path:");
         console.log(req.path);
@@ -24,9 +24,9 @@ module.exports = function(app) {
         } else if (req.path.length >= 2) {
             res.render('index');
             app.get(req.path);
-            next();
+            // next();
         } else {
-            next();
+            // next();
         }
     });
 
