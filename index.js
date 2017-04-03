@@ -11,6 +11,9 @@ var config = require('config'); // configuration, will find /config/default.json
 var routes = require('./routes/index.js'); // ./routes/index.js
 var api = require('./routes/api');
 var autoSignin = require('./routes/autoSignin');
+var marked = require('marked');
+console.log(marked('I am using __markdown__.'));
+// Outputs: <p>I am using <strong>markdown</strong>.</p>
 
 // --- configuration
 app.use(express.static(__dirname + '/public')); // set the static files location /public/img will be /img for users

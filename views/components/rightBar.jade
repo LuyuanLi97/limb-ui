@@ -3,35 +3,43 @@
         a#authorInfoBtn.btn.btn-inverse(type='button', ng-click='spanAuthor = !spanAuthor', data-toggle='collapse', data-target='#authorInfo', aria-expanded='false', aria-controls='authorInfo') 
             span.fui-plus(ng-hide="spanAuthor") &nbsp;SHOW AUTHOR
             span.fui-cross(ng-show="spanAuthor") &nbsp;HIDE AUTHOR
-        //- a#goToLeafBtn.btn.btn-inverse(href="#menu").visible-xs       
-        //-     span.icon-double-angle-up.visible-xs 
+
+        //- 作者信息
         center#authorInfo.collapse
             br
-            img#myicon(src='img/avatar.png', alt='icon')
+            img#myicon(src='{{nodeData.author.avatar}}', alt='icon')
             h5 
-                a(href='/browse/user/chroslen') Larry
-            p sophomore, at SYSU.
-            a 4 leaves - 
+                a(href='{{nodeData.author.profile}}') {{nodeData.author.name}} 
+            p {{nodeData.author.description}}
+            a {{nodeData.author.leavesNum}} leaves - 
             span
-                a 3 tags
+                a {{nodeData.author.tagsNum}} tags
             br
-            a 
+            a(href='{{nodeData.author.github}}')
                 span.fui-github GitHub &nbsp;
-            a 
-                span.fui-mail larry@gmail.com
+            a(href='mailto:{{nodeData.author.mail}}')
+                span.fui-mail {{nodeData.author.mail}}
             br
             br
+
+    //- 几个节点例子
+    br
+    a(ng-repeat='node in nodes')
+        button.btn-sm(ng-click='getNodeData(node)') {{node}}
+    br
+    small 试着点击以上几个节点，默认为 root 节点
+
+    //-路径
     ol.breadcrumb
-        li
-            a(href='#') 作业汇总
-        li
-            a(href='#') web2.0
-        li.active 课程作业
+        li.animate-repeat(ng-repeat='node in nodeData.nodeString')
+            a(ng-click='getNodeData(node)') {{node}}
+
+    //- 标签
     .tagsinput-primary
-        input.tagsinput(name='tagsinput', data-role='tagsinput', value='未完成, school')
+        input.tagsinput(name='tagsinput', data-role='tagsinput', ng-model='nodeData.tags')
 
     form.form-horizontal(role='form')
-
+        //- 描述
         .form-group.rightBar-card
             .panel.panel-primary
                 .panel-heading
@@ -41,25 +49,23 @@
                     .topRightBtn.topRightBtn-1(type='button', ng-click='editDescription = !editDescription' data-toggle='collapse', data-target='#updateDescription', aria-expanded='false', aria-controls='updateDescription')
                         span.glyphicon.glyphicon-edit(ng-hide="editDescription")
                         span.fui-cross(ng-show="editDescription")
-                .panel-body
-                    center#updateDescription.collapse
-                        textarea.form-control(rows='3', autofocus='', ng-model="description", placeholder='description') {{description}}
+                .panel-body#updateDescription.collapse
+                    center
+                        textarea.form-control(rows='3', autofocus='', ng-model="nodeData.description", placeholder='add description')
                 .panel-body(ng-hide="editDescription")
-                    p {{description}}
-
-        .form-group.rightBar-card
+                    | {{nodeData.description}}
+        //- Notes
+        .form-group
             .panel.panel-primary
                 .panel-heading
                     h3.panel-title 笔记
-                    .topRightBtn.topRightBtn-2(type='submit', ng-click='editNotes = !editNotes' data-toggle='collapse', data-target='#updateNotes', aria-expanded='false', aria-controls='updateNotes')
-                        span.fui-check(ng-show="editNotes")
-                    .topRightBtn.topRightBtn-1(type='button', ng-click='editNotes = !editNotes' data-toggle='collapse', data-target='#updateNotes', aria-expanded='false', aria-controls='updateNotes')
-                        span.glyphicon.glyphicon-edit(ng-hide="editNotes")
-                        span.fui-cross(ng-show="editNotes")
-                .panel-body
-                    center#updateNotes.collapse
-                        textarea.form-control(rows='7', autofocus='', ng-model="notes", placeholder='在这里写下笔记') 
-                    p(ng-hide="editNotes") {{notes}} 
+                    .topRightBtn.topRightBtn-1(type='submit')
+                        span.icon-cloud-upload
+                .panel-body.no-padding
+                    center
+                        textarea.form-control(rows='7', autofocus='', data-provide='markdown', ng-model="nodeData.notes", placeholder='在这里写下笔记') 
+
+        //- documents
         .form-group.rightBar-card
             .panel.panel-primary
                 .panel-heading
@@ -67,6 +73,16 @@
                     .topRightBtn.topRightBtn-1(type='button', ng-click='spanUploadFiles = !spanUploadFiles' data-toggle='collapse', data-target='#uploadFiles', aria-expanded='false', aria-controls='uploadFiles')
                         span.fui-plus(ng-hide="spanUploadFiles")
                         span.fui-cross(ng-show="spanUploadFiles")
+                //- input file
+                center#uploadFiles.collapse
+                    .row(style='padding:5px 16px 5px 16px;')
+                        input#input-700.file-loading(name='kartik-input-700[]', type='file', multiple='')
+                        script.
+                            $("#input-700").fileinput({
+                                uploadUrl: "http://localhost/file-upload/", // server upload action
+                                uploadAsync: true,
+                                maxFileCount: 5
+                            });
                 .panel-body
                     .table-responsive
                         table.table
@@ -77,46 +93,19 @@
                                     th Date Modified
                                     th Size
                             tbody
-                                tr
-                                    th(scope='row') 1
+                                tr.animate-repeat(ng-repeat='document in nodeData.documents')
+                                    th(scope='row') {{$index + 1}}
                                     td 
-                                        a(type='button', data-toggle='collapse', data-target='#file1', aria-expanded='false', aria-controls='file1')
-                                            | Mark.doc
-                                        #file1.collapse
-                                            .btn 预览
-                                            .btn 下载
-                                    td 13,Mar, 2017
-                                    td 2Mb
-                                tr
-                                    th(scope='row') 2
-                                    td 
-                                        a(type='button', data-toggle='collapse', data-target='#file2', aria-expanded='false', aria-controls='file2')
-                                            | Jacob.css
-                                        #file2.collapse
-                                            .btn 预览
-                                            .btn 下载
-                                    td 13,Mar, 2017
-                                    td 2kb
-                                tr
-                                    th(scope='row') 3
-                                    td 
-                                        a(type='button', data-toggle='collapse', data-target='#file3', aria-expanded='false', aria-controls='file3')
-                                            | Larry.rmvb
-                                        #file3.collapse
-                                            .btn 预览
-                                            .btn 下载
-                                    td 15,Mar, 2017
-                                    td 234Mb
-                    center#uploadFiles.collapse
-                        .row(style='padding:5px 16px 5px 16px;')
-                            input#input-700.file-loading(name='kartik-input-700[]', type='file', multiple='')
-                            script.
-                                $("#input-700").fileinput({
-                                uploadUrl: "http://localhost/file-upload/", // server upload action
-                                uploadAsync: true,
-                                maxFileCount: 5
-                                });
-
+                                        a(type='button', data-toggle='collapse', data-target='#file{{$index + 1}}', aria-expanded='false', aria-controls='file{{$index + 1}}')
+                                            | {{document.name}}
+                                        div(id='file{{$index + 1}}').collapse
+                                            .btn#preview
+                                                span.icon-eye-open
+                                            .btn#download
+                                                span.icon-cloud-download
+                                    td {{document.date}}
+                                    td {{document.size}}
+        //- 计划
         .form-group.rightBar-card
             .panel.panel-primary
                 .panel-heading
@@ -132,39 +121,61 @@
                                     th 任务
                                     th 截止时间
                             tbody
-                                tr
-                                    td 
-                                        input(type='checkbox', value='', data-toggle='checkbox')
-                                    td  
-                                        a(type='button', data-toggle='collapse', data-target='#planOne', aria-expanded='false', aria-controls='planOne') 
-                                            span 第一次课后作业
-                                        #planOne.collapse
-                                            p 第一次课后作业
-                                    td 2015年11月11日
-                                tr
-                                    td 
-                                        input(type='checkbox', value='', data-toggle='checkbox')
+                                tr.animate-repeat(ng-repeat='plan in nodeData.plans')
                                     td
-                                        a(type='button', data-toggle='collapse', data-target='#planTwo', aria-expanded='false', aria-controls='planTwo') 
-                                            span 实验一
-                                        #planTwo.collapse
-                                            p 实验一
-                                    td 2016年12月30日
-
+                                        input(type='checkbox', ng-model='plan.state', data-toggle='checkbox')
+                                    td
+                                        a(type='button', data-toggle='collapse', data-target='#plan{{$index + 1}}', aria-expanded='false', aria-controls='plan{{$index+1}}') 
+                                            span {{plan.title}}
+                                        div(id="plan{{$index+1}}").collapse
+                                            small {{plan.content}}
+                                    td {{plan.deadline}}
 
         .form-group.rightBar-card
-            .panel.panel-primary(style='overflow: auto; height: 360px;')
+            .panel.panel-primary
                 .panel-heading
                     h3.panel-title 留言
+                    .topRightBtn.topRightBtn-1(type='button', ng-click='spanQdiscuss = !spanQdiscuss' data-toggle='collapse', data-target='#qdiscuss', aria-expanded='false', aria-controls='qdiscuss')
+                        span.fui-plus(ng-hide="spanQdiscuss")
+                        span.fui-cross(ng-show="spanQdiscuss")
                 .panel-body
-                    #qdiscuss
-                        textarea#mesg.message.form-control(contenteditable='true')
+                    //- 添加留言
+                    #qdiscuss.collapse
+                        textarea#mesg.message.form-control(contenteditable='true', placeholder='添加新的留言')
                         .But
                             span.submit 发表
-                    #msgpad.msgCon
+                    //- #msgpad.msgCon
+                    .bootstrap.snippet
+                        .blog-comment
+                            ul.comments
+                                li.clearfix(ng-repeat='comment in nodeData.comments', ng-include="'commentsItem'")
+
         br
         center            
             span.buttomEditButton.fui-plus
             span.buttomEditButton.fui-gear
+            span.buttomEditButton.icon-edit
         br
         br
+        br
+        br
+        br
+        br
+
+script#commentsItem(type='text/ng-template').
+    <img class="avatar", src='{{comment.avatar}}', alt='' />
+    <div class="post-comments">
+        <p class="meta"> {{comment.date}}
+            <a href='{{comment.profile}}'> {{comment.name}}</a> says : 
+            <i class="pull-right">
+                <a href='#'>
+                    <small> Reply</small>
+                </a>
+            </i>
+        </p>
+        <p> {{comment.content}}</p>
+    </div>
+    <ul class="comments" ng-if="comment.children">
+        <li class="clearfix" ng-repeat="comment in comment.children" ng-include="'commentsItem'">
+        </li>
+    </ul>

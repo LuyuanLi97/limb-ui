@@ -1,31 +1,6 @@
 link(rel='stylesheet', href='css/homePage.css')
 .container-fluid#main-intro
-    .row
-        center.col-xs-12.col-sm-7#welcome
-            h2 LEAF
-                small Königsberg
-            p.lead welcome to leaf
-            br
-        .col-xs-12.visible-xs
-            .login-screen.screen-xs
-                .login-form
-                    a.btn.btn-primary.btn-lg.btn-block(href='/signup') Register / Sign In
-        .col-xs-12.col-sm-5.hidden-xs
-            .login-screen
-                .login-form(ng-model='toSignup')
-                    .form-group
-                        input#login-emal.form-control.login-field(type='email', value='', placeholder='Enter your email', ng-model='formData.email')
-                        label.login-field-icon.fui-mail(for='login-mail')
-                    .form-group
-                        input#login-pass.form-control.login-field(type='password', value='', placeholder='Password', ng-model='formData.password')
-                        label.login-field-icon.fui-lock(for='login-pass')
-                    div(ng-if="!toSignup")
-                        a.btn.btn-primary.btn-lg.btn-block(type='submit', ng-click='signin()') Sign in
-                        a.login-link(ng-click='switchToSignup()') New to Leaf? 
-                        a.login-link(href='#') Lost your password?
-                    div(ng-if="toSignup")
-                        a.btn.btn-primary.btn-lg.btn-block(type='submit', ng-click='signup()') Register
-                        a.login-link(ng-click='switchToSignin()') Have an account already? 
+    p home page
 .container-fluid#main-part1.main-part
     row.vertical-align
 .container-fluid#main-part2.main-part

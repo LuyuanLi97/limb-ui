@@ -4,23 +4,22 @@
     font-size: 16px;
     height: 100%;
     overflow: auto;
-    background-color: #D6D0CE;
+    background: linear-gradient(70deg, #b889ef, #97d0e1);
     position: relative;
     z-index: 100 !important;
-}
-
-@media only screen and (max-width: 500px) {
-    #leaf-right-bar {
-        box-shadow: none;
-    }
 }
 
 .panel {
     margin-bottom: 0px;
 }
 
+.tagsinput-primary, .form-horizontal .form-group {
+    background: transparent !important;
+}
+
 .panel-primary {
     border: none;
+    border-radius: 2px !important;
 }
 
 .panel-primary>.panel-heading {
@@ -42,13 +41,12 @@ h3 {
 }
 
 .breadcrumb, .tagsinput-primary, .rightBar-card {
-    /*background-color: white;*/
     transition-duration: 1s;
 }
 
 .breadcrumb:hover, .tagsinput-primary:hover, .rightBar-card:hover {
     transform: translate(0px, -3px);
-    box-shadow: 0px 2px 2px black;
+    box-shadow: 0px 1px 5px gray;
     transition-duration: 0s;
 }
 
@@ -65,6 +63,7 @@ h3 {
     width: 100%;
     background-color: #222;
     margin: 0;
+    border: none;
 }
 
 #goToLeafBtn {
@@ -74,10 +73,11 @@ h3 {
 }
 
 .breadcrumb, .tagsinput-primary, .form-horizontal .form-group {
-    margin-left: 10px;
-    margin-right: 10px;
+    margin-left: 12px;
+    margin-right: 12px;
     margin-top: 9px;
     margin-bottom: 0;
+    background-color: white;
 }
 
 
@@ -122,3 +122,49 @@ h3 {
 
 
 /*buttomEditButton end*/
+
+ol li:last-child a {
+    color: gray !important;
+}
+
+ol li:last-child a:hover {
+    border: none;
+}
+
+
+/*markdown editor*/
+
+.md-editor.md-fullscreen-mode .md-header {
+    top: 53px !important;
+}
+
+.md-editor.md-fullscreen-mode {
+    top: 53px !important;
+}
+
+
+/*markdown editor end*/
+
+
+/*panel-body padding*/
+
+.panel-body {
+    padding: 7px;
+}
+
+.no-padding {
+    padding: 0;
+}
+
+
+/*panel-body padding end*/
+
+@media only screen and (max-width: 500px) {
+    #leaf-right-bar {
+        box-shadow: none;
+    }
+    .breadcrumb, .tagsinput-primary, .form-horizontal .form-group {
+        margin-left: 6px;
+        margin-right: 6px;
+    }
+}

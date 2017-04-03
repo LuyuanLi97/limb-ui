@@ -1,28 +1,8 @@
-#main-intro {
-    background: #495a80 !important;
-}
-
-#welcome {
-    margin-top: 30px;
-}
+#main-intro {}
 
 .vertical-align {
     display: flex;
     align-items: center;
-}
-
-.login-screen {
-    min-height: 300px;
-    margin-top: 50px;
-}
-
-.login-screen.screen-xs {
-    min-height: 120px;
-    margin-top: 0;
-}
-
-.login-form {
-    background: transparent;
 }
 
 h2 {
@@ -44,3 +24,6 @@ p.lead {
 }
 
 #main-part1 {}
+
+
+/*bg of main-intro start*/

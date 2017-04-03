@@ -22,62 +22,64 @@
                         b.caret
                     ul.dropdown-menu
                         li
-                            a(href='/browse', ng-click='ngfilter-menu = "all"') all
+                            a(href='/browse') all
                         li
-                            a(href='/browse', ng-click='ngfilter-menu = "leaf"') leaf
+                            a(href='/browse') leaf
                         li
-                            a(href='/browse', ng-click='ngfilter-menu = "document"') document
+                            a(href='/browse') document
                         li
-                            a(href='/browse', ng-click='ngfilter-menu = "user"') user
+                            a(href='/browse') user
                         li
-                            a(href='/browse', ng-click='ngfilter-menu = "local"') local
+                            a(href='/browse') local
+                        li
+                            a(href='/new_function') new_function
             form.navbar-form.navbar-left(role='search').hidden-xs
                 .form-group.has-feedback
                     .input-group
                         input.form-control(type='search', placeholder='Search Leaf', ng-model='search')
-                        span.browseIconBg
-                            a(href='/browse')
-                                span.fui-search
-            ul.nav.navbar-nav.navbar-right
-                li.dropdown
-                    a.dropdown-toggle(href='', data-toggle='dropdown')
-                        span.fui-document
-                        b.caret
-                    ul.dropdown-menu
-                        li
-                            a(href='/leaf') new public leaf
-                        li
-                            a(href='/leaf') new private leaf
-                        li
-                            a(href='/leaf') open file
-                        li
-                            a(href='/leaf') delete this leaf
-                        li.divider
-                        li
-                            a(href='/leaf') recently opened &nbsp;
-                                span.label.label-info 5
-                li.dropdown(ng-controller='checkSigninCtrl', ng-model='signedin')
-                    a.dropdown-toggle(href='', data-toggle='dropdown')
-                        span.fui-user
-                        b.caret
-                    ul.dropdown-menu(ng-if='signedin')
-                        li
-                            a(href='/myprofile') my profile
-                        li
-                            a(href='/mymessages') my messages &nbsp;
-                                span.label.label-info 3
-                        li
-                            a(href='/requests') requests &nbsp;
-                                span.label.label-info 1
-                        li.divider
-                        li
-                            a(href='/settings') settings
-                        li
-                            a(href='/help') help
-                        li
-                            a(href='/signout') sign out
-                    ul.dropdown-menu(ng-if='!signedin')
-                        li
-                            a(href='/signup') register
-                        li
-                            a(href='/signin') sign in
+                        a.browseIconBg(href='/browse')
+                            span.fui-search
+            a.menuAbout(href='/about') about
+            div(ng-controller='checkSigninCtrl', ng-model='signedin')
+                a.menuSignin(href='/signin', ng-hide='signedin')
+                    form
+                        button(href='/signin') Register / Sign In
+                ul.nav.navbar-nav.navbar-right(ng-show='signedin')
+                    li.dropdown
+                        a.dropdown-toggle(href='', data-toggle='dropdown')
+                            span.fui-document
+                            b.caret
+                        ul.dropdown-menu
+                            li
+                                a(href='/leaf') new public leaf
+                            li
+                                a(href='/leaf') new private leaf
+                            li
+                                a(href='/leaf') open file
+                            li
+                                a(href='/leaf') delete this leaf
+                            li.divider
+                            li
+                                a(href='/leaf') recently opened &nbsp;
+                                    span.label.label-info 5
+                    li.dropdown
+                        a.dropdown-toggle(href='', data-toggle='dropdown')
+                            span
+                                img(ng-src='{{userAvatar}}')
+                            b.caret
+                        ul.dropdown-menu
+                            li
+                                a(href='/myprofile') my profile
+                            li
+                                a(href='/mymessages') my messages &nbsp;
+                                    span.label.label-info 3
+                            li
+                                a(href='/requests') requests &nbsp;
+                                    span.label.label-info 1
+                            li.divider
+                            li
+                                a(href='/settings') settings
+                            li
+                                a(href='/help') help
+                            li
+                                a(href='/signout') sign out

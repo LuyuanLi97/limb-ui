@@ -1,5 +1,4 @@
 link(rel='stylesheet', href='css/browse.css')
-
 #filtersAndSearch.container-fluit
     p#browseTitle.lead Lots of Leaves, one Tree
     p#browseIntroduction {{users.length}} users, {{leaves.length}} leaves
@@ -7,8 +6,8 @@ link(rel='stylesheet', href='css/browse.css')
         span.fui-plus(ng-show="withFilters") &nbsp;SHOW FILTERS
         span.fui-cross(ng-hide="withFilters") &nbsp;HIDE FILTERS
 
-#browse-main.palette-clouds
-    .row.browse-results
+#browse-main
+    .browse-results.container-fluid
         .col-xs-12.col-sm-3
             #filtersList.collapse.in
                 br
@@ -50,52 +49,50 @@ link(rel='stylesheet', href='css/browse.css')
         // with filter list
         .col-xs-12.col-sm-9(ng-hide="withFilters")
             br
-            .col-xs-6.col-sm-6.col-md-4(ng-repeat='leaf in leaves | filter : search as filteredLeaves', ng-show="ngfilter == 'all' || ngfilter == 'leaf'")
-                a(href='/leaf')
-                    .tile.browse-card
-                        h3.tile-title {{leaf.topic}}
-                        br
-                        span.label.label-success leaf
+            center.grid
+                .grid-item.animate-repeat(ng-repeat='leaf in leaves | filter : search as filteredLeaves', ng-if="ngfilter == 'all' || ngfilter == 'leaf'")
+                    a(href='/leaf')
+                        .browse-card
+                            h3 {{leaf.topic}}
+                            span.label.label-success leaf
 
-            .col-xs-6.col-sm-6.col-md-4(ng-repeat='document in documents | filter : search as filteredDocs', ng-show="ngfilter == 'all' || ngfilter == 'document'")
-                a(href='/leaf')
-                    .tile.browse-card
-                        h3.tile-title {{document.documentName}}
-                        br
-                        span.label.label-warning document
+                .grid-item.animate-repeat(ng-repeat='document in documents | filter : search as filteredDocs', ng-if="ngfilter == 'all' || ngfilter == 'document'")
+                    a(href='/leaf')
+                        .browse-card
+                            h3 {{document.documentName}}
+                            span.label.label-warning document
 
-            .col-xs-6.col-sm-6.col-md-4(ng-repeat='user in users | filter : search as filteredUsers', ng-show="ngfilter == 'all' || ngfilter == 'user'")
-                a(href='/browse/user/{{user.name}}')
-                    .tile.browse-card
-                        h3.tile-title {{user.name}}
-                        br
-                        p {{user.description}}
-                        span.label.label-info user
+                .grid-item.animate-repeat(ng-repeat='user in users | filter : search as filteredUsers', ng-if="ngfilter == 'all' || ngfilter == 'user'")
+                    a(href='/browse/user/{{user.email}}')
+                        .browse-card
+                            img(src="{{user.avatar}}")
+                            h3 {{user.name}}
+                            p {{user.description}}
+                            span.label.label-info user
 
         // without filter list
         .col-xs-12.col-sm-12(ng-show="withFilters")
-            br
-            .col-xs-6.col-sm-6.col-md-4(ng-repeat='leaf in leaves | filter : search as filteredLeaves', ng-if="ngfilter == 'all' || ngfilter == 'leaf'")
-                .tile.browse-card
+            br    
+            center.grid
+                .grid-item.animate-repeat(ng-repeat='leaf in leaves | filter : search as filteredLeaves', ng-if="ngfilter == 'all' || ngfilter == 'leaf'")
                     a(href='/leaf')
-                        h3.tile-title {{leaf.topic}}
-                    br
-                    span.label.label-success leaf
+                        .browse-card
+                            h3 {{leaf.topic}}
+                            span.label.label-success leaf
 
-            .col-xs-6.col-sm-6.col-md-4(ng-repeat='document in documents | filter : search as filteredDocs', ng-if="ngfilter == 'all' || ngfilter == 'document'")
-                .tile.browse-card
+                .grid-item.animate-repeat(ng-repeat='document in documents | filter : search as filteredDocs', ng-if="ngfilter == 'all' || ngfilter == 'document'")
                     a(href='/leaf')
-                        h3.tile-title {{document.documentName}}
-                    br
-                    span.label.label-warning document
+                        .browse-card
+                            h3 {{document.documentName}}
+                            span.label.label-warning document
 
-            .col-xs-6.col-sm-6.col-md-4(ng-repeat='user in users | filter : search as filteredUsers', ng-if="ngfilter == 'all' || ngfilter == 'user'")
-                .tile.browse-card
-                    a(href='/browse/user/{{user.name}}')
-                        h3.tile-title {{user.name}}
-                    br
-                    p {{user.description}}
-                    span.label.label-info user
+                .grid-item.animate-repeat(ng-repeat='user in users | filter : search as filteredUsers', ng-if="ngfilter == 'all' || ngfilter == 'user'")
+                    a(href='/browse/user/{{user.email}}')
+                        .browse-card
+                            img(src="{{user.avatar}}")
+                            h3 {{user.name}}
+                            p {{user.description}}
+                            span.label.label-info user
 
         // 页面导航栏
         .col-xs-12

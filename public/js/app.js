@@ -3,7 +3,7 @@
 // 导入module
 // ngRoute路由配置
 // toastr消息提醒
-var app = angular.module('myApp', ['ngRoute', 'toastr']);
+var app = angular.module('myApp', ['ngAnimate', 'ngRoute', 'toastr']);
 
 // routeProvider提供路由配置
 app.config(function config($locationProvider, $routeProvider) {
@@ -18,7 +18,17 @@ app.config(function config($locationProvider, $routeProvider) {
         templateUrl: 'partials/browse',
         controller: BrowseCtrl
     }).
-    when('/browse/user/:userName', {
+    when('/about', {
+        title: 'About',
+        templateUrl: 'partials/about',
+        controller: AboutCtrl
+    }).
+    when('/new_function', {
+        title: 'New function',
+        templateUrl: 'partials/new_function',
+        controller: new_functionCtrl
+    }).
+    when('/browse/user/:userEmail', {
         title: 'My profile',
         templateUrl: 'partials/myprofile',
         controller: BrowseUserCtrl

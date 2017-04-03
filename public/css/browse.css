@@ -4,6 +4,10 @@
     min-height: 100% !important;
 }
 
+#ngview {
+    background-color: #F7F8FA;
+}
+
 .browse-results {
     position: relative;
     min-height: 100% !important;
@@ -12,7 +16,8 @@
 #filtersAndSearch {
     height: 120px;
     position: relative;
-    background-color: #D6D0CE;
+    background: linear-gradient(70deg, #b889ef, #97d0e1);
+    background-attachment: fixed;
 }
 
 #filtersBtn {
@@ -33,87 +38,95 @@
     font-size: 16px;
     left: 20px;
     top: 60px;
-    opacity: 0.5;
-}
-
-#ngview {
-    background-color: #ecf0f1;
+    opacity: 1;
 }
 
 .browse-card {
+    padding: 1px;
+    margin: 5px;
+    position: relative;
     background-color: white;
     transition-duration: 1s;
+    border-radius: 2px;
+    box-shadow: 0px 1px 7px #a4a5a7;
+    min-height: 150px;
+}
+
+.browse-card img {
+    margin: 2px;
+    margin-left: 5px;
+    width: 30px;
+}
+
+.browse-card h3 {
+    margin: 10px;
+    text-align: center;
+    font-weight: 300;
+    font-size: 24px;
+    display: inline-block;
+}
+
+.browse-card p {
+    text-align: center;
+    color: gray;
+    font-weight: 400;
+    font-size: 16px;
+}
+
+.browse-card span.label {
+    top: 2px;
+    right: -10px;
+    position: absolute;
+    opacity: 0;
+    transition: 0.3s;
+}
+
+.browse-card:hover span.label {
+    top: 2px;
+    right: 2px;
+    transition: 0.1s;
+    opacity: 1;
 }
 
 .browse-card:hover {
     transform: translate(0px, -3px);
-    box-shadow: 0px 2px 10px black;
+    box-shadow: 0px 2px 7px gray;
     transition-duration: 0s;
 }
 
-li a span {
-    position: absolute;
-    right: 7px;
-}
 
-* {
+/*ng-animate*/
+
+.animate-repeat {
+    line-height: 30px;
+    list-style: none;
     box-sizing: border-box;
 }
 
-body {
-    font-family: sans-serif;
+.animate-repeat.ng-move, .animate-repeat.ng-enter, .animate-repeat.ng-leave {
+    transition: all linear 0.5s;
+}
+
+.animate-repeat.ng-leave.ng-leave-active, .animate-repeat.ng-move, .animate-repeat.ng-enter {
+    opacity: 0;
+    max-height: 0;
+}
+
+.animate-repeat.ng-leave, .animate-repeat.ng-move.ng-move-active, .animate-repeat.ng-enter.ng-enter-active {
+    opacity: 1;
+    max-height: 30px;
 }
 
 
-/* ---- grid ---- */
-
-.grid {
-    background: #EEE;
-    max-width: 1200px;
-}
-
-
-/* clearfix */
-
-.grid:after {
-    content: '';
-    display: block;
-    clear: both;
-}
-
-
-/* ---- grid-item ---- */
+/*ng-animate*/
 
 .grid-item {
-    width: 160px;
-    height: 120px;
+    width: 210px;
     float: left;
-    background: #D26;
-    border: 2px solid #333;
-    border-color: hsla(0, 0%, 0%, 0.5);
-    border-radius: 5px;
 }
 
-.grid-item--width2 {
-    width: 320px;
-}
-
-.grid-item--width3 {
-    width: 480px;
-}
-
-.grid-item--width4 {
-    width: 640px;
-}
-
-.grid-item--height2 {
-    height: 200px;
-}
-
-.grid-item--height3 {
-    height: 260px;
-}
-
-.grid-item--height4 {
-    height: 360px;
+@media only screen and (max-width: 500px) {
+    .grid-item {
+        width: calc(50% - 10px);
+    }
 }
