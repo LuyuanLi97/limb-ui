@@ -6,11 +6,21 @@
 
 .navbar {
     min-height: 53px;
-    font-size: 16px;
+    font-size: 20px;
     border: none;
     border-radius: 0px;
     margin-bottom: 0px;
 }
+
+.navbar-brand {
+    font-weight: 400;
+}
+
+.navbar-nav>li>a {
+    font-weight: 400;
+}
+
+.navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form {}
 
 .topArea {
     /*height: 53px;*/
@@ -64,9 +74,9 @@
 
 .navbar-brand img {
     position: relative;
-    top: -2px;
-    height: 26px;
-    width: 26px;
+    top: -3px;
+    height: 24px;
+    width: 24px;
 }
 
 
@@ -92,7 +102,7 @@
     color: #1abc9c;
     right: 30px;
     height: 36px;
-    width: 180px;
+    width: 150px;
 }
 
 .phoneSearchBar a {
@@ -105,20 +115,105 @@
 
 /*search bar end*/
 
+
+/*search bar on biger screen start*/
+
 .navbar-inverse .navbar-form .form-control, .navbar-inverse .navbar-form .select2-search input[type="text"] {
+    height: 39px;
+    margin: none;
+    border-radius: 6px !important;
+    background-color: #303b54;
     border: none;
-    border-radius: 0px;
-    border-bottom: 1px gray solid;
-    background: transparent;
-    color: #1abc9c;
 }
 
-.input-group-btn {
+.navbar-form {
+    padding: 7px !important;
+}
+
+input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+    color: gray !important;
+}
+
+input:-moz-placeholder, textarea:-moz-placeholder {
+    color: gray !important;
+}
+
+input::-moz-placeholder, textarea::-moz-placeholder {
+    color: gray !important;
+}
+
+input:-ms-input-placeholder, textarea:-ms-input-placeholder {
+    color: gray !important;
+}
+
+.browseIconBg {
+    position: absolute;
+    right: 7px;
+    top: 2px;
     opacity: 0;
     transition: 0.5s;
 }
 
-.input-group input:focus+.input-group-btn {
+.input-group input:focus {
+    background-color: white !important;
+}
+
+.input-group input:focus+.browseIconBg {
     opacity: 1;
     transition: 0.1s;
+}
+
+
+/*search bar on biger screen end*/
+
+.menuAbout {
+    font-size: 18px;
+    font-weight: 400;
+    margin-top: 11px;
+    margin-bottom: 11px;
+    margin-left: 0px;
+    color: white;
+}
+
+@media only screen and (min-width: 750px) {
+    .menuAbout {
+        float: left;
+    }
+}
+
+@media only screen and (max-width: 750px) {
+    .menuSignin form button {
+        float: left !important;
+    }
+}
+
+a.dropdown-toggle span img {
+    width: 23px;
+    height: 23px;
+}
+
+.menuSignin form button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    outline: 0;
+    background-color: white;
+    border: 0;
+    padding: 7px 5px !important;
+    color: #53e3a6;
+    border-radius: 3px;
+    width: 180px !important;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 200;
+    -webkit-transition-duration: 0.25s;
+    transition-duration: 0.25s;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    float: right;
+    right: 10px;
+}
+
+form button:hover {
+    background-color: #f5f7f9;
 }

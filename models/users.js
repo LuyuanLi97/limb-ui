@@ -1,9 +1,18 @@
 var User = require('../lib/mongo').User;
+var bcrypt = require('bcrypt');
 
 module.exports = {
     // create an user
     create: function create(user) {
         return User.create(user);
+    },
+
+    createHashPassword: function(password) {
+        return bcrypt.hashSync(password, 10);
+    },
+
+    validHashPassword: function(password, passwordInDB) {
+        return bcrypt.compareSync(password, passwordInDB);
     },
 
     // get user by email

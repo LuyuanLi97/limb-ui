@@ -1,18 +1,26 @@
-link(rel='stylesheet', href='css/signinAndRegister.css')
-.login-screen
-    .login-form(ng-model='toSignup')
-        .form-group
-            input#login-emal.form-control.login-field(type='email', value='', placeholder='Enter your email', ng-model='formData.email')
-            label.login-field-icon.fui-mail(for='login-mail')
-        .form-group
-            input#login-pass.form-control.login-field(type='password', value='', placeholder='Password', ng-model='formData.password')
-            label.login-field-icon.fui-lock(for='login-pass')
-        div(ng-if="!toSignup")
-            a.btn.btn-primary.btn-lg.btn-block(type='submit', ng-click='signin()') Sign in
-            a.login-link(ng-click='switchToSignup()') New to Leaf? 
-            a.login-link(href='#') Lost your password?
-        div(ng-if="toSignup")
-            a.btn.btn-primary.btn-lg.btn-block(type='submit', ng-click='signup()') Register
-            a.login-link(ng-click='switchToSignin()') Have an account already? 
-
+link(rel='stylesheet', type='text/css', href='css/signinAndRegister.css')
+.wrapper
+    .container
+        h1 Welcome to Leaf
+        form.form-login(ng-model='toSignup')
+            input.input-login(type='email', value='', placeholder='Email', ng-model='formData.email')
+            input.input-login(type='password', value='', placeholder='Password', ng-model='formData.password')
+            div(ng-if="!toSignup")
+                button#login-button(type='submit', ng-click='signin()') Sign in
+                a.login-link(ng-click='switchToSignup()') New to Leaf? 
+                a.login-link(href='#') Lost your password?
+            div(ng-if="toSignup")
+                button#login-button(type='submit', ng-click='signup()') Register
+                a.login-link(ng-click='switchToSignin()') Have an account already? 
+    ul.bg-bubbles
+        li
+        li
+        li
+        li
+        li
+        li
+        li
+        li
+        li
+        li
 include ../components/footer
