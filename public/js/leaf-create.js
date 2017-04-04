@@ -1,261 +1,40 @@
 // 创建新的思维导图
 ($(function() {
-    var inputData = [{
-    "name": "作业汇总",
-    "value": 0,
-    "children": [
-        {
-            "name": "高数homework",
-            "value": 1,
-            "children": [
-                {
-                    "name": "第一章",
-                    "value": 2,
-                    "children": []
-                },
-                {
-                    "name": "第二章",
-                    "value": 3,
-                    "children": []
-                },
-                {
-                    "name": "第三章",
-                    "value": 4,
-                    "children": []
-                },
-                {
-                    "name": "第四章",
-                    "value": 5,
-                    "children": []
-                },
-                {
-                    "name": "第五章",
-                    "value": 6,
-                    "children": [
-                        {
-                            "name": "第一节",
-                            "value": 7,
-                            "children": []
-                        },
-                        {
-                            "name": "第二节",
-                            "value": 8,
-                            "children": []
-                        },
-                        {
-                            "name": "第三节",
-                            "value": 9,
-                            "children": []
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "name": "模电homework",
-            "value": 10,
-            "children": [
-                {
-                    "name": "第一章",
-                    "value": 11,
-                    "children": []
-                },
-                {
-                    "name": "第二章",
-                    "value": 12,
-                    "children": []
-                },
-                {
-                    "name": "第三章",
-                    "value": 13,
-                    "children": []
-                }
-            ]
-        },
-        {
-            "name": "数字电子技术",
-            "value": 14,
-            "children": []
-        },
-        {
-            "name": "C++程序设计",
-            "value": 15,
-            "children": []
-        },
-        {
-            "name": "Web2.0",
-            "value": 16,
-            "children": [
-                {
-                    "name": "Plan and Goals",
-                    "value": 17,
-                    "children": []
-                },
-                {
-                    "name": "课程PPT",
-                    "value": 18,
-                    "children": []
-                },
-                {
-                    "name": "课程作业",
-                    "value": 19,
-                    "children": [
-                        {
-                            "name": "Homework1: Menu",
-                            "value": 20,
-                            "children": []
-                        },
-                        {
-                            "name": "Homework2: Login",
-                            "value": 21,
-                            "children": []
-                        },
-                        {
-                            "name": "Final Work: My Achievement",
-                            "value": 22,
-                            "children": []
-                        }
-                    ]
-                },
-                {
-                    "name": "html",
-                    "value": 23,
-                    "children": []
-                },
-                {
-                    "name": "css",
-                    "value": 24,
-                    "children": []
-                },
-                {
-                    "name": "javascript",
-                    "value": 25,
-                    "children": []
-                }
-            ]
-        },
-        {
-            "name": "比赛经历",
-            "value": 26,
-            "children": [
-                {
-                    "name": "软件创新大赛",
-                    "value": 27,
-                    "children": [
-                        {
-                            "name": "总结与反思",
-                            "value": 28,
-                            "children": []
-                        }
-                    ]
-                },
-                {
-                    "name": "美国数学建模大赛",
-                    "value": 29,
-                    "children": []
-                }
-            ]
-        },
-        {
-            "name": "总结与思考 homework",
-            "value": 30,
-            "children": []
-        }
-    ]
-}];
-
     // $.get('./test.json').done(function(json, status, xhr) {
         // 初始化第一个节点
         // inputData = JSON.parse(json);
-        while (inputData[0].name === "") {
-            inputData[0].name = prompt("请为您的第一个节点设置一个名字：");
-        }
-        var valueCount = 0;
-        inputData[0].value = valueCount;
-        valueCount++;
+        // var inputData = [{
+        //     // String
+        //     "filename": null,
+        //     // String
+        //     "author": null,
+        //     // Array
+        //     "tree": null
+        // }];
+        var rootValue = null;
+        var inputData = initTree();
+
         $('#main').css('height', '5000px');
         $('#main').css('width', '5000px');
         var myCharts = echarts.init($("#main").get(0));
-        option = {
-            title: {
-                // text: "Limb",
-                // subtext: "Made By konigsberg",
-            },
-            legend: {
-                // 和series里面的name对应
-                data: [inputData[0].name.toString()],
-            },
-            // 工具箱
-            toolbox: {
-                show: true,
-                feature: {
-                    // mark: {show: true},
-                    // dataZoom: {show: true},
-                    // dataView: {show: true},
-                    // restore: {show: true},
-                    saveAsImage: {show: true},
-                }
-            },
-            calculable : false,
-            tooltip: {
-                // 节点可以进入
-                show: true,
-                formatter: '{b}:{c}',
-            },
-            series: [
-                {
-                    name: inputData[0].name,
-                    type:'tree',
-                    // 树的展示方式
-                    orient: 'horizontal',
-                    rootLocation: {
-                        x: 50,
-                        y: 'center',
-                    },
-                    nodePadding: 25,
-                    itemStyle: {
-                        normal: {
-                            // 不支持显示value
-                            label: {
-                                show: true,
-                                position: 'bottom',
-                            },
-                            color: 'rgb(44, 153, 132)',
-                            lineStyle: {
-                                color: 'rgb(50, 74, 94)',
-                                width: 3,
-                                type: 'curve',
-                            },
-                        }
-                    },
-                    // 可以点击
-                    // clickable: true,
-                    // roam: true,
-                    // 是否反转
-                    // direction: 'inverse',
-                    data: inputData
-                }
-            ],
-        };
-
+        console.log(inputData);
+        var option = optionConfig(inputData);
+        console.log(option);
         myCharts.setOption(option);
-        var myCopyContent = {};
-        // myCharts.on("click", clickOnce);
 
-        console.log("in main.js");
+        var myCopyContent = {};
+
         // 上移下移
         $('#up').on('click', up);
 
         $('#down').on('click', down);
 
         $('#left').on('click', function() {
-            console.log("left");
             $('#main').css('left', function(index, value) {
                 return parseInt(value)-50+"px";
             });
         });
         $('#right').on('click', function () {
-            console.log("right");
             $('#main').css('left', function(index, value) {
                 return parseInt(value)+50+"px";
             });
@@ -263,8 +42,11 @@
 
 
         myCharts.on("click", function(ecData) {
-            console.log("in");
-            console.log(ecData);
+            // console.log("in");
+            // console.log(ecData);
+            // console.log(ecData.data.value);
+            console.log(findPathFromSelfToRoot(ecData.data.value));
+            console.log(getValue(ecData));
             // $('#dropdown').trigger('click');
             // $('.dropdown-toggle').dropdown('toggle');
             // 创建新节点
@@ -278,13 +60,12 @@
                 var thisValue = ecData.data.value;
                 var current = findCurrentNodeByValue(thisValue);
                 var currentChildren = current.children;
-
+                var selfValue = getRandomValue();
                 var newObj = {
                     name: newNodeName,
-                    value: valueCount,
+                    value: selfValue,
                     children: []
                 };
-                valueCount++;
                 current.children.push(newObj);
                 myCharts.clear();
                 myCharts.setOption(option);
@@ -330,6 +111,7 @@
                 var thisValue = ecData.data.value;
                 var current = findCurrentNodeByValue(thisValue);
                 // console.log("copy:");
+                // 深复制
                 myCopyContent = JSON.parse(JSON.stringify(current));
                 // console.log(myCopyContent);
                 // $('#copyContent').off();
@@ -339,16 +121,10 @@
 
             // 粘贴节点
             $('button#pasteToContent').on('click', function() {
-                console.log("pasteToContent");
                 var thisValue = ecData.data.value;
                 var current = findCurrentNodeByValue(thisValue);
-                myCopyContent2 = {
-                    "name": 12,
-                    "value": 1,
-                    "children": []
-                };
                 var cloneObj = JSON.parse(JSON.stringify(myCopyContent));
-                // console.log(cloneObj);
+                cloneObj = recurChangeValuesForObject(cloneObj);
                 if (myCopyContent != null) {
                     current.children.push(cloneObj);
                 }
@@ -363,7 +139,6 @@
             // 取消注册的事件，十分关键！
             $('#main').on('click', function() {
                 console.log("I am in the main!!!");
-                console.log(ecData);
                 $('button#create').off();
                 $('button#delete').off();
                 $('button#SBContent').off();
@@ -693,6 +468,38 @@
             }
         }
 
+        function findNameByValue(value) {
+            console.log(findCurrentNodeByValue(value));
+            return findCurrentNodeByValue(value).name;
+        }
+
+        function findPathFromSelfToRoot(value) {
+            var path = [];
+            var selfValue = value;
+            path.push(findNameByValue(selfValue));
+            while (selfValue != rootValue) {
+                selfValue = findParentNodeByValue(selfValue).value;
+                path.push(findNameByValue(selfValue));
+            }
+            return path;
+        }
+
+        function recurChangeValuesForObject(cloneObj) {
+            // 无孩子
+            if (cloneObj.children.length == 0) {
+                cloneObj.value = getRandomValue();
+            } else {
+                cloneObj.value = getRandomValue();
+                for (let i = 0; i < cloneObj.children.length; i++)
+                    recurChangeValuesForObject(cloneObj.children[i]);
+            }
+            return cloneObj;
+        }
+
+        function getValue(ecData) {
+            return ecData.data.value;
+        }
+
         $('#save').on('click', function() {
             var filename = prompt('保存的文件名是：');
             inputData.filename = filename;
@@ -711,18 +518,105 @@
             });
         }
 
-        // function myleft() {
-        //     console.log("left");
-        //     $('#main').css('left', function(index, value) {
-        //         return parseInt(value)-50+"px";
-        //     });
-        // };
+        function getRandomValue() {
+            return Math.random().toString(35);
+        }
 
-        // function myright() {
-        //     console.log("right");
-        //     $('#main').css('left', function(index, value) {
-        //         return parseInt(value)+50+"px";
-        //     });
-        // }
-    // });
+        function initTree() {
+            console.log("in initTree");
+            var inputData = [{
+                // String
+                "filename": null,
+                // String
+                "author": null,
+                // Array
+                "tree": null
+            }];
+            var rootValue = null;
+            inputData[0].filename = "default";
+            // test
+            var rootName = "defaultRoot";
+            while (inputData[0].filename === null) {
+                inputData[0].filename = prompt("请为您的文件设置一个名字：");
+            }
+
+            while (rootName === null) {
+                let rootName = prompt("请为您的第一个节点设置一个名字：");
+            }
+
+            // 添加root节点
+            rootValue = getRandomValue();
+            inputData[0].tree = {
+                "name": rootName,
+                "value": rootValue,
+                "children": []
+            }
+            return inputData;
+        }
+
+        function optionConfig(inputData) {
+            var option = {
+                title: {
+                    // text: "Limb",
+                    // subtext: "Made By konigsberg",
+                },
+                legend: {
+                    // 和series里面的name对应
+                    data: [inputData[0].filename.toString()],
+                },
+                // 工具箱
+                toolbox: {
+                    show: true,
+                    feature: {
+                        // mark: {show: true},
+                        // dataZoom: {show: true},
+                        // dataView: {show: true},
+                        // restore: {show: true},
+                        saveAsImage: {show: true},
+                    }
+                },
+                calculable : false,
+                tooltip: {
+                    // 节点可以进入
+                    show: true,
+                    formatter: '{b}',
+                },
+                series: [
+                    {
+                        name: inputData[0].filename,
+                        type:'tree',
+                        // 树的展示方式
+                        orient: 'horizontal',
+                        rootLocation: {
+                            x: 50,
+                            y: 'center',
+                        },
+                        nodePadding: 25,
+                        itemStyle: {
+                            normal: {
+                                // 不支持显示value
+                                label: {
+                                    show: true,
+                                    position: 'bottom',
+                                },
+                                color: 'rgb(44, 153, 132)',
+                                lineStyle: {
+                                    color: 'rgb(50, 74, 94)',
+                                    width: 3,
+                                    type: 'curve',
+                                },
+                            }
+                        },
+                        // 可以点击
+                        // clickable: true,
+                        // roam: true,
+                        // 是否反转
+                        // direction: 'inverse',
+                        data: inputData[0].tree
+                    }
+                ],
+            };
+            return option;
+        }
+
 }()));

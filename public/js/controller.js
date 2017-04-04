@@ -172,10 +172,10 @@ function HelpCtrl($scope, $http, $rootScope) {};
 function SettingsCtrl($scope, $http, $rootScope) {
     $rootScope.$broadcast('authenticationChanged');
     $http.get('/api/settings')
-        .then(function(data) {
-            $scope.name = data.data.name;
-            $scope.avatar = data.data.avatar;
-            $scope.email = data.data.email;
+        .then(function(response) {
+            $scope.name = response.data.name;
+            $scope.avatar = response.data.avatar;
+            $scope.email = response.data.email;
             $scope.description = data.data.description;
         }, function(error) {
             console.log('Error: ' + error);
@@ -184,9 +184,8 @@ function SettingsCtrl($scope, $http, $rootScope) {
 
 app.controller('updateProfileCtrl', function($http, $rootScope, $location, $scope) {
     $scope.updateProfile = function() {
-        console.log($scope.formData);
         $http.post('/api/updateProfile', $scope.formData)
-            .then(function(data) {
+            .then(function(response) {
                 toastr.success('Update Profile Success!');
             });
         $location.path('/myprofile');
@@ -200,33 +199,38 @@ app.controller('updateAccountCtrl', function($http, $rootScope, $scope) {
 });
 
 app.controller('updateAvatarCtrl', function($http, $rootScope, $location, $scope) {
+    // 上传头像
     $scope.uploadFile = function() {
         var file = $scope.myFile;
         var uploadUrl = "/api/updateAvatar";
         var fd = new FormData();
         fd.append('file', file);
         $http.post(uploadUrl, fd, {
-                transformRequest: angular.identity,
-                headers: {
-                    'Content-Type': undefined
-                }
-            })
-            .then(function() {
-                console.log("success!!");
-                $location.path('/myprofile');
-            }, function() {
-                console.log("error!!");
-            });
+            transformRequest: angular.identity,
+            headers: {
+                'Content-Type': undefined
+            }
+        })
+        .then(function() {
+            console.log("success!!");
+            $location.path('/myprofile');
+        }, function() {
+            console.log("error!!");
+        });
     };
 });
+
+/*
+    退出登录
+*/
 
 function SignoutCtrl($scope, $http, $location, $rootScope, toastr) {
     $rootScope.$broadcast('authenticationChanged');
     $http.get('/api/myprofile')
-        .then(function(data) {
-            $scope.name = data.data.name;
-            $scope.email = data.data.email;
-            $scope.description = data.data.description;
+        .then(function(response) {
+            $scope.name = response.data.name;
+            $scope.email = response.data.email;
+            $scope.description = response.data.description;
         }, function(error) {
             console.log('Error: ' + error);
         });
@@ -260,25 +264,31 @@ function LeafCtrl($scope, $rootScope, $http, $location) {
 
     // 默认读取跟节点数据
     $http.get('/api/getNodeData/root')
-        .then(function(data) {
-            $scope.nodeData = data.data;
+        .then(function(response) {
+            $scope.nodeData = response.data;
         });
 
     // 选中其他节点时
     $scope.getNodeData = function(nodeId) {
         $http.get('/api/getNodeData/' + nodeId)
-            .then(function(data) {
-                $scope.nodeData = data.data;
+            .then(function(response) {
+                $scope.nodeData = response.data;
             });
     }
 };
 
+/*
+    路由改变的时候调用
+*/
 app.run(['$rootScope', function($rootScope) {
     $rootScope.$on('$routeChangeSuccess', function(event, current, previous) {
         $rootScope.title = current.$$route.title;
     });
 }]);
 
+/*
+    监视用户状态
+*/
 app.controller('checkSigninCtrl', function($http, $rootScope, $scope) {
     $rootScope.$on('authenticationChanged', function() {
         $http.get('/api/checkSignin')
@@ -291,8 +301,9 @@ app.controller('checkSigninCtrl', function($http, $rootScope, $scope) {
     });
 });
 
-// toastr config
+// 配置toastr
 app.config(function(toastrConfig) {
+    // extend相当于浅copy
     angular.extend(toastrConfig, {
         autoDismiss: false,
         containerId: 'toast-container',
@@ -311,7 +322,6 @@ function BrowseCtrl($scope, $rootScope, $http, $routeParams) {
     // users
     $http.get('/api/browse')
         .then(function(response) {
-            console.log(response.data);
             $scope.users = response.data;
         }, function(error) {
             console.log('Error: ' + error);
@@ -324,6 +334,7 @@ function BrowseCtrl($scope, $rootScope, $http, $routeParams) {
         topic: "angularJS",
         type: "leaf local"
     }];
+
     $scope.documents = [{
         documentName: "Operating System week2.pdf",
         type: "document local"
@@ -342,8 +353,9 @@ app.directive('fileModel', ['$parse', function($parse) {
     return {
         restrict: 'A',
         link: function(scope, element, attrs) {
-            var model = $parse(attrs.fileModel);
-            var modelSetter = model.assign;
+            var modelFuc = $parse(attrs.fileModel);
+            // 使得modelSetter可以通过下面的方法进行赋值
+            var modelSetter = modelFuc.assign;
 
             element.bind('change', function() {
                 scope.$apply(function() {
