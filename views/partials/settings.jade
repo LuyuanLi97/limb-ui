@@ -1,13 +1,14 @@
+link(rel='stylesheet', href='css/settings.css')
 br
-.container
-    .row(ng-switch="condition")
+.container-fluid
+    .row
         .col-xs-12.col-sm-3
             include ../components/settings/sidebar
-        .col-xs-12.col-sm-5(ng-switch-default)
+        .col-xs-12.col-sm-5(ng-show="ngfilter=='profile'")
             include ../components/settings/profile
-        .col-xs-12.col-sm-4(ng-switch-default)
+        .col-xs-12.col-sm-4(ng-show="ngfilter=='profile'")
             include ../components/settings/avatar
-        .col-xs-12.col-sm-8(ng-switch-when="Account")
+        .col-xs-12.col-sm-8(ng-show="ngfilter=='account'")
             include ../components/settings/account
-        .col-xs-12.col-sm-8(ng-switch-when="Email")
+        .col-xs-12.col-sm-8(ng-show="ngfilter=='email'")
             include ../components/settings/email

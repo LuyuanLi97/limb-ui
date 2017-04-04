@@ -2,9 +2,17 @@
     nav.navbar.navbar-inverse(role='navigation')
         // Brand and toggle get grouped for better mobile display
         .navbar-header
-            button.navbar-toggle(type='button', data-toggle='collapse', data-target='#bs-example-navbar-collapse-1')
-                span.sr-only Toggle navigation
-            a.navbar-brand(href='/') Leaf
+            .menuToggle.visible-xs(type='button', ng-click='collapseList = !collapseList', data-toggle='collapse', data-target='#bs-example-navbar-collapse-1')
+                span.fui-list(ng-hide='collapseList')
+                span.fui-cross(ng-show='collapseList')
+            a.navbar-brand(href='/') 
+                img(src='img/leaf.png')
+                | &nbsp; Leaf &nbsp;
+            .phoneSearchBar.visible-xs
+                form
+                    input.form-control.phoneSearchBarFormCtrl(type='search', placeholder='Search Leaf', ng-model='search', ng-show='clickSearch')
+                    a(href='/browse', ng-click='clickSearch = !clickSearch')
+                        span.fui-search
         // Collect the nav links, forms, and other content for toggling
         #bs-example-navbar-collapse-1.collapse.navbar-collapse
             ul.nav.navbar-nav.navbar-left
@@ -14,62 +22,61 @@
                         b.caret
                     ul.dropdown-menu
                         li
-                            a(href='/') all
+                            a(href='/browse') all
                         li
-                            a(href='/') leaf
+                            a(href='/browse') leaf
                         li
-                            a(href='/') document
+                            a(href='/browse') document
                         li
-                            a(href='/') user
+                            a(href='/browse') user
                         li
-                            a(href='/') local
-            form.navbar-form.navbar-left(action='/', role='search')
+                            a(href='/browse') local
+                        li
+                            a(href='/new_function') new_function
+            form.navbar-form.navbar-left(role='search').hidden-xs
                 .form-group.has-feedback
                     .input-group
-                        input.form-control(type='text', placeholder='Search Leaf')
-                        span.input-group-addon
+                        input.form-control(type='search', placeholder='Search Leaf', ng-model='search')
+                        a.browseIconBg(href='/browse')
                             span.fui-search
-            ul.nav.navbar-nav.navbar-right
-                li.dropdown
-                    a.dropdown-toggle(href='', data-toggle='dropdown')
-                        span.fui-document
-                        b.caret
-                    ul.dropdown-menu
-                        li
-                            a(href='/leaf') new public leaf
-                        li
-                            a(href='/leaf') new private leaf
-                        li
-                            a(href='/leaf') open file
-                        li
-                            a(href='/leaf') delete this leaf
-                        li.divider
-                        li
-                            a(href='/leaf') recently opened
-                li.dropdown(ng-controller='checkSigninCtrl', ng-model='signedin')
-                    a.dropdown-toggle(href='', data-toggle='dropdown')
-                        span.fui-user
-                        b.caret
-                    ul.dropdown-menu(ng-if='signedin')
-                        li
-                            a(href='/myprofile') my profile
-                        li
-                            a(href='/') my leaves
-                        li
-                            a(href='/') my stars
-                        li
-                            a(href='/') my messages
-                        li
-                            a(href='/') request
-                        li.divider
-                        li
-                            a(href='/settings') settings
-                        li
-                            a(href='/') help
-                        li
-                            a(href='/signout') sign out
-                    ul.dropdown-menu(ng-if='!signedin')
-                        li
-                            a(href='/signup') register
-                        li
-                            a(href='/signin') sign in
+            a.menuAbout(href='/about') about
+            div(ng-controller='checkSigninCtrl', ng-model='signedin')
+                a.menuSignin(href='/signin', ng-hide='signedin')
+                    form
+                        button(href='/signin') Register / Sign In
+                ul.nav.navbar-nav.navbar-right(ng-show='signedin')
+                    li.dropdown
+                        a.dropdown-toggle(href='', data-toggle='dropdown')
+                            span.fui-plus
+                            b.caret
+                        ul.dropdown-menu
+                            li
+                                a(href='/leaf') new public leaf
+                            li
+                                a(href='/leaf') new private leaf
+                            //- li
+                            //-     a(href='/leaf') open file
+                            //- li
+                            //-     a(href='/leaf') delete this leaf
+                            //- li.divider
+                            //- li
+                            //-     a(href='/leaf') recently opened &nbsp;
+                            //-         span.label.label-info 5
+                    li.dropdown
+                        a.dropdown-toggle(href='', data-toggle='dropdown')
+                            span
+                                img(ng-src='{{userAvatar}}')
+                            b.caret
+                        ul.dropdown-menu
+                            li
+                                a(href='/myprofile') my profile
+                            li
+                                a(href='/mymessages') my messages &nbsp;
+                                    span.label.label-info 3
+                            li.divider
+                            li
+                                a(href='/settings') settings
+                            li
+                                a(href='/help') help
+                            li
+                                a(href='/signout') sign out

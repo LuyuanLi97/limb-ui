@@ -1,0 +1,69 @@
+#leaf-main {
+    padding: 0px;
+    height: 100%;
+    border-bottom: 10px gray solid;
+    overflow: scroll;
+}
+
+#toolToggle {
+    position: absolute;
+    height: 78px;
+    width: 10px !important;
+    background: transparent;
+}
+
+#toolToggle:hover {
+    background-color: #222;
+}
+
+#toolBar {
+    position: fixed;
+    background: transparent;
+    z-index: 10;
+}
+
+#toolList {
+    margin-left: 30px;
+}
+
+#parent {
+    height: 100%;
+    width: 100%;
+    position: relative;
+    overflow: scroll;
+}
+
+@media only screen and (max-width: 500px) {
+    #parent, #main {
+        position: fixed;
+    }
+}
+
+#main {
+    height: 5000px;
+    width: 5000px;
+    position: relative;
+    top: -2000px;
+    left: 100px;
+}
+
+.btn, .btn-primary, .btn-sm {
+    margin: 2px;
+    color: gray;
+    background-color: white;
+}
+
+.btn:focus, .btn-primary:focus, .btn-sm:focus {
+    margin: 2px;
+    color: gray;
+    background-color: white;
+}
+
+.btn-tool {
+    background: transparent;
+}
+
+.btn:hover, .btn-primary:hover, .btn-sm:hover {
+    color: white;
+    background-color: #222;
+}

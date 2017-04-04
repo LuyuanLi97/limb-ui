@@ -1,0 +1,117 @@
+link(rel='stylesheet', href='css/browse.css')
+#filtersAndSearch.container-fluit
+    p#browseTitle.lead Lots of Leaves, one Tree
+    p#browseIntroduction {{users.length}} users, {{leaves.length}} leaves
+    a#filtersBtn.btn.btn-inverse(type='button', ng-click="withFilters = !withFilters", data-toggle='collapse', data-target='#filtersList', aria-expanded='false', aria-controls='filtersList')
+        span.fui-plus(ng-show="withFilters") &nbsp;SHOW FILTERS
+        span.fui-cross(ng-hide="withFilters") &nbsp;HIDE FILTERS
+
+#browse-main
+    .browse-results.container-fluid
+        .col-xs-12.col-sm-3
+            #filtersList.collapse.in
+                br
+                ul#nav-tabs-wrapper.nav.nav-tabs.nav-pills.nav-stacked.well
+
+                    li(ng-hide="ngfilter == 'all' || ngfilter-menu == 'all'")
+                        a(ng-click='ngfilter = "all"', ng-init='ngfilter="all"') all
+                            span.badge {{filteredUsers.length + filteredLeaves.length + filteredDocs.length}}
+                    li.active(ng-show="ngfilter == 'all' || ngfilter-menu == 'all'")
+                        a(ng-click='ngfilter = "all"', ng-init='ngfilter="all"') all
+                            span.badge {{filteredUsers.length + filteredLeaves.length + filteredDocs.length}}
+
+                    li(ng-hide="ngfilter == 'leaf' || ngfilter-menu == 'leaf'")
+                        a(ng-click='ngfilter = "leaf"') leaf
+                            span.badge {{filteredLeaves.length}}
+                    li.active(ng-show="ngfilter == 'leaf' || ngfilter-menu == 'leaf'")
+                        a(ng-click='ngfilter = "leaf"') leaf
+                            span.badge {{filteredLeaves.length}}
+
+                    li(ng-hide="ngfilter == 'document' || ngfilter-menu == 'document'")
+                        a(ng-click='ngfilter = "document"') document
+                            span.badge {{filteredDocs.length}}            
+                    li.active(ng-show="ngfilter == 'document' || ngfilter-menu == 'document'")
+                        a(ng-click='ngfilter = "document"') document
+                            span.badge {{filteredDocs.length}}
+
+                    li(ng-hide="ngfilter == 'user' || ngfilter-menu == 'user'")
+                        a(ng-click='ngfilter = "user"') user 
+                            span.badge {{filteredUsers.length}}
+                    li.active(ng-show="ngfilter == 'user' || ngfilter-menu == 'user'")
+                        a(ng-click='ngfilter = "user"') user 
+                            span.badge {{filteredUsers.length}}
+
+                    li(ng-hide="ngfilter == 'local' || ngfilter-menu == 'local'")
+                        a(ng-click='ngfilter = "local"') local
+                    li.active(ng-show="ngfilter == 'local' || ngfilter-menu == 'local'")
+                        a(ng-click='ngfilter = "local"') local
+
+        // with filter list
+        .col-xs-12.col-sm-9(ng-hide="withFilters")
+            br
+            center.grid
+                .grid-item.animate-repeat(ng-repeat='leaf in leaves | filter : search as filteredLeaves', ng-if="ngfilter == 'all' || ngfilter == 'leaf'")
+                    a(href='/leaf')
+                        .browse-card
+                            h3 {{leaf.topic}}
+                            span.label.label-success leaf
+
+                .grid-item.animate-repeat(ng-repeat='document in documents | filter : search as filteredDocs', ng-if="ngfilter == 'all' || ngfilter == 'document'")
+                    a(href='/leaf')
+                        .browse-card
+                            h3 {{document.documentName}}
+                            span.label.label-warning document
+
+                .grid-item.animate-repeat(ng-repeat='user in users | filter : search as filteredUsers', ng-if="ngfilter == 'all' || ngfilter == 'user'")
+                    a(href='/browse/user/{{user.email}}')
+                        .browse-card
+                            img(src="{{user.avatar}}")
+                            h3 {{user.name}}
+                            p {{user.description}}
+                            span.label.label-info user
+
+        // without filter list
+        .col-xs-12.col-sm-12(ng-show="withFilters")
+            br    
+            center.grid
+                .grid-item.animate-repeat(ng-repeat='leaf in leaves | filter : search as filteredLeaves', ng-if="ngfilter == 'all' || ngfilter == 'leaf'")
+                    a(href='/leaf')
+                        .browse-card
+                            h3 {{leaf.topic}}
+                            span.label.label-success leaf
+
+                .grid-item.animate-repeat(ng-repeat='document in documents | filter : search as filteredDocs', ng-if="ngfilter == 'all' || ngfilter == 'document'")
+                    a(href='/leaf')
+                        .browse-card
+                            h3 {{document.documentName}}
+                            span.label.label-warning document
+
+                .grid-item.animate-repeat(ng-repeat='user in users | filter : search as filteredUsers', ng-if="ngfilter == 'all' || ngfilter == 'user'")
+                    a(href='/browse/user/{{user.email}}')
+                        .browse-card
+                            img(src="{{user.avatar}}")
+                            h3 {{user.name}}
+                            p {{user.description}}
+                            span.label.label-info user
+
+        // 页面导航栏
+        .col-xs-12
+            center
+                ul.pagination
+                    li.previous
+                        a.fui-arrow-left(href='#fakelink')
+                    li.active
+                        a(href='#fakelink') 1
+                    li
+                        a(href='#fakelink') 2
+                    li
+                        a(href='#fakelink') 3
+                    li
+                        a(href='#fakelink') 4
+                    li
+                        a(href='#fakelink') 5
+                    li.next
+                        a.fui-arrow-right(href='#fakelink')
+                br
+                br
+    include ../components/footer
