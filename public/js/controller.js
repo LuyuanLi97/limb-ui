@@ -1,6 +1,10 @@
 "use strict";
 
+/*
+    主页面登录注册
+*/
 function IndexCtrl($scope, $http, $location, $rootScope, toastr) {
+    // rootScope里面的变量可以在不同的controller里面通用，而且可以在外面通过$root.变量名访问得到
     $scope.ngViewClass = 'page-home';
     $rootScope.$broadcast('authenticationChanged');
 }
@@ -113,6 +117,9 @@ function SigninCtrl($scope, $http, $location, $rootScope, toastr) {
     };
 };
 
+/*
+    获取用户资料
+*/
 function MyprofileCtrl($scope, $http, $rootScope) {
     $rootScope.$broadcast('authenticationChanged');
     $http.get('/api/myprofile')
@@ -122,11 +129,15 @@ function MyprofileCtrl($scope, $http, $rootScope) {
             $scope.email = data.data.email;
             $scope.description = data.data.description;
         }, function(error) {
+            // 重定向到错误页面
+            // $location.url('error');
             console.log('Error: ' + error);
         });
 };
 
-// Browse
+/*
+    查看其他用户的信息
+*/
 function BrowseUserCtrl($scope, $http, $rootScope, $routeParams) {
     $rootScope.$broadcast('authenticationChanged');
     $http.get('/api/browse/user/' + $routeParams.userEmail)
@@ -140,12 +151,24 @@ function BrowseUserCtrl($scope, $http, $rootScope, $routeParams) {
         });
 };
 
+/*
+    接受信息  
+*/
 function MymessagesCtrl($scope, $http, $rootScope) {};
 
+/*
+    请求
+*/
 function RequestsCtrl($scope, $http, $rootScope) {};
 
+/*
+    leaf的使用文档
+*/
 function HelpCtrl($scope, $http, $rootScope) {};
 
+/*
+    设置
+*/
 function SettingsCtrl($scope, $http, $rootScope) {
     $rootScope.$broadcast('authenticationChanged');
     $http.get('/api/settings')
@@ -265,9 +288,9 @@ app.run(['$rootScope', function($rootScope) {
 app.controller('checkSigninCtrl', function($http, $rootScope, $scope) {
     $rootScope.$on('authenticationChanged', function() {
         $http.get('/api/checkSignin')
-            .then(function(data) {
-                $scope.signedin = data.data.signedin;
-                $scope.userAvatar = data.data.userAvatar;
+            .then(function(response) {
+                $scope.signedin = response.data.signedin;
+                $scope.userAvatar = response.data.userAvatar;
             }, function(error) {
                 console.log('Error: ' + error);
             });
@@ -293,9 +316,9 @@ function BrowseCtrl($scope, $rootScope, $http, $routeParams) {
     $rootScope.$broadcast('authenticationChanged');
     // users
     $http.get('/api/browse')
-        .then(function(data) {
-            console.log(data.data);
-            $scope.users = data.data;
+        .then(function(response) {
+            console.log(response.data);
+            $scope.users = response.data;
         }, function(error) {
             console.log('Error: ' + error);
         });

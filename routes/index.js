@@ -22,24 +22,31 @@ var upload = multer({
 module.exports = function(app) {
     // app.post('/multer', upload.single('file'));
     // render
-    app.get('/', function(req, res) {
+    app.get('/', function(req, res, next) {
         res.render('index');
     });
-    app.get('/partials/:name', function(req, res) {
+
+    // :后面作为一个可变的参数传进去，由req进行访问
+    app.get('/partials/:name', function(req, res, next) {
         var name = req.params.name;
+        console.log("partials:"+name+"has been request!");
         res.render('partials/' + name);
+        console.log("par");
     });
-    // 优化路由
+
+    // 解决直接访问路由出现404错误的问题
     app.use(function(req, res, next) {
+        console.log("req.path:");
         console.log(req.path);
+        // 路由中含有api
         if (req.path.indexOf('/api') >= 0) {
             next();
         } else if (req.path.length >= 2) {
             res.render('index');
             app.get(req.path);
-            next();
+            // next();
         } else {
-            next();
+            // next();
         }
     });
 

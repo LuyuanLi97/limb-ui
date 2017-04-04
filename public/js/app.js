@@ -1,7 +1,11 @@
 "use strict";
 
+// 导入module
+// ngRoute路由配置
+// toastr消息提醒
 var app = angular.module('myApp', ['ngAnimate', 'ngRoute', 'toastr']);
 
+// routeProvider提供路由配置
 app.config(function config($locationProvider, $routeProvider) {
     $routeProvider.
     when('/', {
@@ -78,6 +82,7 @@ app.config(function config($locationProvider, $routeProvider) {
         templateUrl: 'partials/settings',
         controller: SettingsCtrl
     }).
+    // 默认路由地址——没有找到的路径自动跳转  
     otherwise({
         redirectTo: '/'
     });
