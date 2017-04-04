@@ -189,6 +189,7 @@ exports.updateProfile = function(req, res, next) {
         .then(user => {
             req.session.user = user;
         });
+    next();
 };
 
 // Update avatar
@@ -199,7 +200,10 @@ exports.updateAvatar = function(req, res, next) {
         email: req.session.user.email
     }, {
         avatar: relativeAddress
-    }, function(error) {});
+    }, function(error) {
+        console.log('updateAvatar error: ' + error);
+    });
+    next();
 };
 
 // Update Account
