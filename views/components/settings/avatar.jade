@@ -4,6 +4,4 @@ br
 img.bg#myicon(src='{{avatar}}', alt='icon')
 form(ng-controller='updateAvatarCtrl')
     input(type='file', file-model='myFile')
-    br
-    br
-    button(ng-click='uploadFile()') Upload new picture
+    a.btn.btn-success(ng-click='uploadFile()') Upload new picture
