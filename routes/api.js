@@ -1,7 +1,7 @@
 'use secret';
 
 var User = require('../lib/mongo').User;
-var UserModel = require('../models/users');
+var userEntity = require('../models/users');
 
 // Sign up
 exports.signup = function(req, res) {
@@ -24,7 +24,7 @@ exports.signup = function(req, res) {
             'message': e.message
         });
     }
-    UserModel.getUserByEmail(email)
+    userEntity.getUserByEmail(email)
         .then(function(user) {
             if (user) {
                 return res.json({
@@ -37,11 +37,11 @@ exports.signup = function(req, res) {
     // 待写入数据库的用户信息
     var user = {
         email: email,
-        password: UserModel.createHashPassword(password),
+        password: userEntity.createHashPassword(password),
     };
 
     // 用户信息写入数据库
-    UserModel.create(user)
+    userEntity.create(user)
         .then(function(user) {
             console.log('注册成功');
             // 将用户信息存入 session
@@ -59,13 +59,13 @@ exports.signin = function(req, res) {
     var email = req.body.email;
     var password = req.body.password;
 
-    UserModel.getUserByEmail(email)
+    userEntity.getUserByEmail(email)
         .then(function(user) {
             try {
                 if (!user) {
                     throw new Error('用户不存在');
                 }
-                if (!UserModel.validHashPassword(password, user.password)) {
+                if (!userEntity.validHashPassword(password, user.password)) {
                     throw new Error('邮箱或密码错误');
                 }
             } catch (e) {
@@ -91,7 +91,7 @@ exports.signout = function(req, res, next) {
 };
 
 exports.browse = function(req, res, next) {
-    UserModel.getUsers()
+    userEntity.getUsers()
         .then(users => {
             console.log("users: \n");
             console.log(users);
@@ -101,7 +101,7 @@ exports.browse = function(req, res, next) {
 
 exports.myprofile = function(req, res, next) {
     if (!!req.session.user) {
-        UserModel.getUserByEmail(req.session.user.email)
+        userEntity.getUserByEmail(req.session.user.email)
             .then(user => {
                 res.json({
                     'name': user.name,
@@ -114,7 +114,7 @@ exports.myprofile = function(req, res, next) {
 };
 
 exports.browse.user = function(req, res, next) {
-    UserModel.getUserByEmail(req.params.userEmail)
+    userEntity.getUserByEmail(req.params.userEmail)
         .then(user => {
             res.json({
                 'name': user.name,
@@ -127,7 +127,7 @@ exports.browse.user = function(req, res, next) {
 
 exports.settings = function(req, res, next) {
     if (!!req.session.user) {
-        UserModel.getUserByEmail(req.session.user.email)
+        userEntity.getUserByEmail(req.session.user.email)
             .then(user => {
                 res.json({
                     'name': user.name,
@@ -141,7 +141,7 @@ exports.settings = function(req, res, next) {
 
 exports.checkSignin = function(req, res, next) {
     if (!!req.session.user) {
-        UserModel.getUserByEmail(req.session.user.email)
+        userEntity.getUserByEmail(req.session.user.email)
             .then(user => {
                 console.log('avatar:' + user.avatar);
                 res.json({
@@ -161,48 +161,52 @@ exports.checkSignin = function(req, res, next) {
 exports.updateProfile = function(req, res, next) {
     console.log("req.body: \n");
     console.log(req.body);
-    var MyUser = User;
+    var myUser = User;
     if (req.body.name) {
-        MyUser.update({
+        myUser.update({
             email: req.session.user.email
         }, {
             name: req.body.name
         }, function(error) {});
     };
     if (req.body.email) {
-        MyUser.update({
+        myUser.update({
             email: req.session.user.email
         }, {
             email: req.body.email
         }, function(error) {});
-        UserModel.getUserByEmail(req.body.email)
+        userEntity.getUserByEmail(req.body.email)
             .then(user => {
                 req.session.user = user;
             });
     };
     if (req.body.description) {
-        MyUser.update({
+        myUser.update({
             email: req.session.user.email
         }, {
             description: req.body.description
         }, function(error) {});
     };
 
-    UserModel.getUserByEmail(req.session.user.email)
+    userEntity.getUserByEmail(req.session.user.email)
         .then(user => {
             req.session.user = user;
         });
+    next();
 };
 
 // Update avatar
 exports.updateAvatar = function(req, res, next) {
     var relativeAddress = 'uploads/' + req.file.filename;
-    var MyUser = User;
-    MyUser.update({
+    var myUser = User;
+    myUser.update({
         email: req.session.user.email
     }, {
         avatar: relativeAddress
-    }, function(error) {});
+    }, function(error) {
+        console.log('updateAvatar error: ' + error);
+    });
+    next();
 };
 
 // Update Account
@@ -402,3 +406,196 @@ exports.getNodeData = function(req, res, next) {
         });
     };
 };
+
+exports.getLeafFromDatabase = function(req, res, next) {
+
+    var dataFromDatabase = {
+        "filename": "fileOfPerdon",
+        "author": "Perdon",
+        "tree": [{
+            "name": "作业汇总",
+            "value": 0,
+            "children": [
+                {
+                    "name": "高数homework",
+                    "value": 1,
+                    "children": [
+                        {
+                            "name": "第一章",
+                            "value": 2,
+                            "children": []
+                        },
+                        {
+                            "name": "第二章",
+                            "value": 3,
+                            "children": []
+                        },
+                        {
+                            "name": "第三章",
+                            "value": 4,
+                            "children": []
+                        },
+                        {
+                            "name": "第四章",
+                            "value": 5,
+                            "children": []
+                        },
+                        {
+                            "name": "第五章",
+                            "value": 6,
+                            "children": [
+                                {
+                                    "name": "第一节",
+                                    "value": 7,
+                                    "children": []
+                                },
+                                {
+                                    "name": "第二节",
+                                    "value": 8,
+                                    "children": []
+                                },
+                                {
+                                    "name": "第三节",
+                                    "value": 9,
+                                    "children": []
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "模电homework",
+                    "value": 10,
+                    "children": [
+                        {
+                            "name": "第一章",
+                            "value": 11,
+                            "children": []
+                        },
+                        {
+                            "name": "第二章",
+                            "value": 12,
+                            "children": []
+                        },
+                        {
+                            "name": "第三章",
+                            "value": 13,
+                            "children": []
+                        }
+                    ]
+                },
+                {
+                    "name": "数字电子技术",
+                    "value": 14,
+                    "children": []
+                },
+                {
+                    "name": "C++程序设计",
+                    "value": 15,
+                    "children": []
+                },
+                {
+                    "name": "Web2.0",
+                    "value": 16,
+                    "children": [
+                        {
+                            "name": "Plan and Goals",
+                            "value": 17,
+                            "children": []
+                        },
+                        {
+                            "name": "课程PPT",
+                            "value": 18,
+                            "children": []
+                        },
+                        {
+                            "name": "课程作业",
+                            "value": 19,
+                            "children": [
+                                {
+                                    "name": "Homework1: Menu",
+                                    "value": 20,
+                                    "children": []
+                                },
+                                {
+                                    "name": "Homework2: Login",
+                                    "value": 21,
+                                    "children": []
+                                },
+                                {
+                                    "name": "Final Work: My Achievement",
+                                    "value": 22,
+                                    "children": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "html",
+                            "value": 23,
+                            "children": []
+                        },
+                        {
+                            "name": "css",
+                            "value": 24,
+                            "children": []
+                        },
+                        {
+                            "name": "javascript",
+                            "value": 25,
+                            "children": []
+                        }
+                    ]
+                },
+                {
+                    "name": "比赛经历",
+                    "value": 26,
+                    "children": [
+                        {
+                            "name": "软件创新大赛",
+                            "value": 27,
+                            "children": [
+                                {
+                                    "name": "总结与反思",
+                                    "value": 28,
+                                    "children": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "美国数学建模大赛",
+                            "value": 29,
+                            "children": []
+                        }
+                    ]
+                },
+                {
+                    "name": "总结与思考 homework",
+                    "value": 30,
+                    "children": []
+                }
+            ]
+        }]
+    };
+    console.log("come to the server json successfully!");
+    res.json(dataFromDatabase);
+};
+
+exports.saveLeafToDatabase = function(req, res, next) {
+    console.log("out of the req");
+    console.log(req.body.tree[0].children);
+    var myUser = User;
+    myUser.update({
+        "email": req.session.user.email
+    }, {
+        $push: {
+            leaves: {
+                "testName": req.body
+            }
+        }
+    }, function(err, updatedData) {
+        console.log(updatedData);
+    });
+    console.log(myUser.find(function(err, person) {
+        console.log(person);
+    }));
+}

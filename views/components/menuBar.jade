@@ -47,21 +47,21 @@
                 ul.nav.navbar-nav.navbar-right(ng-show='signedin')
                     li.dropdown
                         a.dropdown-toggle(href='', data-toggle='dropdown')
-                            span.fui-document
+                            span.fui-plus
                             b.caret
                         ul.dropdown-menu
                             li
                                 a(href='/leaf') new public leaf
                             li
                                 a(href='/leaf') new private leaf
-                            li
-                                a(href='/leaf') open file
-                            li
-                                a(href='/leaf') delete this leaf
-                            li.divider
-                            li
-                                a(href='/leaf') recently opened &nbsp;
-                                    span.label.label-info 5
+                            //- li
+                            //-     a(href='/leaf') open file
+                            //- li
+                            //-     a(href='/leaf') delete this leaf
+                            //- li.divider
+                            //- li
+                            //-     a(href='/leaf') recently opened &nbsp;
+                            //-         span.label.label-info 5
                     li.dropdown
                         a.dropdown-toggle(href='', data-toggle='dropdown')
                             span
@@ -73,9 +73,6 @@
                             li
                                 a(href='/mymessages') my messages &nbsp;
                                     span.label.label-info 3
-                            li
-                                a(href='/requests') requests &nbsp;
-                                    span.label.label-info 1
                             li.divider
                             li
                                 a(href='/settings') settings

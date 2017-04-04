@@ -56,6 +56,7 @@ module.exports = function(app) {
     app.post('/api/updateProfile', api.updateProfile);
     app.post('/api/updateAccount', api.updateAccount);
     app.post('/api/updateAvatar', upload.single('file'), api.updateAvatar);
+    app.post('/api/saveLeafToDatabase', api.saveLeafToDatabase);
     app.get('/api/signout', api.signout);
     app.get('/api/browse', api.browse);
     app.get('/api/myprofile', api.myprofile);
@@ -63,9 +64,8 @@ module.exports = function(app) {
     app.get('/api/settings', api.settings);
     app.get('/api/checkSignin', api.checkSignin);
     app.get('/api/getNodeData/:nodeId', api.getNodeData);
-    app.get('test.json', function(req, res) {
-        console.log("get('./test.json')");
-    });
+    app.get('/api/*.json', api.getLeafFromDatabase);
+
 
 
     // otherwise

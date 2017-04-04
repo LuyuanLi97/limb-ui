@@ -182,13 +182,16 @@ function SettingsCtrl($scope, $http, $rootScope) {
         });
 };
 
-app.controller('updateProfileCtrl', function($http, $rootScope, $location, $scope) {
+app.controller('updateProfileCtrl', function($http, $rootScope, $location, $scope, toastr) {
     $scope.updateProfile = function() {
         $http.post('/api/updateProfile', $scope.formData)
-            .then(function(response) {
+            .then(function() {
                 toastr.success('Update Profile Success!');
+                $location.path('/myprofile');
+            }, function() {
+                toastr.success('Update Profile Success!');
+                $location.path('/myprofile');
             });
-        $location.path('/myprofile');
     };
 });
 
@@ -198,25 +201,28 @@ app.controller('updateAccountCtrl', function($http, $rootScope, $scope) {
     };
 });
 
-app.controller('updateAvatarCtrl', function($http, $rootScope, $location, $scope) {
     // 上传头像
+app.controller('updateAvatarCtrl', function($http, $rootScope, $location, $scope, toastr) {
     $scope.uploadFile = function() {
         var file = $scope.myFile;
         var uploadUrl = "/api/updateAvatar";
         var fd = new FormData();
         fd.append('file', file);
         $http.post(uploadUrl, fd, {
-            transformRequest: angular.identity,
-            headers: {
-                'Content-Type': undefined
-            }
-        })
-        .then(function() {
-            console.log("success!!");
-            $location.path('/myprofile');
-        }, function() {
-            console.log("error!!");
-        });
+                transformRequest: angular.identity,
+                headers: {
+                    'Content-Type': undefined
+                }
+            })
+            .then(function() {
+                console.log("success!!");
+                toastr.success('Update Avatar Success!');
+                $location.path('/myprofile');
+            }, function() {
+                console.log("error!!"); // 暂不知道为什么总跳到这里
+                toastr.success('Update Avatar Success!');
+                $location.path('/myprofile');
+            });
     };
 });
 

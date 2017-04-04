@@ -1,6 +1,6 @@
 // 创建新的思维导图
 ($(function() {
-    // $.get('./test.json').done(function(json, status, xhr) {
+    $.get('/api/my.json').done(function(json, status, xhr) {
         // 初始化第一个节点
         // inputData = JSON.parse(json);
         // var inputData = [{
@@ -11,6 +11,8 @@
         //     // Array
         //     "tree": null
         // }];
+        console.log("get json successfilly!");
+        console.log(json);
         var rootValue = null;
         var inputData = initTree();
 
@@ -42,17 +44,8 @@
 
 
         myCharts.on("click", function(ecData) {
-            // console.log("in");
-            // console.log(ecData);
-            // console.log(ecData.data.value);
-            console.log(findPathFromSelfToRoot(ecData.data.value));
-            console.log(getValue(ecData));
-            // $('#dropdown').trigger('click');
-            // $('.dropdown-toggle').dropdown('toggle');
             // 创建新节点
-            // var createFlag = false;
             $('button#create').on('click', function(event) {
-                // if (!createFlag)
                 console.log("creat");
                 console.log(ecData.name);
 
@@ -469,6 +462,7 @@
         }
 
         function findNameByValue(value) {
+            console.log(value);
             console.log(findCurrentNodeByValue(value));
             return findCurrentNodeByValue(value).name;
         }
@@ -503,6 +497,9 @@
         $('#save').on('click', function() {
             var filename = prompt('保存的文件名是：');
             inputData.filename = filename;
+            $.post('/api/saveLeafToDatabase', inputData);
+            // 显示保存成功
+            location.href = "/myprofile";
         });
 
         function up() {
@@ -524,33 +521,22 @@
 
         function initTree() {
             console.log("in initTree");
-            var inputData = [{
-                // String
-                "filename": null,
-                // String
-                "author": null,
-                // Array
-                "tree": null
-            }];
+            // var inputData = [{
+            //     // String
+            //     "filename": null,
+            //     // String
+            //     "author": null,
+            //     // Array
+            //     "tree": null
+            // }];
+            var inputData = json;
             var rootValue = null;
-            inputData[0].filename = "default";
-            // test
-            var rootName = "defaultRoot";
-            while (inputData[0].filename === null) {
-                inputData[0].filename = prompt("请为您的文件设置一个名字：");
+            // inputData[0].filename = "default";
+            while (inputData.filename === null) {
+                inputData.filename = prompt("请为您的第一个节点设置一个名字：");
             }
-
-            while (rootName === null) {
-                let rootName = prompt("请为您的第一个节点设置一个名字：");
-            }
-
             // 添加root节点
             rootValue = getRandomValue();
-            inputData[0].tree = {
-                "name": rootName,
-                "value": rootValue,
-                "children": []
-            }
             return inputData;
         }
 
@@ -562,7 +548,7 @@
                 },
                 legend: {
                     // 和series里面的name对应
-                    data: [inputData[0].filename.toString()],
+                    data: [inputData.filename.toString()],
                 },
                 // 工具箱
                 toolbox: {
@@ -583,7 +569,7 @@
                 },
                 series: [
                     {
-                        name: inputData[0].filename,
+                        name: inputData.filename,
                         type:'tree',
                         // 树的展示方式
                         orient: 'horizontal',
@@ -612,11 +598,17 @@
                         // roam: true,
                         // 是否反转
                         // direction: 'inverse',
-                        data: inputData[0].tree
+                        data: inputData.tree
                     }
                 ],
             };
             return option;
         }
+        // 确保用户已经保存
+        window.onbeforeunload = function() {
+            console.log("A!???");
+            return "确认保存了吗?";
+        };
 
+    });
 }()));
