@@ -4,7 +4,7 @@ form(ng-controller="updateProfileCtrl")
     | Name
     input.form-control.input-sm(type='text', ng-model='formData.name', placeholder='Name', ng-value="name") 
     | Email
-    input.form-control.input-sm(type='email', ng-model='formData.email', placeholder='Email', ng-value="email") 
+    input.form-control.input-sm(type='email', ng-model='formData.email', placeholder='Email', ng-value="email", disabled="disabled") 
     | Description
     textarea.form-control.input-sm(type='text', ng-model='formData.description', placeholder='Description', ng-value="description")
     br

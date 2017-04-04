@@ -1,10 +1,16 @@
 "use strict";
 
-function IndexCtrl($scope, $http, $rootScope) {
-    $rootScope.$broadcast('authenticationChanged'); // check session to resolve the dropdown list items
+/*
+    主页面登录注册
+*/
+function IndexCtrl($scope, $http, $location, $rootScope, toastr) {
+    // rootScope里面的变量可以在不同的controller里面通用，而且可以在外面通过$root.变量名访问得到
+    $scope.ngViewClass = 'page-home';
+    $rootScope.$broadcast('authenticationChanged');
 }
 
-function SignupCtrl($scope, $http, $location, $rootScope) {
+function SignupCtrl($scope, $http, $location, $rootScope, toastr) {
+    $scope.ngViewClass = 'page-signin';
     $scope.switchToSignin = function() {
         $scope.toSignin = true;
         $rootScope.title = 'Signin';
@@ -29,7 +35,7 @@ function SignupCtrl($scope, $http, $location, $rootScope) {
                     if (data.data.status) {
                         $rootScope.$broadcast('authenticationChanged');
                         swal('注册成功!', 'Hi, ' + data.data.email + '!\nLeaf已向您发送一封验证邮件，为了您的安全，请尽快完成验证。\n接下来将自动为您登陆.', 'success');
-                        $location.path('/');
+                        $location.path('/myprofile');
                     } else {
                         swal('注册失败!', data.data.message, 'error');
                     }
@@ -44,8 +50,9 @@ function SignupCtrl($scope, $http, $location, $rootScope) {
             .then(function(data) {
                 if (data.data.status) {
                     $rootScope.$broadcast('authenticationChanged');
-                    swal('登陆成功!', 'Hi, ' + data.data.email + ' !', 'success');
-                    $location.path('/');
+                    // swal('登陆成功!', 'Hi, ' + data.data.email + ' !', 'success');
+                    toastr.success('Sign in Success!');
+                    $location.path('/myprofile');
                 } else {
                     swal('登陆失败!', data.data.message, 'error');
                 }
@@ -57,6 +64,7 @@ function SignupCtrl($scope, $http, $location, $rootScope) {
 };
 
 function SigninCtrl($scope, $http, $location, $rootScope, toastr) {
+    $scope.ngViewClass = 'page-signin';
     $scope.switchToSignup = function() {
         $scope.toSignup = true;
         $rootScope.title = 'Register';
@@ -81,7 +89,7 @@ function SigninCtrl($scope, $http, $location, $rootScope, toastr) {
                     if (data.data.status) {
                         $rootScope.$broadcast('authenticationChanged');
                         swal('注册成功!', 'Hi, ' + data.data.email + '!\nLeaf已向您发送一封验证邮件，为了您的安全，请尽快完成验证。\n接下来将自动为您登陆.', 'success');
-                        $location.path('/');
+                        $location.path('/myprofile');
                     } else {
                         swal('注册失败!', data.data.message, 'error');
                     }
@@ -96,9 +104,9 @@ function SigninCtrl($scope, $http, $location, $rootScope, toastr) {
             .then(function(data) {
                 if (data.data.status) {
                     $rootScope.$broadcast('authenticationChanged');
-                    swal('登陆成功!', 'Hi, ' + data.data.email + ' !', 'success');
-                    // toastr.success('Sign in Success!');
-                    $location.path('/');
+                    // swal('登陆成功!', 'Hi, ' + data.data.email + ' !', 'success');
+                    toastr.success('Sign in Success!');
+                    $location.path('/myprofile');
                 } else {
                     swal('登陆失败!', data.data.message, 'error');
                 }
@@ -109,11 +117,33 @@ function SigninCtrl($scope, $http, $location, $rootScope, toastr) {
     };
 };
 
+/*
+    获取用户资料
+*/
 function MyprofileCtrl($scope, $http, $rootScope) {
     $rootScope.$broadcast('authenticationChanged');
     $http.get('/api/myprofile')
         .then(function(data) {
             $scope.name = data.data.name;
+            $scope.avatar = data.data.avatar;
+            $scope.email = data.data.email;
+            $scope.description = data.data.description;
+        }, function(error) {
+            // 重定向到错误页面
+            // $location.url('error');
+            console.log('Error: ' + error);
+        });
+};
+
+/*
+    查看其他用户的信息
+*/
+function BrowseUserCtrl($scope, $http, $rootScope, $routeParams) {
+    $rootScope.$broadcast('authenticationChanged');
+    $http.get('/api/browse/user/' + $routeParams.userEmail)
+        .then(function(data) {
+            $scope.name = data.data.name;
+            $scope.avatar = data.data.avatar;
             $scope.email = data.data.email;
             $scope.description = data.data.description;
         }, function(error) {
@@ -121,34 +151,48 @@ function MyprofileCtrl($scope, $http, $rootScope) {
         });
 };
 
+/*
+    接受信息  
+*/
+function MymessagesCtrl($scope, $http, $rootScope) {};
+
+/*
+    请求
+*/
+function RequestsCtrl($scope, $http, $rootScope) {};
+
+/*
+    leaf的使用文档
+*/
+function HelpCtrl($scope, $http, $rootScope) {};
+
+/*
+    设置
+*/
 function SettingsCtrl($scope, $http, $rootScope) {
     $rootScope.$broadcast('authenticationChanged');
     $http.get('/api/settings')
         .then(function(data) {
             $scope.name = data.data.name;
+            $scope.avatar = data.data.avatar;
             $scope.email = data.data.email;
             $scope.description = data.data.description;
         }, function(error) {
             console.log('Error: ' + error);
         });
-
-    // switch condition
-    $scope.condition = "";
-    $scope._profile = function() {
-        $scope.condition = "Profile";
-    };
-    $scope._account = function() {
-        $scope.condition = "Account";
-    };
-    $scope._email = function() {
-        $scope.condition = "Email";
-    };
 };
 
-app.controller('updateProfileCtrl', function($http, $rootScope, $scope) {
+app.controller('updateProfileCtrl', function($http, $rootScope, $location, $scope, toastr) {
     $scope.updateProfile = function() {
         console.log($scope.formData);
-        $http.post('/api/updateProfile', $scope.formData);
+        $http.post('/api/updateProfile', $scope.formData)
+            .then(function() {
+                toastr.success('Update Profile Success!');
+                $location.path('/myprofile');
+            }, function() {
+                toastr.success('Update Profile Success!');
+                $location.path('/myprofile');
+            });
     };
 });
 
@@ -158,13 +202,40 @@ app.controller('updateAccountCtrl', function($http, $rootScope, $scope) {
     };
 });
 
-app.controller('updateAvatarCtrl', function($http, $rootScope, $scope) {
-    $scope.updateAvatar = function() {
-        $http.post('/api/updateAvatar', $scope.formData);
+app.controller('updateAvatarCtrl', function($http, $rootScope, $location, $scope, toastr) {
+    $scope.uploadFile = function() {
+        var file = $scope.myFile;
+        var uploadUrl = "/api/updateAvatar";
+        var fd = new FormData();
+        fd.append('file', file);
+        $http.post(uploadUrl, fd, {
+                transformRequest: angular.identity,
+                headers: {
+                    'Content-Type': undefined
+                }
+            })
+            .then(function() {
+                console.log("success!!");
+                toastr.success('Update Avatar Success!');
+                $location.path('/myprofile');
+            }, function() {
+                console.log("error!!"); // 暂不知道为什么总跳到这里
+                toastr.success('Update Avatar Success!');
+                $location.path('/myprofile');
+            });
     };
 });
 
 function SignoutCtrl($scope, $http, $location, $rootScope, toastr) {
+    $rootScope.$broadcast('authenticationChanged');
+    $http.get('/api/myprofile')
+        .then(function(data) {
+            $scope.name = data.data.name;
+            $scope.email = data.data.email;
+            $scope.description = data.data.description;
+        }, function(error) {
+            console.log('Error: ' + error);
+        });
     swal({
         title: "Leave Leaf?",
         text: "Your session will be deleted",
@@ -188,9 +259,25 @@ function SignoutCtrl($scope, $http, $location, $rootScope, toastr) {
     });
 };
 
-function NewLeafCtrl($scope, $http, $location) {};
+function LeafCtrl($scope, $rootScope, $http, $location) {
+    $rootScope.$broadcast('authenticationChanged');
+    // 几组 node id
+    $scope.nodes = ['root', 'web2.0', '课程作业', '模电homework'];
 
-function OneLeafCtrl($scope, $http, $location) {};
+    // 默认读取跟节点数据
+    $http.get('/api/getNodeData/root')
+        .then(function(data) {
+            $scope.nodeData = data.data;
+        });
+
+    // 选中其他节点时
+    $scope.getNodeData = function(nodeId) {
+        $http.get('/api/getNodeData/' + nodeId)
+            .then(function(data) {
+                $scope.nodeData = data.data;
+            });
+    }
+};
 
 app.run(['$rootScope', function($rootScope) {
     $rootScope.$on('$routeChangeSuccess', function(event, current, previous) {
@@ -201,14 +288,16 @@ app.run(['$rootScope', function($rootScope) {
 app.controller('checkSigninCtrl', function($http, $rootScope, $scope) {
     $rootScope.$on('authenticationChanged', function() {
         $http.get('/api/checkSignin')
-            .then(function(data) {
-                $scope.signedin = data.data.signedin;
+            .then(function(response) {
+                $scope.signedin = response.data.signedin;
+                $scope.userAvatar = response.data.userAvatar;
             }, function(error) {
                 console.log('Error: ' + error);
             });
     });
 });
 
+// toastr config
 app.config(function(toastrConfig) {
     angular.extend(toastrConfig, {
         autoDismiss: false,
@@ -221,3 +310,54 @@ app.config(function(toastrConfig) {
         target: 'body'
     });
 });
+
+function BrowseCtrl($scope, $rootScope, $http, $routeParams) {
+    $scope.ngViewClass = 'page-browse';
+    $rootScope.$broadcast('authenticationChanged');
+    // users
+    $http.get('/api/browse')
+        .then(function(response) {
+            console.log(response.data);
+            $scope.users = response.data;
+        }, function(error) {
+            console.log('Error: ' + error);
+        });
+
+    $scope.leaves = [{
+        topic: "web",
+        type: "leaf"
+    }, {
+        topic: "angularJS",
+        type: "leaf local"
+    }];
+    $scope.documents = [{
+        documentName: "Operating System week2.pdf",
+        type: "document local"
+    }, {
+        documentName: "News English week3.pdf",
+        type: "document"
+    }];
+};
+
+function AboutCtrl($scope, $http, $routeParams) {
+    $scope.ngViewClass = 'page-about';
+};
+
+// to upload file using angular
+app.directive('fileModel', ['$parse', function($parse) {
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs) {
+            var model = $parse(attrs.fileModel);
+            var modelSetter = model.assign;
+
+            element.bind('change', function() {
+                scope.$apply(function() {
+                    modelSetter(scope, element[0].files[0]);
+                });
+            });
+        }
+    };
+}]);
+
+function new_functionCtrl($scope, $http, $location, $routeParams) {}

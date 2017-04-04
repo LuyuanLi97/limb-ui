@@ -1,0 +1,42 @@
+#toolBar
+    button#toolToggle.btn.btn-primary.btn-sm.btn-tool(type='button', ng-click="showTools = !showTools", data-toggle='collapse', data-target='#toolList', aria-expanded='false', aria-controls='toolList')
+        span.icon-angle-down(ng-show="showTools")
+        span.icon-angle-up(ng-hide="showTools")
+    #toolList.collapse.in
+        button#up.btn.btn-primary.btn-sm.btn-tool
+            span.glyphicon.glyphicon-arrow-up
+                span.hidden-xs.hidden-sm 上移
+        button#left.btn.btn-primary.btn-sm.btn-tool
+            span.glyphicon.glyphicon-arrow-left
+                span.hidden-xs.hidden-sm 左移
+        button#create.btn.btn-primary.btn-sm.btn-tool
+            span.fui-plus
+                span.hidden-xs 创建子节点
+        button#copyContent.btn.btn-primary.btn-sm.btn-tool
+            span.icon-copy
+                span.hidden-xs 复制
+        button#edit.btn.btn-primary.btn-sm.btn-tool
+            span.glyphicon.glyphicon-edit
+                span.hidden-xs 编辑
+        button#SBContent.btn.btn-primary.btn-sm.btn-tool
+            span.icon-exchange
+                span.hidden-xs 展开/收缩
+        br
+        button#down.btn.btn-primary.btn-sm.btn-tool
+            span.glyphicon.glyphicon-arrow-down
+                span.hidden-xs.hidden-sm 下移
+        button#right.btn.btn-primary.btn-sm.btn-tool
+            span.glyphicon.glyphicon-arrow-right
+                span.hidden-xs.hidden-sm 右移
+        button#delete.btn.btn-primary.btn-sm.btn-tool
+            span.fui-trash
+                span.hidden-xs 删除此节点
+        button#pasteToContent.btn.btn-primary.btn-sm.btn-tool
+            span.icon-paste
+                span.hidden-xs 粘贴
+        button#save.btn.btn-primary.btn-sm.btn-tool
+            span.glyphicon.glyphicon-cloud-upload
+                span.hidden-xs 保存
+
+#parent
+    #main

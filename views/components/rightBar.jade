@@ -1,126 +1,181 @@
-link(href='css/bootstrap.css', rel='stylesheet')
-link(rel='stylesheet', href='css/discuss.css')
-link(rel='stylesheet', href='css/fileinput.css', media='all')
-link(rel='stylesheet', href='css/rightBar.css')
-script(type='text/javascript', src='js/jquery-3.1.1.js')
-script(type='text/javascript', src='js/fileinput.js')
-script(type='text/javascript', src='js/bootstrap.js')
-.sidebars
-    .rightbar.bg-default(style='right: 0px;')
-        form.form-horizontal(role='form')
-            .form-group
-                h1#cnode_name.text-center Current
-            .form-group
-                .panel.panel-primary
-                    .panel-heading
-                        h3.panel-title.text-center 资料
-                    .panel-body
-                        #accordion.panel-group(role='tablist', aria-multiselectable='true')
-                            .panel.panel-default
-                                #headingOne.panel-heading(role='tab')
-                                    h4.panel-title
-                                        a(data-toggle='collapse', data-parent='#accordion', href='#collapseOne', aria-expanded='true', aria-controls='collapseOne')
-                                            | 日期: 2016年11月25日
-                                #collapseOne.panel-collapse.collapse.in(role='tabpanel', aria-labelledby='headingOne')
-                                    .panel-body
-                                        | file #1
-                            .panel.panel-default
-                                #headingTwo.panel-heading(role='tab')
-                                    h4.panel-title
-                                        a.collapsed(data-toggle='collapse', data-parent='#accordion', href='#collapseTwo', aria-expanded='false', aria-controls='collapseTwo')
-                                            | 日期: 2016年11月26日
-                                #collapseTwo.panel-collapse.collapse(role='tabpanel', aria-labelledby='headingTwo')
-                                    .panel-body
-                                        | file #2
-                            .panel.panel-default
-                                #headingThree.panel-heading(role='tab')
-                                    h4.panel-title
-                                        a.collapsed(data-toggle='collapse', data-parent='#accordion', href='#collapseThree', aria-expanded='false', aria-controls='collapseThree')
-                                            | 日期: 2016年12月01日
-                                #collapseThree.panel-collapse.collapse(role='tabpanel', aria-labelledby='headingThree')
-                                    .panel-body
-                                        | file #3
-            .form-group
-                .panel.panel-primary
-                    .panel-heading
-                        h3.panel-title.text-center 描述
-                    .panel-body
-                        dl
-                            dt title
-                            dd content
-                        span.label.label-success 公开
-                        // <span class="label label-primary">私有</span>
-                        // <span class="label label-success">已完成</span>
-                        span.label.label-primary 未完成
-            .form-group
-                .panel.panel-primary
-                    .panel-heading
-                        h3.panel-title.text-center 计划
-                    .panel-body
-                        .table-responsive
-                            table.table.table-hover
-                                thead
-                                    tr
-                                        th 任务
-                                        th 截止时间
-                                        th 完成情况
-                                tbody
-                                    tr
-                                        td
-                                            button.btn.btn-success(type='button', data-toggle='modal', data-target='#myModal')
-                                                | 第一次课后作业
-                                        td 2015年11月11日
-                                        td 已完成
-                                    tr
-                                        td
-                                            button.btn(type='button', data-toggle='modal', data-target='#myModal')
-                                                | 实验一
-                                        td 2016年12月30日
-                                        td 未完成
-            .form-group
-                .panel.panel-primary
-                    .panel-heading
-                        h3.panel-title.text-center 记录
-                    .panel-body
-                        textarea.form-control(rows='10', cols='50', autofocus='', placeholder='在这里写下笔记')
-                        .row(style='padding:5px 16px 5px 16px;')
-                            input#input-700.file-loading(name='kartik-input-700[]', type='file', multiple='')
-                            script.
-                                $("#input-700").fileinput({
+#leaf-right-bar
+    #authorInfoContainer
+        a#authorInfoBtn.btn.btn-inverse(type='button', ng-click='spanAuthor = !spanAuthor', data-toggle='collapse', data-target='#authorInfo', aria-expanded='false', aria-controls='authorInfo') 
+            span.fui-plus(ng-hide="spanAuthor") &nbsp;SHOW AUTHOR
+            span.fui-cross(ng-show="spanAuthor") &nbsp;HIDE AUTHOR
+
+        //- 作者信息
+        center#authorInfo.collapse
+            br
+            img#myicon(src='{{nodeData.author.avatar}}', alt='icon')
+            h5 
+                a(href='{{nodeData.author.profile}}') {{nodeData.author.name}} 
+            p {{nodeData.author.description}}
+            a {{nodeData.author.leavesNum}} leaves - 
+            span
+                a {{nodeData.author.tagsNum}} tags
+            br
+            a(href='{{nodeData.author.github}}')
+                span.fui-github GitHub &nbsp;
+            a(href='mailto:{{nodeData.author.mail}}')
+                span.fui-mail {{nodeData.author.mail}}
+            br
+            br
+
+    //- 几个节点例子
+    br
+    a(ng-repeat='node in nodes')
+        button.btn-sm(ng-click='getNodeData(node)') {{node}}
+    br
+    small 试着点击以上几个节点，默认为 root 节点
+
+    //-路径
+    ol.breadcrumb
+        li.animate-repeat(ng-repeat='node in nodeData.nodeString')
+            a(ng-click='getNodeData(node)') {{node}}
+
+    //- 标签
+    .tagsinput-primary
+        input.tagsinput(name='tagsinput', data-role='tagsinput', ng-model='nodeData.tags')
+
+    form.form-horizontal(role='form')
+        //- 描述
+        .form-group.rightBar-card
+            .panel.panel-primary
+                .panel-heading
+                    h3.panel-title 描述
+                    .topRightBtn.topRightBtn-2(type='submit', ng-click='editDescription = !editDescription' data-toggle='collapse', data-target='#updateDescription', aria-expanded='false', aria-controls='updateDescription')
+                        span.fui-check(ng-show="editDescription")
+                    .topRightBtn.topRightBtn-1(type='button', ng-click='editDescription = !editDescription' data-toggle='collapse', data-target='#updateDescription', aria-expanded='false', aria-controls='updateDescription')
+                        span.glyphicon.glyphicon-edit(ng-hide="editDescription")
+                        span.fui-cross(ng-show="editDescription")
+                .panel-body#updateDescription.collapse
+                    center
+                        textarea.form-control(rows='3', autofocus='', ng-model="nodeData.description", placeholder='add description')
+                .panel-body(ng-hide="editDescription")
+                    | {{nodeData.description}}
+        //- Notes
+        .form-group
+            .panel.panel-primary
+                .panel-heading
+                    h3.panel-title 笔记
+                    .topRightBtn.topRightBtn-1(type='submit')
+                        span.icon-cloud-upload
+                .panel-body.no-padding
+                    center
+                        textarea.form-control(rows='7', autofocus='', data-provide='markdown', ng-model="nodeData.notes", placeholder='在这里写下笔记') 
+
+        //- documents
+        .form-group.rightBar-card
+            .panel.panel-primary
+                .panel-heading
+                    h3.panel-title 资料
+                    .topRightBtn.topRightBtn-1(type='button', ng-click='spanUploadFiles = !spanUploadFiles' data-toggle='collapse', data-target='#uploadFiles', aria-expanded='false', aria-controls='uploadFiles')
+                        span.fui-plus(ng-hide="spanUploadFiles")
+                        span.fui-cross(ng-show="spanUploadFiles")
+                //- input file
+                center#uploadFiles.collapse
+                    .row(style='padding:5px 16px 5px 16px;')
+                        input#input-700.file-loading(name='kartik-input-700[]', type='file', multiple='')
+                        script.
+                            $("#input-700").fileinput({
                                 uploadUrl: "http://localhost/file-upload/", // server upload action
                                 uploadAsync: true,
                                 maxFileCount: 5
-                                });
-            .form-group
-                .panel.panel-primary(style='overflow: auto; height: 360px;')
-                    .panel-heading
-                        h3.panel-title.text-center 留言
-                    .panel-body
-                        #qdiscuss
-                            textarea#mesg.message.form-control(contenteditable='true')
-                            .But
-                                span.submit 发表
-                        #msgpad.msgCon
-// 模态框（Modal）
-#myModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
-    .modal-dialog
-        .modal-content
-            .modal-header
-                button.close(type='button', data-dismiss='modal', aria-hidden='true')
-                    | ×
-                h4#myModalLabel.modal-title
-                    | 尝试写一个微信小程序
-            .modal-body
-                | 小程序开发上手极其简单，我们一起开发一个集新闻阅读与电影影讯为一体的小程序，做完这个项目，你就能掌握小程序全部的常用组件、API和开发技巧，开发出你想要的小程序
-            .modal-footer
-                button.btn.btn-default(type='button', data-dismiss='modal')
-                    | 未完成
-                button.btn.btn-primary(type='button')
-                    | 已完成
-        // /.modal-content
-        // /.modal-dialog
-        // /.modal
-        // jQuery (necessary for Bootstrap's JavaScript plugins)
-        script(src='https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js')
-        // Include all compiled plugins (below), or include individual files as needed
-        script(src='js/bootstrap.min.js')
+                            });
+                .panel-body
+                    .table-responsive
+                        table.table
+                            thead
+                                tr
+                                    th #
+                                    th Name
+                                    th Date Modified
+                                    th Size
+                            tbody
+                                tr.animate-repeat(ng-repeat='document in nodeData.documents')
+                                    th(scope='row') {{$index + 1}}
+                                    td 
+                                        a(type='button', data-toggle='collapse', data-target='#file{{$index + 1}}', aria-expanded='false', aria-controls='file{{$index + 1}}')
+                                            | {{document.name}}
+                                        div(id='file{{$index + 1}}').collapse
+                                            .btn#preview
+                                                span.icon-eye-open
+                                            .btn#download
+                                                span.icon-cloud-download
+                                    td {{document.date}}
+                                    td {{document.size}}
+        //- 计划
+        .form-group.rightBar-card
+            .panel.panel-primary
+                .panel-heading
+                    h3.panel-title 计划
+                    .topRightBtn.topRightBtn-1
+                        span.fui-plus
+                .panel-body
+                    .table-responsive
+                        table.table
+                            thead
+                                tr
+                                    th 状态
+                                    th 任务
+                                    th 截止时间
+                            tbody
+                                tr.animate-repeat(ng-repeat='plan in nodeData.plans')
+                                    td
+                                        input(type='checkbox', ng-model='plan.state', data-toggle='checkbox')
+                                    td
+                                        a(type='button', data-toggle='collapse', data-target='#plan{{$index + 1}}', aria-expanded='false', aria-controls='plan{{$index+1}}') 
+                                            span {{plan.title}}
+                                        div(id="plan{{$index+1}}").collapse
+                                            small {{plan.content}}
+                                    td {{plan.deadline}}
+
+        .form-group.rightBar-card
+            .panel.panel-primary
+                .panel-heading
+                    h3.panel-title 留言
+                    .topRightBtn.topRightBtn-1(type='button', ng-click='spanQdiscuss = !spanQdiscuss' data-toggle='collapse', data-target='#qdiscuss', aria-expanded='false', aria-controls='qdiscuss')
+                        span.fui-plus(ng-hide="spanQdiscuss")
+                        span.fui-cross(ng-show="spanQdiscuss")
+                .panel-body
+                    //- 添加留言
+                    #qdiscuss.collapse
+                        textarea#mesg.message.form-control(contenteditable='true', placeholder='添加新的留言')
+                        .But
+                            span.submit 发表
+                    //- #msgpad.msgCon
+                    .bootstrap.snippet
+                        .blog-comment
+                            ul.comments
+                                li.clearfix(ng-repeat='comment in nodeData.comments', ng-include="'commentsItem'")
+
+        br
+        center            
+            span.buttomEditButton.fui-plus
+            span.buttomEditButton.fui-gear
+            span.buttomEditButton.icon-edit
+        br
+        br
+        br
+        br
+        br
+        br
+
+script#commentsItem(type='text/ng-template').
+    <img class="avatar", src='{{comment.avatar}}', alt='' />
+    <div class="post-comments">
+        <p class="meta"> {{comment.date}}
+            <a href='{{comment.profile}}'> {{comment.name}}</a> says : 
+            <i class="pull-right">
+                <a href='#'>
+                    <small> Reply</small>
+                </a>
+            </i>
+        </p>
+        <p> {{comment.content}}</p>
+    </div>
+    <ul class="comments" ng-if="comment.children">
+        <li class="clearfix" ng-repeat="comment in comment.children" ng-include="'commentsItem'">
+        </li>
+    </ul>

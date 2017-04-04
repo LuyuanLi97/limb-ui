@@ -1,0 +1,132 @@
+#browse-main {
+    position: relative;
+    height: 100% !important;
+    min-height: 100% !important;
+}
+
+#ngview {
+    background-color: #F7F8FA;
+}
+
+.browse-results {
+    position: relative;
+    min-height: 100% !important;
+}
+
+#filtersAndSearch {
+    height: 120px;
+    position: relative;
+    background: linear-gradient(70deg, #b889ef, #97d0e1);
+    background-attachment: fixed;
+}
+
+#filtersBtn {
+    position: absolute;
+    left: 30px;
+    top: 100px;
+    z-index: 100;
+}
+
+#browseTitle {
+    position: absolute;
+    left: 20px;
+    top: 15px;
+}
+
+#browseIntroduction {
+    position: absolute;
+    font-size: 16px;
+    left: 20px;
+    top: 60px;
+    opacity: 1;
+}
+
+.browse-card {
+    padding: 1px;
+    margin: 5px;
+    position: relative;
+    background-color: white;
+    transition-duration: 1s;
+    border-radius: 2px;
+    box-shadow: 0px 1px 7px #a4a5a7;
+    min-height: 150px;
+}
+
+.browse-card img {
+    margin: 2px;
+    margin-left: 5px;
+    width: 30px;
+}
+
+.browse-card h3 {
+    margin: 10px;
+    text-align: center;
+    font-weight: 300;
+    font-size: 24px;
+    display: inline-block;
+}
+
+.browse-card p {
+    text-align: center;
+    color: gray;
+    font-weight: 400;
+    font-size: 16px;
+}
+
+.browse-card span.label {
+    top: 2px;
+    right: -10px;
+    position: absolute;
+    opacity: 0;
+    transition: 0.3s;
+}
+
+.browse-card:hover span.label {
+    top: 2px;
+    right: 2px;
+    transition: 0.1s;
+    opacity: 1;
+}
+
+.browse-card:hover {
+    transform: translate(0px, -3px);
+    box-shadow: 0px 2px 7px gray;
+    transition-duration: 0s;
+}
+
+
+/*ng-animate*/
+
+.animate-repeat {
+    line-height: 30px;
+    list-style: none;
+    box-sizing: border-box;
+}
+
+.animate-repeat.ng-move, .animate-repeat.ng-enter, .animate-repeat.ng-leave {
+    transition: all linear 0.5s;
+}
+
+.animate-repeat.ng-leave.ng-leave-active, .animate-repeat.ng-move, .animate-repeat.ng-enter {
+    opacity: 0;
+    max-height: 0;
+}
+
+.animate-repeat.ng-leave, .animate-repeat.ng-move.ng-move-active, .animate-repeat.ng-enter.ng-enter-active {
+    opacity: 1;
+    max-height: 30px;
+}
+
+
+/*ng-animate*/
+
+.grid-item {
+    width: 210px;
+    float: left;
+}
+
+@media only screen and (max-width: 500px) {
+    .grid-item {
+        width: calc(50% - 10px);
+    }
+}

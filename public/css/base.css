@@ -1,0 +1,22 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#ngview {
+    width: 100%;
+    height: calc(100% - 53px);
+    overflow: scroll;
+}
+
+
+/*my profile and setting*/
+
+img.bg {
+    width: 100%;
+    max-width: 200px;
+}
+
+
+/*my profile and setting end*/

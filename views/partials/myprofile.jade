@@ -1,12 +1,46 @@
 br
-.container
-    .col-sm-4.col-xs-12
-        img#myicon(src='img/avatar.png', alt='icon')
-        p(ng-model="name") {{name}}
-        p(ng-model="email") {{email}}
-        p(ng-model="description") {{description}}
-    .col-sm-8.col-xs-12 
-        hr
-        p overview leaves stars followers following
-        hr
-        p hello world
+.col-sm-3.col-xs-12
+    img.bg#myicon(src='{{avatar}}', alt='icon')
+    h5(ng-model="name") {{name}}
+    p(ng-model="description") {{description}}
+    hr
+    a(ng-model="email", href="mailto:{{email}}")
+        small
+            span.fui-mail 
+            span {{email}}
+.col-sm-9.col-xs-12 
+    row
+        ul.nav.nav-tabs
+            li.active(ng-show="ngChoice == 'overview'", role='presentation')
+                a(ng-click='ngChoice = "overview"', ng-init='ngChoice="overview"') Overview
+            li(ng-hide="ngChoice == 'overview'", role='presentation')
+                a(ng-click='ngChoice = "overview"') Overview
+
+            li.active(ng-show="ngChoice == 'leaves'", role='presentation')
+                a(ng-click='ngChoice = "leaves"') Leaves
+                    span.badge 1
+            li(ng-hide="ngChoice == 'leaves'", role='presentation')
+                a(ng-click='ngChoice = "leaves"') Leaves
+                    span.badge 1
+
+            li.active(ng-show="ngChoice == 'stars'", role='presentation')
+                a(ng-click='ngChoice = "stars"') Stars
+            li(ng-hide="ngChoice == 'stars'", role='presentation')
+                a(ng-click='ngChoice = "stars"') Stars
+
+            li.active(ng-show="ngChoice == 'followers'", role='presentation')
+                a(ng-click='ngChoice = "followers"') Followers
+            li(ng-hide="ngChoice == 'followers'", role='presentation')
+                a(ng-click='ngChoice = "followers"') Followers
+
+            li.active(ng-show="ngChoice == 'following'", role='presentation')
+                a(ng-click='ngChoice = "following"') Following
+            li(ng-hide="ngChoice == 'following'", role='presentation')
+                a(ng-click='ngChoice = "following"') Following
+
+    row(ng-if="ngChoice == 'overview'")
+        p.lead hello world
+
+    row(ng-if="ngChoice == 'leaves'")
+        br
+        a(href='/leaf') 作业汇总

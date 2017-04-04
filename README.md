@@ -1,35 +1,57 @@
 # leaf dev
 this progect used to be `limb`, by team `Königsberg`.
 
-## installation
+## Run Leaf
 
 ### 1. clone the repo
+```
+git clone https://github.com/chroslen/leaf.git
+```
 
-  git clone https://github.com/chroslen/leaf.git
 
 ### 2. NPM install
 
-  cd leaf
-  
-  npm install
+```
+$ cd leaf
+$ npm install
+```
 
 ### 3. start the server
 
-  node index.js
+use node
+
+```
+$ node index.js
+```
 
 you can use supervisor as well
 
-  supervisor --hemony index
+```
+$ supervisor --hemony index
+```
 
-### 4. the lastest issues
+### 4. ⚠️注意
 
-- 用户未登录与已登录无差别。此问题与ng-if 和 res.locals.user 有关，正在解决。
+如果没有运行 `mongodb`：
+将 /config/default.json 中的
+
+```javascript
+/*"mongodb": "mongodb://node:node@jello.modulusmongo.net:27017/z9apyjiS"*/
+"mongodb": "mongodb://localhost:27017/leaf"
+
+```
+修改为
+
+```javascript
+"mongodb": "mongodb://node:node@jello.modulusmongo.net:27017/z9apyjiS"
+/*"mongodb": "mongodb://localhost:27017/leaf"*/
+
+```
+这是一个远程 `mongodb` 的数据库地址，现在好像链接不上，无法注册登陆，其他正常。
+
+## the lastest issues
+
 - 明文加密
-- 文中问题的处理 http://blog.fens.me/angularjs-url/
-- 登录后没有跳回主页面
-- 注册／登录成功／失败无提示信息，而只能在终端里查看。
-- 登录登出等页面太原始，需要美化。
-
 
 ## 开发框架（采取MVC模型）
 - config

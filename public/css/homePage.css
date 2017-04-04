@@ -1,0 +1,29 @@
+#main-intro {}
+
+.vertical-align {
+    display: flex;
+    align-items: center;
+}
+
+h2 {
+    font-weight: 200;
+    color: #16a085;
+}
+
+h2 small {
+    color: gray;
+    margin-left: 10px;
+}
+
+p.lead {
+    color: #ded9d9;
+}
+
+.main-part {
+    height: 70%;
+}
+
+#main-part1 {}
+
+
+/*bg of main-intro start*/
