@@ -1,6 +1,6 @@
 // 创建新的思维导图
 ($(function() {
-    $.get('/api/my.json').done(function(json, status, xhr) {
+    $.get('/api/getFileFromDatabase/Perdon/123123321').done(function(json, status, xhr) {
         // 初始化第一个节点
         // inputData = JSON.parse(json);
         // var inputData = [{
@@ -497,7 +497,7 @@
         $('#save').on('click', function() {
             var filename = prompt('保存的文件名是：');
             inputData.filename = filename;
-            $.post('/api/saveLeafToDatabase', inputData);
+            $.post('/api/saveFileToDatabase/'+filename, inputData);
             // 显示保存成功
             location.href = "/myprofile";
         });

@@ -66,13 +66,16 @@ function SigninCtrl($scope, $http, $location, $rootScope, toastr) {
     获取用户资料
 */
 function MyprofileCtrl($scope, $http, $rootScope) {
+    // console.log("myprofile");
+    // console.log("params:"+$stateParams.username);
     $rootScope.$broadcast('authenticationChanged');
     $http.get('/api/myprofile')
-        .then(function(data) {
-            $scope.name = data.data.name;
-            $scope.avatar = data.data.avatar;
-            $scope.email = data.data.email;
-            $scope.description = data.data.description;
+        .then(function(response) {
+            $scope.name = response.data.name;
+            $scope.avatar = response.data.avatar;
+            $scope.email = response.data.email;
+            $scope.description = response.data.description;
+            $scope.fileList = response.data.fileList;
         }, function(error) {
             // 重定向到错误页面
             // $location.url('error');

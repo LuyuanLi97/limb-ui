@@ -43,4 +43,6 @@ br
 
     row(ng-if="ngChoice == 'leaves'")
         br
-        a(href='/leaf') 作业汇总
+        ul
+            li(ng-repeat='filename in fileList')
+                a(href='/leaf/{{name}}/{{filename}}') {{filename}}

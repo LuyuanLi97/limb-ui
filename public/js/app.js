@@ -68,7 +68,7 @@ app.config(function config($locationProvider, $routeProvider) {
         templateUrl: 'partials/leaf',
         controller: LeafCtrl
     }).
-    when('/leaf/:leafId', {
+    when('/leaf/:username/:filename', {
         templateUrl: 'partials/leaf',
         controller: LeafCtrl
     }).

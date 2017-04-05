@@ -9,7 +9,16 @@ userModel = mongoose.model('userModel', userSchema);
 
 module.exports = {
     create: function(user) {
-        return userModel.create(user);
+        return userModel.create(user, function(err, data) {
+            if (err)
+                console.log("create user err");
+        });
+    },
+    update: function(findObj, afterUpdate) {
+        return userModel.update(findObj, afterUpdate, function(err, data) {
+            if (err)
+                console.log("update user err");
+        });
     },
 
     createHashPassword: function(password) {
