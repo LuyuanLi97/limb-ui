@@ -8,6 +8,10 @@
           },
           "user": {}
     },
-    "mongodb": "mongodb://chroslen:chroslen@olympia.modulusmongo.net:27017/edI7qoti"
-    /*"mongodb": "mongodb://localhost:27017/leaf"*/
+    // 远程数据库，不可见(除Perdon和圆圆外使用)
+    // "mongodb": "mongodb://chroslen:chroslen@olympia.modulusmongo.net:27017/edI7qoti"
+    // 圆圆本地数据库
+    // "mongodb": "mongodb://localhost:27017/leaf"
+    // Perdon本地数据库
+    "mongodb": "mongodb://localhost:27001/leaf"
 }

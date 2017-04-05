@@ -1,7 +1,6 @@
 'use secret';
 
-var User = require('../lib/mongo').User;
-var userEntity = require('../models/users');
+var userModel = require('../models/userModel');
 
 // Sign up
 exports.signup = function(req, res) {
@@ -24,7 +23,7 @@ exports.signup = function(req, res) {
             'message': e.message
         });
     }
-    userEntity.getUserByEmail(email)
+    userModel.getUserByEmail(email)
         .then(function(user) {
             if (user) {
                 return res.json({
@@ -37,11 +36,11 @@ exports.signup = function(req, res) {
     // 待写入数据库的用户信息
     var user = {
         email: email,
-        password: userEntity.createHashPassword(password),
+        password: userModel.createHashPassword(password),
     };
 
     // 用户信息写入数据库
-    userEntity.create(user)
+    userModel.create(user)
         .then(function(user) {
             console.log('注册成功');
             // 将用户信息存入 session
@@ -50,7 +49,9 @@ exports.signup = function(req, res) {
             return res.json({
                 'status': true,
                 'email': email
-            })
+            });
+        }).catch(function(err) {
+            console.log("create user fail");
         });
 };
 
@@ -59,13 +60,13 @@ exports.signin = function(req, res) {
     var email = req.body.email;
     var password = req.body.password;
 
-    userEntity.getUserByEmail(email)
+    userModel.getUserByEmail(email)
         .then(function(user) {
             try {
                 if (!user) {
                     throw new Error('用户不存在');
                 }
-                if (!userEntity.validHashPassword(password, user.password)) {
+                if (!userModel.validHashPassword(password, user.password)) {
                     throw new Error('邮箱或密码错误');
                 }
             } catch (e) {
@@ -91,7 +92,7 @@ exports.signout = function(req, res, next) {
 };
 
 exports.browse = function(req, res, next) {
-    userEntity.getUsers()
+    userModel.getUsers()
         .then(users => {
             console.log("users: \n");
             console.log(users);
@@ -101,7 +102,7 @@ exports.browse = function(req, res, next) {
 
 exports.myprofile = function(req, res, next) {
     if (!!req.session.user) {
-        userEntity.getUserByEmail(req.session.user.email)
+        userModel.getUserByEmail(req.session.user.email)
             .then(user => {
                 res.json({
                     'name': user.name,
@@ -114,7 +115,7 @@ exports.myprofile = function(req, res, next) {
 };
 
 exports.browse.user = function(req, res, next) {
-    userEntity.getUserByEmail(req.params.userEmail)
+    userModel.getUserByEmail(req.params.userEmail)
         .then(user => {
             res.json({
                 'name': user.name,
@@ -127,7 +128,7 @@ exports.browse.user = function(req, res, next) {
 
 exports.settings = function(req, res, next) {
     if (!!req.session.user) {
-        userEntity.getUserByEmail(req.session.user.email)
+        userModel.getUserByEmail(req.session.user.email)
             .then(user => {
                 res.json({
                     'name': user.name,
@@ -141,7 +142,7 @@ exports.settings = function(req, res, next) {
 
 exports.checkSignin = function(req, res, next) {
     if (!!req.session.user) {
-        userEntity.getUserByEmail(req.session.user.email)
+        userModel.getUserByEmail(req.session.user.email)
             .then(user => {
                 console.log('avatar:' + user.avatar);
                 res.json({
@@ -161,34 +162,33 @@ exports.checkSignin = function(req, res, next) {
 exports.updateProfile = function(req, res, next) {
     console.log("req.body: \n");
     console.log(req.body);
-    var myUser = User;
     if (req.body.name) {
-        myUser.update({
+        userModel.update({
             email: req.session.user.email
         }, {
             name: req.body.name
         }, function(error) {});
     };
     if (req.body.email) {
-        myUser.update({
+        userModel.update({
             email: req.session.user.email
         }, {
             email: req.body.email
         }, function(error) {});
-        userEntity.getUserByEmail(req.body.email)
+        userModel.getUserByEmail(req.body.email)
             .then(user => {
                 req.session.user = user;
             });
     };
     if (req.body.description) {
-        myUser.update({
+        userModel.update({
             email: req.session.user.email
         }, {
             description: req.body.description
         }, function(error) {});
     };
 
-    userEntity.getUserByEmail(req.session.user.email)
+    userModel.getUserByEmail(req.session.user.email)
         .then(user => {
             req.session.user = user;
         });
@@ -198,8 +198,7 @@ exports.updateProfile = function(req, res, next) {
 // Update avatar
 exports.updateAvatar = function(req, res, next) {
     var relativeAddress = 'uploads/' + req.file.filename;
-    var myUser = User;
-    myUser.update({
+    userModel.update({
         email: req.session.user.email
     }, {
         avatar: relativeAddress
@@ -583,8 +582,7 @@ exports.getLeafFromDatabase = function(req, res, next) {
 exports.saveLeafToDatabase = function(req, res, next) {
     console.log("out of the req");
     console.log(req.body.tree[0].children);
-    var myUser = User;
-    myUser.update({
+    userModel.update({
         "email": req.session.user.email
     }, {
         $push: {
@@ -595,7 +593,7 @@ exports.saveLeafToDatabase = function(req, res, next) {
     }, function(err, updatedData) {
         console.log(updatedData);
     });
-    console.log(myUser.find(function(err, person) {
+    console.log(userModel.find(function(err, person) {
         console.log(person);
     }));
 }
