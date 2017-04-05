@@ -9,78 +9,23 @@ function IndexCtrl($scope, $http, $location, $rootScope, toastr) {
     $rootScope.$broadcast('authenticationChanged');
 }
 
-function SignupCtrl($scope, $http, $location, $rootScope, toastr) {
-    $scope.ngViewClass = 'page-signin';
-    $scope.switchToSignin = function() {
-        $scope.toSignin = true;
-        $rootScope.title = 'Signin';
-    };
-    $scope.switchToSignup = function() {
-        $scope.toSignin = false;
-        $rootScope.title = 'Register';
-    };
-    $scope.signup = function() {
-        swal({
-            title: $scope.formData.email + " ?",
-            text: "Please check your email again. \n",
-            type: "info",
-            showCancelButton: true,
-            confirmButtonColor: "#8cd4f5",
-            confirmButtonText: "Yes, register!",
-            closeOnConfirm: false,
-            html: false
-        }, function() {
-            $http.post('/api/signup', $scope.formData)
-                .then(function(data) {
-                    if (data.data.status) {
-                        $rootScope.$broadcast('authenticationChanged');
-                        swal('注册成功!', 'Hi, ' + data.data.email + '!\nLeaf已向您发送一封验证邮件，为了您的安全，请尽快完成验证。\n接下来将自动为您登陆.', 'success');
-                        $location.path('/myprofile');
-                    } else {
-                        swal('注册失败!', data.data.message, 'error');
-                    }
-                }, function(error) {
-                    swal('注册失败!', '未知错误', 'error');
-                    console.log('Error: ' + error);
-                });
-        });
-    };
-    $scope.signin = function() {
-        $http.post('/api/signin', $scope.formData)
-            .then(function(data) {
-                if (data.data.status) {
-                    $rootScope.$broadcast('authenticationChanged');
-                    // swal('登陆成功!', 'Hi, ' + data.data.email + ' !', 'success');
-                    toastr.success('Sign in Success!');
-                    $location.path('/myprofile');
-                } else {
-                    swal('登陆失败!', data.data.message, 'error');
-                }
-            }, function(error) {
-                swal('登陆失败!', '未知错误', 'error');
-                console.log('Error: ' + error);
-            });
-    };
-};
-
 function SigninCtrl($scope, $http, $location, $rootScope, toastr) {
     $scope.ngViewClass = 'page-signin';
     $scope.switchToSignup = function() {
-        $scope.toSignup = true;
         $rootScope.title = 'Register';
     };
     $scope.switchToSignin = function() {
-        $scope.toSignup = false;
         $rootScope.title = 'Signin';
     };
     $scope.signup = function() {
         swal({
             title: $scope.formData.email + " ?",
-            text: "Please check your email again. \n",
+            text: "请再次检查您的邮箱. \n",
             type: "info",
             showCancelButton: true,
+            cancelButtonText: "取消",
             confirmButtonColor: "#8cd4f5",
-            confirmButtonText: "Yes, register!",
+            confirmButtonText: "注册!",
             closeOnConfirm: false,
             html: false
         }, function() {
@@ -88,7 +33,7 @@ function SigninCtrl($scope, $http, $location, $rootScope, toastr) {
                 .then(function(data) {
                     if (data.data.status) {
                         $rootScope.$broadcast('authenticationChanged');
-                        swal('注册成功!', 'Hi, ' + data.data.email + '!\nLeaf已向您发送一封验证邮件，为了您的安全，请尽快完成验证。\n接下来将自动为您登陆.', 'success');
+                        swal('注册成功!', 'Hi, ' + data.data.name + '!\nLeaf已向您发送一封验证邮件，为了您的安全，请尽快完成验证。\n接下来将自动为您登陆.', 'success');
                         $location.path('/myprofile');
                     } else {
                         swal('注册失败!', data.data.message, 'error');
@@ -105,7 +50,7 @@ function SigninCtrl($scope, $http, $location, $rootScope, toastr) {
                 if (data.data.status) {
                     $rootScope.$broadcast('authenticationChanged');
                     // swal('登陆成功!', 'Hi, ' + data.data.email + ' !', 'success');
-                    toastr.success('Sign in Success!');
+                    toastr.success('登陆成功!');
                     $location.path('/myprofile');
                 } else {
                     swal('登陆失败!', data.data.message, 'error');
@@ -152,7 +97,7 @@ function BrowseUserCtrl($scope, $http, $rootScope, $routeParams) {
 };
 
 /*
-    接受信息  
+    接受信息
 */
 function MymessagesCtrl($scope, $http, $rootScope) {};
 
@@ -201,7 +146,7 @@ app.controller('updateAccountCtrl', function($http, $rootScope, $scope) {
     };
 });
 
-    // 上传头像
+// 上传头像
 app.controller('updateAvatarCtrl', function($http, $rootScope, $location, $scope, toastr) {
     $scope.uploadFile = function() {
         var file = $scope.myFile;
@@ -241,19 +186,20 @@ function SignoutCtrl($scope, $http, $location, $rootScope, toastr) {
             console.log('Error: ' + error);
         });
     swal({
-        title: "Leave Leaf?",
-        text: "Your session will be deleted",
+        title: "离开 Leaf 吗?",
+        text: "您的会话记录将被删除",
         type: "warning",
         showCancelButton: true,
+        cancelButtonText: "取消",
         confirmButtonColor: "#DD6B55",
-        confirmButtonText: "Yes, leave!",
+        confirmButtonText: "离开!",
         closeOnConfirm: false,
         html: false
     }, function() {
         $http.get('/api/signout')
             .then(function() {
                 $rootScope.$broadcast('authenticationChanged');
-                swal('登出成功!', 'Your session has been deleted!', 'success');
+                swal('登出成功!', '您的会话记录已被删除', 'success');
                 // toastr.success('Your session has been deleted!', 'Sign out Success');
                 $location.path('/');
             }, function(error) {

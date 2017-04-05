@@ -8,8 +8,8 @@ var bcrypt = require('bcrypt');
 userModel = mongoose.model('userModel', userSchema);
 
 module.exports = {
-    create: function (user) {
-        return userModel.insert(user);
+    create: function(user) {
+        return userModel.create(user);
     },
 
     createHashPassword: function(password) {
@@ -21,20 +21,20 @@ module.exports = {
     },
 
     // get user by email
-    getUserByEmail: function (email) {
+    getUserByEmail: function(email) {
         return userModel.findOne({
             email: email
         });
     },
 
     // get user by name
-    getUserByName: function (name) {
+    getUserByName: function(name) {
         return userModel.findOne({
             name: name
         });
     },
 
-    getUsers: function () {
+    getUsers: function() {
         return userModel.find({}, function(err, docs) {
             if (err) {
                 console.log("Error:" + err);

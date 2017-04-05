@@ -4,6 +4,7 @@ var userModel = require('../models/userModel');
 
 // Sign up
 exports.signup = function(req, res) {
+    var name = req.body.name;
     var email = req.body.email;
     var password = req.body.password;
 
@@ -28,13 +29,23 @@ exports.signup = function(req, res) {
             if (user) {
                 return res.json({
                     'status': false,
-                    'message': '用户已存在'
+                    'message': '此邮箱已被用户使用'
+                })
+            }
+        });
+    userModel.getUserByName(name)
+        .then(function(user) {
+            if (user) {
+                return res.json({
+                    'status': false,
+                    'message': '此用户名已被使用'
                 })
             }
         });
 
     // 待写入数据库的用户信息
     var user = {
+        name: name,
         email: email,
         password: userModel.createHashPassword(password),
     };
@@ -48,7 +59,7 @@ exports.signup = function(req, res) {
             req.session.user = user;
             return res.json({
                 'status': true,
-                'email': email
+                'name': name
             });
         }).catch(function(err) {
             console.log("create user fail");
@@ -75,7 +86,7 @@ exports.signin = function(req, res) {
                     'message': e.message
                 });
             }
-            console.log(user.name+'已登陆');
+            console.log(user.name + '已登陆');
             delete user.password;
             req.session.user = user;
             return res.json({
@@ -414,12 +425,10 @@ exports.getLeafFromDatabase = function(req, res, next) {
         "tree": [{
             "name": "作业汇总",
             "value": 0,
-            "children": [
-                {
+            "children": [{
                     "name": "高数homework",
                     "value": 1,
-                    "children": [
-                        {
+                    "children": [{
                             "name": "第一章",
                             "value": 2,
                             "children": []
@@ -442,8 +451,7 @@ exports.getLeafFromDatabase = function(req, res, next) {
                         {
                             "name": "第五章",
                             "value": 6,
-                            "children": [
-                                {
+                            "children": [{
                                     "name": "第一节",
                                     "value": 7,
                                     "children": []
@@ -465,8 +473,7 @@ exports.getLeafFromDatabase = function(req, res, next) {
                 {
                     "name": "模电homework",
                     "value": 10,
-                    "children": [
-                        {
+                    "children": [{
                             "name": "第一章",
                             "value": 11,
                             "children": []
@@ -496,8 +503,7 @@ exports.getLeafFromDatabase = function(req, res, next) {
                 {
                     "name": "Web2.0",
                     "value": 16,
-                    "children": [
-                        {
+                    "children": [{
                             "name": "Plan and Goals",
                             "value": 17,
                             "children": []
@@ -510,8 +516,7 @@ exports.getLeafFromDatabase = function(req, res, next) {
                         {
                             "name": "课程作业",
                             "value": 19,
-                            "children": [
-                                {
+                            "children": [{
                                     "name": "Homework1: Menu",
                                     "value": 20,
                                     "children": []
@@ -548,17 +553,14 @@ exports.getLeafFromDatabase = function(req, res, next) {
                 {
                     "name": "比赛经历",
                     "value": 26,
-                    "children": [
-                        {
+                    "children": [{
                             "name": "软件创新大赛",
                             "value": 27,
-                            "children": [
-                                {
-                                    "name": "总结与反思",
-                                    "value": 28,
-                                    "children": []
-                                }
-                            ]
+                            "children": [{
+                                "name": "总结与反思",
+                                "value": 28,
+                                "children": []
+                            }]
                         },
                         {
                             "name": "美国数学建模大赛",

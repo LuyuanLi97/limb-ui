@@ -33,11 +33,6 @@ app.config(function config($locationProvider, $routeProvider) {
         templateUrl: 'partials/myprofile',
         controller: BrowseUserCtrl
     }).
-    when('/signup', {
-        title: 'Register',
-        templateUrl: 'partials/signup',
-        controller: SignupCtrl
-    }).
     when('/signin', {
         title: 'Signin',
         templateUrl: 'partials/signin',
@@ -82,7 +77,7 @@ app.config(function config($locationProvider, $routeProvider) {
         templateUrl: 'partials/settings',
         controller: SettingsCtrl
     }).
-    // 默认路由地址——没有找到的路径自动跳转  
+    // 默认路由地址——没有找到的路径自动跳转
     otherwise({
         redirectTo: '/'
     });
