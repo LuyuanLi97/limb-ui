@@ -124,7 +124,7 @@ function SettingsCtrl($scope, $http, $rootScope) {
             $scope.name = response.data.name;
             $scope.avatar = response.data.avatar;
             $scope.email = response.data.email;
-            $scope.description = data.data.description;
+            $scope.description = response.data.description;
         }, function(error) {
             console.log('Error: ' + error);
         });
