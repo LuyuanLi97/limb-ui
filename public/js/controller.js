@@ -212,10 +212,18 @@ function SignoutCtrl($scope, $http, $location, $rootScope, toastr) {
     });
 };
 
-function LeafCtrl($scope, $rootScope, $http, $location) {
+function LeafCtrl($scope, $rootScope, $http, $location, $routeParams) {
     $rootScope.$broadcast('authenticationChanged');
     // 几组 node id
     $scope.nodes = ['root', 'web2.0', '课程作业', '模电homework'];
+
+    $scope.username = $routeParams.username;
+    $scope.filename = $routeParams.filename;
+    console.log("I am in leafCtrl@!!");
+    // $http.get('/api/getFileFromDatabase/'+$scope.username+$scope.filename)
+    //     .then(function(response) {
+    //         console.log('/api/getFileFromDatabase/'+$scope.name+$scope.filename+"successfully!!!!!!");
+    //     });
 
     // 默认读取跟节点数据
     $http.get('/api/getNodeData/root')

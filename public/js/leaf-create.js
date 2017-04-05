@@ -1,6 +1,34 @@
 // 创建新的思维导图
 ($(function() {
-    $.get('/api/getFileFromDatabase/Perdon/123123321').done(function(json, status, xhr) {
+
+$.get('/api/getFileFromDatabase/Perdon/123').done(function() {
+
+    var leafBase = '/api/getFileFromDatabase';
+    var username, filename, leafUrl;
+    username = $('#getUsername').val();
+    filename = $('#getFilename').val();
+    console.log("I am in leaf-create: \n");
+    console.log(username);
+    console.log("I am in leaf-create: \n");
+    console.log(filename);
+    var leafUrl = leafBase+'/'+username+'/'+filename;
+    $.ajax({
+      // 默认GET提交
+      type: "get",
+      url: leafUrl,
+      beforeSend: function() {
+        // leafUrl = ;
+        console.log("发送请求之前执行");
+      },
+      // 以下三个都是回调函数
+      // 提示错误——请求失败后
+      error: function(xhr, errorText, errorType) {
+        console.log(errorText + ":" + errorType);
+      },
+      success: function(response, status, xhr) {
+
+      },
+    }).done(function(json, status, xhr) {
         // 初始化第一个节点
         // inputData = JSON.parse(json);
         // var inputData = [{
@@ -611,4 +639,5 @@
         };
 
     });
+});
 }()));

@@ -414,177 +414,21 @@ exports.getNodeData = function(req, res, next) {
 };
 
 exports.getFileFromDatabase = function(req, res, next) {
-    // var data = {
-    //     "filename": "fileOfPerdon",
-    //     "author": "Perdon",
-    //     "tree": [{
-    //         "name": "作业汇总",
-    //         "value": 0,
-    //         "children": [{
-    //                 "name": "高数homework",
-    //                 "value": 1,
-    //                 "children": [{
-    //                         "name": "第一章",
-    //                         "value": 2,
-    //                         "children": []
-    //                     },
-    //                     {
-    //                         "name": "第二章",
-    //                         "value": 3,
-    //                         "children": []
-    //                     },
-    //                     {
-    //                         "name": "第三章",
-    //                         "value": 4,
-    //                         "children": []
-    //                     },
-    //                     {
-    //                         "name": "第四章",
-    //                         "value": 5,
-    //                         "children": []
-    //                     },
-    //                     {
-    //                         "name": "第五章",
-    //                         "value": 6,
-    //                         "children": [{
-    //                                 "name": "第一节",
-    //                                 "value": 7,
-    //                                 "children": []
-    //                             },
-    //                             {
-    //                                 "name": "第二节",
-    //                                 "value": 8,
-    //                                 "children": []
-    //                             },
-    //                             {
-    //                                 "name": "第三节",
-    //                                 "value": 9,
-    //                                 "children": []
-    //                             }
-    //                         ]
-    //                     }
-    //                 ]
-    //             },
-    //             {
-    //                 "name": "模电homework",
-    //                 "value": 10,
-    //                 "children": [{
-    //                         "name": "第一章",
-    //                         "value": 11,
-    //                         "children": []
-    //                     },
-    //                     {
-    //                         "name": "第二章",
-    //                         "value": 12,
-    //                         "children": []
-    //                     },
-    //                     {
-    //                         "name": "第三章",
-    //                         "value": 13,
-    //                         "children": []
-    //                     }
-    //                 ]
-    //             },
-    //             {
-    //                 "name": "数字电子技术",
-    //                 "value": 14,
-    //                 "children": []
-    //             },
-    //             {
-    //                 "name": "C++程序设计",
-    //                 "value": 15,
-    //                 "children": []
-    //             },
-    //             {
-    //                 "name": "Web2.0",
-    //                 "value": 16,
-    //                 "children": [{
-    //                         "name": "Plan and Goals",
-    //                         "value": 17,
-    //                         "children": []
-    //                     },
-    //                     {
-    //                         "name": "课程PPT",
-    //                         "value": 18,
-    //                         "children": []
-    //                     },
-    //                     {
-    //                         "name": "课程作业",
-    //                         "value": 19,
-    //                         "children": [{
-    //                                 "name": "Homework1: Menu",
-    //                                 "value": 20,
-    //                                 "children": []
-    //                             },
-    //                             {
-    //                                 "name": "Homework2: Login",
-    //                                 "value": 21,
-    //                                 "children": []
-    //                             },
-    //                             {
-    //                                 "name": "Final Work: My Achievement",
-    //                                 "value": 22,
-    //                                 "children": []
-    //                             }
-    //                         ]
-    //                     },
-    //                     {
-    //                         "name": "html",
-    //                         "value": 23,
-    //                         "children": []
-    //                     },
-    //                     {
-    //                         "name": "css",
-    //                         "value": 24,
-    //                         "children": []
-    //                     },
-    //                     {
-    //                         "name": "javascript",
-    //                         "value": 25,
-    //                         "children": []
-    //                     }
-    //                 ]
-    //             },
-    //             {
-    //                 "name": "比赛经历",
-    //                 "value": 26,
-    //                 "children": [{
-    //                         "name": "软件创新大赛",
-    //                         "value": 27,
-    //                         "children": [{
-    //                             "name": "总结与反思",
-    //                             "value": 28,
-    //                             "children": []
-    //                         }]
-    //                     },
-    //                     {
-    //                         "name": "美国数学建模大赛",
-    //                         "value": 29,
-    //                         "children": []
-    //                     }
-    //                 ]
-    //             },
-    //             {
-    //                 "name": "总结与思考 homework",
-    //                 "value": 30,
-    //                 "children": []
-    //             }
-    //         ]
-    //     }]
-    // };
-    // var filename = req.params.filename;
-    // var author = req.params.author;
-    // var findObj = {
-    //     "filename": filename,
-    //     "author": author
-    // };
-    // console.log("findObj:\n");
-    // console.log(findObj);
-    fileModel.getDataByFilenameAndAuthor()
+    var filename = req.params.filename;
+    var author = req.params.author;
+    var findObj = {
+        "filename": filename,
+        "author": author
+    };
+    fileModel.getDataByFilenameAndAuthor(findObj)
         .then(function(response) {
             console.log("I am data: ");
             console.log(response);
-            res.json(data);
+            if (response instanceof Array) {
+                res.json(response[0].data);
+            } else {
+                res.json(response.data);
+            }
         });
     // res.json(data);
     // console.log("come to the server json successfully!");
@@ -622,3 +466,11 @@ exports.saveFileToDatabase = function(req, res, next) {
     });
 }
 
+exports.getUsernameAndFilename = function(req, res, next) {
+    var username = req.session.user.name;
+    var filename = req.params.filename;
+    res.json({
+        "username" : username,
+        "filename": filename
+    });
+}

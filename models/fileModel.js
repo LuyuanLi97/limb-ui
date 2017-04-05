@@ -13,8 +13,8 @@ module.exports = {
                 console.log("create file error");
         });
     },
-    getDataByFilenameAndAuthor: function() {
-        return fileModel.find({}, function(err, docs) {
+    getDataByFilenameAndAuthor: function(findObj) {
+        return fileModel.find(findObj, function(err, docs) {
             if (err) {
                 console.log("Error:" + err);
             }
