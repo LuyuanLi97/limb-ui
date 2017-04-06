@@ -71,6 +71,8 @@ module.exports = function(app) {
     app.get('/api/node/:nodeId', api.node);
     app.post('/api/node/updateNodeData', api.node.updateNodeData);
 
+    app.post('/api/uploadFile', upload.single('file'), api.uploadFile);
+
 
 
     // otherwise

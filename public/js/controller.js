@@ -214,8 +214,16 @@ function SignoutCtrl($scope, $http, $location, $rootScope, toastr) {
 };
 
 // Leaf 页面， 内容为右边栏的处理方法
-function LeafCtrl($scope, $rootScope, $http, $location, toastr) {
-    // $rootScope.$broadcast('authenticationChanged');
+function LeafCtrl($scope, $rootScope, $http, $location, toastr, $window) {
+
+    // 刷新页面，能解决 collapse 的一些问题
+    $rootScope.$broadcast('enterLeafPage');
+    $rootScope.$on('enterLeafPage', function() {
+        $window.location.reload();
+    });
+
+    // 如果用户在这个页面刷新，广播能够根据用户的登陆状态修改导航栏的右上角数据
+    $rootScope.$broadcast('authenticationChanged');
 
     // 沛东需要给过来的数据
     $scope.nodeIds = []; // 路径 --- perdon
@@ -292,6 +300,12 @@ function LeafCtrl($scope, $rootScope, $http, $location, toastr) {
         getNodeDataFormDB(); // 刷新数据
     };
 
+    // 删除计划
+    $scope.deletePlan = function(index) {
+        $scope.nodeData.plans.splice(index, 1);
+        updateNodeData('删除计划成功！');
+    };
+
     // 添加计划
     $scope.addPlan = function(newPlan) {
         $scope.nodeData.plans.push(newPlan);
@@ -302,9 +316,9 @@ function LeafCtrl($scope, $rootScope, $http, $location, toastr) {
     // 添加评论
     $scope.addComment = function(newCommentContent) {
         var newComment = {
-            'name': $scope.author.name,
-            'profile': '/browse/user/' + $scope.author.email,
-            'avatar': $scope.author.avatar,
+            'name': $scope.currentUser.name,
+            'profile': '/browse/user/' + $scope.currentUser.email,
+            'avatar': $scope.currentUser.avatar,
             'date': new Date().toDateString(),
             'content': newCommentContent,
             'children': []
@@ -317,9 +331,9 @@ function LeafCtrl($scope, $rootScope, $http, $location, toastr) {
     // 添加回复
     $scope.reply = function(comment, newCommentContent) {
         var newComment = {
-            'name': $scope.author.name,
-            'profile': '/browse/user/' + $scope.author.email,
-            'avatar': $scope.author.avatar,
+            'name': $scope.currentUser.name,
+            'profile': '/browse/user/' + $scope.currentUser.email,
+            'avatar': $scope.currentUser.avatar,
             'date': new Date().toDateString(),
             'content': newCommentContent,
             'children': []
@@ -351,12 +365,41 @@ function LeafCtrl($scope, $rootScope, $http, $location, toastr) {
             });
     };
 
+    // 上传文件
+    $scope.uploadFile = function() {
+        var file = $scope.myFile;
+        var uploadUrl = "/api/uploadFile";
+        var fd = new FormData();
+        fd.append('file', file);
+        $http.post(uploadUrl, fd, {
+                transformRequest: angular.identity,
+                headers: {
+                    'Content-Type': undefined
+                }
+            })
+            .then(function(response) {
+                console.log("success!!");
+                console.log(response.data);
+                $scope.nodeData.documents.push(response.data);
+                updateNodeData('文件上传成功!');
+            }, function(response) {
+                console.log("error!!");
+                toastr.error('文件上传失败!');
+            });
+    };
+
+    // 删除文件
+    $scope.deleteDocument = function(index) {
+        $scope.nodeData.documents.splice(index, 1);
+        updateNodeData('删除资料成功！');
+    };
+
 };
 
 /*
     路由改变的时候调用
 */
-app.run(['$rootScope', function($rootScope) {
+app.run(['$rootScope', function($rootScope, $window) {
     $rootScope.$on('$routeChangeSuccess', function(event, current, previous) {
         $rootScope.title = current.$$route.title;
     });

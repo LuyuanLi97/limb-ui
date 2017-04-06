@@ -267,6 +267,18 @@ exports.node.updateNodeData = function(req, res, next) {
     next();
 };
 
+// 上传文件
+exports.uploadFile = function(req, res, next) {
+    console.log('----uploadFile----');
+    var newDocument = {
+        'name': req.file.originalname,
+        'size': req.file.size,
+        'date': new Date().toDateString(),
+        'url': 'uploads/' + req.file.filename
+    };
+    res.json(newDocument);
+};
+
 exports.getFileFromDatabase = function(req, res, next) {
     var filename = req.params.filename;
     var author = req.params.author;

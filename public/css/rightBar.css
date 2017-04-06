@@ -177,3 +177,11 @@ ol li:last-child a:hover {
 .btn-success, .btn-danger {
     margin: 2px;
 }
+
+.rightIcon {
+    opacity: 0.3;
+}
+
+.rightIcon:hover {
+    opacity: 1;
+}
