@@ -11,6 +11,9 @@ function IndexCtrl($scope, $http, $location, $rootScope, toastr) {
 
 function SigninCtrl($scope, $http, $location, $rootScope, toastr) {
     $scope.ngViewClass = 'page-signin';
+    $scope.formData = {};
+    $scope.formData.email = "945484716@qq.com";
+    $scope.formData.password = "123456";
     $scope.switchToSignup = function() {
         $rootScope.title = 'Register';
     };
@@ -330,3 +333,22 @@ app.directive('fileModel', ['$parse', function($parse) {
 }]);
 
 function new_functionCtrl($scope, $http, $location, $routeParams) {}
+
+
+app.controller('newLeafCtrl', newLeafCtrl);
+
+function newLeafCtrl($scope, $window, $location, $http) {
+    $scope.newPublicLeaf = function() {
+        var filename = $window.prompt("请输入文件名");
+        if (filename == null || filename == "")
+            filename = "file"+Math.random()*10000;
+        $scope.filename = filename;
+        $http.get('/api/myprofile')
+        .then(function(response) {
+            $scope.author = response.data.name;
+            $location.path('leaf/'+$scope.author+'/'+$scope.filename);
+        }, function(error) {
+            console.log('Error: ' + error);
+        });
+    }
+}

@@ -424,20 +424,11 @@ exports.getFileFromDatabase = function(req, res, next) {
         .then(function(response) {
             console.log("I am data: ");
             console.log(response);
-            if (response instanceof Array) {
-                res.json(response[0].data);
-            } else {
-                res.json(response.data);
-            }
+            res.json(response[0].data);
         });
-    // res.json(data);
-    // console.log("come to the server json successfully!");
 };
 
 exports.saveFileToDatabase = function(req, res, next) {
-    // console.log("out of the req");
-    // console.log(req.body);
-    // console.log(req.body.tree[0].children);
     var author = req.session.user.name;
     var filename = req.params.filename;
     var newFile = {
@@ -466,11 +457,29 @@ exports.saveFileToDatabase = function(req, res, next) {
     });
 }
 
-exports.getUsernameAndFilename = function(req, res, next) {
-    var username = req.session.user.name;
+exports.isFileNew = function(req, res, next) {
     var filename = req.params.filename;
+    var author = req.params.author;
+    var findObj = {
+        "filename": filename,
+        "author": author
+    };
+    console.log("I am in isFileNew api!");
+    fileModel.getDataByFilenameAndAuthor(findObj)
+        .then(function(response) {
+            // 没有找到file
+            var isFileNew = (response.toString() === "");
+            console.log(isFileNew);
+            res.json({
+                "isFileNew": isFileNew
+            });
+        });
+}
+
+exports.getCreateJson = function(req, res, next) {
     res.json({
-        "username" : username,
-        "filename": filename
+        "filename": "",
+        "author": "",
+        "tree": []
     });
 }
