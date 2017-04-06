@@ -67,7 +67,7 @@ module.exports = function(app) {
     app.get('/api/browse/user/:userEmail', api.browse.user);
     app.get('/api/settings', api.settings);
     app.get('/api/checkSignin', api.checkSignin);
-    app.get('/api/getNodeData/:nodeId', api.getNodeData);
+    // app.get('/api/getNodeData/:nodeId', api.getNodeData);
     app.get('/api/create.json', api.getCreateJson);
 
 

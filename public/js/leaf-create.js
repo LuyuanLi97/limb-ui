@@ -5,6 +5,8 @@ $.get('/api/create.json').done(function() {
     var leafBase, username, filename, leafUrl, isFileNewUrl, isFileExist;
     username = $('#getUsername').val();
     filename = $('#getFilename').val();
+    console.log(username);
+    console.log(filename);
     leafBase = '/api/getFileFromDatabase'
     leafUrl = leafBase+'/'+username+'/'+filename;
     console.log("leafUrl"+leafUrl);
@@ -513,15 +515,9 @@ $.get('/api/create.json').done(function() {
             }
 
             $('#save').on('click', function() {
-                // var filename = prompt('保存的文件名是：');
                 inputData.filename = filename;
-                // if (isOnlyRoot()) {
-                    // alert("不允许只有根节点");
-                // } else {                    
                 $.post('/api/saveFileToDatabase/'+filename, inputData);
-                // 显示保存成功
                 alert("保存成功!");
-                // }
             });
 
             function up() {
