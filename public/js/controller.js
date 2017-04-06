@@ -94,6 +94,7 @@ function BrowseUserCtrl($scope, $http, $rootScope, $routeParams) {
             $scope.avatar = data.data.avatar;
             $scope.email = data.data.email;
             $scope.description = data.data.description;
+            $scope.fileList = response.data.fileList;
         }, function(error) {
             console.log('Error: ' + error);
         });
@@ -212,32 +213,144 @@ function SignoutCtrl($scope, $http, $location, $rootScope, toastr) {
     });
 };
 
-function LeafCtrl($scope, $rootScope, $http, $location, $routeParams) {
-    $rootScope.$broadcast('authenticationChanged');
-    // 几组 node id
-    $scope.nodes = ['root', 'web2.0', '课程作业', '模电homework'];
+// Leaf 页面， 内容为右边栏的处理方法
+function LeafCtrl($scope, $rootScope, $http, $location, toastr) {
+    // $rootScope.$broadcast('authenticationChanged');
 
-    $scope.username = $routeParams.username;
-    $scope.filename = $routeParams.filename;
-    console.log("I am in leafCtrl@!!");
-    // $http.get('/api/getFileFromDatabase/'+$scope.username+$scope.filename)
-    //     .then(function(response) {
-    //         console.log('/api/getFileFromDatabase/'+$scope.name+$scope.filename+"successfully!!!!!!");
-    //     });
+    // 沛东需要给过来的数据
+    $scope.nodeIds = []; // 路径 --- perdon
+    // $scope.currentNodeId = $scope.clickedNodeId; // 当前被点击节点id 默认读取跟节点数据 --- Perdon
+    // getNodeDataFormDB();
+    $scope.currentNodeId; // 当前节点id
 
-    // 默认读取跟节点数据
-    $http.get('/api/getNodeData/root')
+    $scope.currentUser; // 当前用户
+
+    // 当前用户身份 - 用于检验用户权限
+    $http.get('/api/myprofile')
         .then(function(response) {
-            $scope.nodeData = response.data;
+            $scope.currentUser = response.data;
+        }, function(error) {
+            console.log('Error: ' + error);
         });
 
-    // 选中其他节点时
+    // 检验用户登陆状态， 用于评论
+    $http.get('/api/checkSignin')
+        .then(function(data) {
+            $scope.signedinAlready = data.data.signedin;
+        }, function(error) {
+            console.log('Error: ' + error);
+        });
+
+
+    // 添加节点用于测试
+    $scope.addNode = function(nodeId) {
+        $scope.nodeIds.push(nodeId);
+    };
+
+    // 选中一个节点时
     $scope.getNodeData = function(nodeId) {
-        $http.get('/api/getNodeData/' + nodeId)
-            .then(function(response) {
-                $scope.nodeData = response.data;
+        $scope.currentNodeId = nodeId.toString();
+        getNodeDataFormDB();
+    };
+
+    var getNodeDataFormDB = function() {
+        $http.get('/api/node/' + $scope.currentNodeId)
+            .then(function(data) {
+                console.log('response: ' + data.data);
+                $scope.nodeData = data.data;
+
+                // notes markdown
+                $scope.markedNotes = marked($scope.nodeData.notes);
+
+                // 获取作者信息
+                $http.get('/api/browse/user/' + $scope.nodeData.authorEmail)
+                    .then(function(data) {
+                        $scope.author = data.data;
+                        console.log('1$scope.author: ' + $scope.author);
+                    }, function(error) {
+                        console.log('Error: ' + error);
+                    });
+            }, function(error) {
+                console.log('Error: ' + error);
             });
     }
+
+    // 更新描述
+    $scope.updateDescription = function() {
+        updateNodeData('描述更新成功！');
+    };
+
+    // 更新笔记
+    $scope.updateNotes = function() {
+        $scope.markedNotes = marked($scope.nodeData.notes);
+        updateNodeData('笔记更新成功！');
+    };
+
+    // 添加计划
+    $scope.updatePlan = function() {
+        updateNodeData('更改计划成功！');
+        getNodeDataFormDB(); // 刷新数据
+    };
+
+    // 添加计划
+    $scope.addPlan = function(newPlan) {
+        $scope.nodeData.plans.push(newPlan);
+        updateNodeData('添加计划成功！');
+        getNodeDataFormDB(); // 刷新数据
+    };
+
+    // 添加评论
+    $scope.addComment = function(newCommentContent) {
+        var newComment = {
+            'name': $scope.author.name,
+            'profile': '/browse/user/' + $scope.author.email,
+            'avatar': $scope.author.avatar,
+            'date': new Date().toDateString(),
+            'content': newCommentContent,
+            'children': []
+        };
+        $scope.nodeData.comments.push(newComment);
+        updateNodeData('评论成功！');
+        getNodeDataFormDB(); // 刷新数据
+    };
+
+    // 添加回复
+    $scope.reply = function(comment, newCommentContent) {
+        var newComment = {
+            'name': $scope.author.name,
+            'profile': '/browse/user/' + $scope.author.email,
+            'avatar': $scope.author.avatar,
+            'date': new Date().toDateString(),
+            'content': newCommentContent,
+            'children': []
+        };
+        comment.children.push(newComment);
+        updateNodeData('回复成功！');
+        getNodeDataFormDB(); // 刷新数据
+    };
+
+    // 更新数据到数据库
+    var updateNodeData = function(info) {
+        // 可修改的内容，不能直接post $scope.nodeData, 里面有些值会导致错误
+        var leatestNodeData = {
+            nodeId_: $scope.nodeData.nodeId, // nodeId_ means nodeId copy, short form
+            comments_: $scope.nodeData.comments,
+            plans_: $scope.nodeData.plans,
+            documents_: $scope.nodeData.documents,
+            notes_: $scope.nodeData.notes,
+            description_: $scope.nodeData.description,
+            tags_: $scope.nodeData.tags
+        };
+        console.log('leatestNodeData: ' + leatestNodeData);
+        $http.post('/api/node/updateNodeData', leatestNodeData)
+            .then(function() {
+                toastr.success(info);
+            }, function(error) {
+                toastr.success(info); // 暂不知道为什么会跳到这里，但的确更新了
+                console.log('Error: ' + error);
+            });
+    };
+
 };
 
 /*
@@ -330,3 +443,10 @@ app.directive('fileModel', ['$parse', function($parse) {
 }]);
 
 function new_functionCtrl($scope, $http, $location, $routeParams) {}
+
+//注册一个过滤器，挂载到任意一个angular.module下，如果自定义过滤器较多，可以提取出来一个公用的过滤器module
+app.filter('to_trusted', ['$sce', function($sce) {
+    return function(text) {
+        return $sce.trustAsHtml(text);
+    };
+}]);

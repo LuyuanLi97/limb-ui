@@ -168,3 +168,12 @@ ol li:last-child a:hover {
         margin-right: 6px;
     }
 }
+
+.btn-primary:hover, .btn-primary.hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open>.dropdown-toggle.btn-primary {
+    background: transparent;
+    color: gray;
+}
+
+.btn-success, .btn-danger {
+    margin: 2px;
+}
