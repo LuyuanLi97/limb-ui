@@ -29,7 +29,7 @@ module.exports = function(app) {
     // :后面作为一个可变的参数传进去，由req进行访问
     app.get('/partials/:name', function(req, res, next) {
         var name = req.params.name;
-        console.log("partials:"+name+"has been request!");
+        console.log("partials:" + name + "has been request!");
         res.render('partials/' + name);
         console.log("par");
     });
@@ -69,6 +69,12 @@ module.exports = function(app) {
     app.get('/api/checkSignin', api.checkSignin);
     app.get('/api/getNodeData/:nodeId', api.getNodeData);
     app.get('/api/create.json', api.getCreateJson);
+
+
+    app.get('/api/node/:nodeId', api.node);
+    app.post('/api/node/updateNodeData', api.node.updateNodeData);
+
+    app.post('/api/uploadFile', upload.single('file'), api.uploadFile);
 
 
 

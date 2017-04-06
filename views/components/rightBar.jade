@@ -7,36 +7,38 @@
         //- 作者信息
         center#authorInfo.collapse
             br
-            img#myicon(src='{{nodeData.author.avatar}}', alt='icon')
+            img#myicon(src='{{author.avatar}}', alt='icon')
             h5 
-                a(href='{{nodeData.author.profile}}') {{nodeData.author.name}} 
-            p {{nodeData.author.description}}
-            a {{nodeData.author.leavesNum}} leaves - 
+                a(href='{{author.profile}}') {{author.name}} 
+            p {{author.description}}
+            a {{author.leavesNum}} leaves - 
             span
-                a {{nodeData.author.tagsNum}} tags
+                a {{author.tagsNum}} tags
             br
-            a(href='{{nodeData.author.github}}')
+            a(href='{{author.github}}')
                 span.fui-github GitHub &nbsp;
-            a(href='mailto:{{nodeData.author.mail}}')
-                span.fui-mail {{nodeData.author.mail}}
+            a(href='mailto:{{author.mail}}')
+                span.fui-mail {{author.mail}}
             br
             br
 
-    //- 几个节点例子
+    input(ng-model='nodeId', type='text', placeholder='nodeId')
+    button.btn.btn-success(type='reset', ng-click='addNode(nodeId)') 添加节点
     br
-    a(ng-repeat='node in nodes')
-        button.btn-sm(ng-click='getNodeData(node)') {{node}}
+    input(ng-model='nodeString', type='text', placeholder='nodeString')
     br
-    small 试着点击以上几个节点，默认为 root 节点
+
+    button(ng-repeat='nodeId in nodeIds', ng-click='getNodeData(nodeId)') {{nodeId}}
 
     //-路径
     ol.breadcrumb
-        li.animate-repeat(ng-repeat='node in nodeData.nodeString')
-            a(ng-click='getNodeData(node)') {{node}}
+        li.animate-repeat(ng-repeat='node in nodeString track by $index')
+            a(href='#') {{node}}
 
-    //- 标签
-    .tagsinput-primary
-        input.tagsinput(name='tagsinput', data-role='tagsinput', ng-model='nodeData.tags')
+    p {{nodeData.tags}}
+    //- //- 标签
+    //- .tagsinput-primary
+    //-     input.tagsinput(name='tagsinput', data-role='tagsinput', ng-model='nodeData.tags')
 
     form.form-horizontal(role='form')
         //- 描述
@@ -44,14 +46,12 @@
             .panel.panel-primary
                 .panel-heading
                     h3.panel-title 描述
-                    .topRightBtn.topRightBtn-2(type='submit', ng-click='editDescription = !editDescription' data-toggle='collapse', data-target='#updateDescription', aria-expanded='false', aria-controls='updateDescription')
-                        span.fui-check(ng-show="editDescription")
-                    .topRightBtn.topRightBtn-1(type='button', ng-click='editDescription = !editDescription' data-toggle='collapse', data-target='#updateDescription', aria-expanded='false', aria-controls='updateDescription')
+                    .topRightBtn.topRightBtn-1(type='button', ng-click='editDescription = !editDescription', data-toggle='collapse', data-target='#updateDescription', aria-expanded='false', aria-controls='updateDescription')
                         span.glyphicon.glyphicon-edit(ng-hide="editDescription")
                         span.fui-cross(ng-show="editDescription")
                 .panel-body#updateDescription.collapse
-                    center
-                        textarea.form-control(rows='3', autofocus='', ng-model="nodeData.description", placeholder='add description')
+                    textarea.form-control(ng-model='nodeData.description', rows='3', placeholder='添加描述')
+                    button.btn.btn-success(ng-click='updateDescription(); editDescription = !editDescription', data-toggle='collapse', data-target='#updateDescription', aria-expanded='false', aria-controls='updateDescription') 更新描述
                 .panel-body(ng-hide="editDescription")
                     | {{nodeData.description}}
         //- Notes
@@ -59,12 +59,14 @@
             .panel.panel-primary
                 .panel-heading
                     h3.panel-title 笔记
-                    .topRightBtn.topRightBtn-1(type='submit')
-                        span.icon-cloud-upload
-                .panel-body.no-padding
-                    center
-                        textarea.form-control(rows='7', autofocus='', data-provide='markdown', ng-model="nodeData.notes", placeholder='在这里写下笔记') 
-
+                    .topRightBtn.topRightBtn-1(type='button', ng-click='spanUpdateNotes = !spanUpdateNotes' data-toggle='collapse', data-target='#uploadNotes', aria-expanded='false', aria-controls='uploadNotes')
+                        span.glyphicon.glyphicon-edit(ng-hide="spanUpdateNotes")
+                        span.fui-cross(ng-show="spanUpdateNotes")
+                .panel-body.no-padding#uploadNotes.collapse
+                    textarea.form-control(rows='7', autofocus='', data-provide='markdown', ng-model="nodeData.notes", placeholder='在这里写下笔记') 
+                    button.btn.btn-success(ng-click='updateNotes(); spanUpdateNotes = !spanUpdateNotes', data-toggle='collapse', data-target='#uploadNotes', aria-expanded='false', aria-controls='uploadNotes') 提交笔记
+                .panel-body(ng-hide="spanUpdateNotes")
+                    div(ng-bind-html='markedNotes | to_trusted')
         //- documents
         .form-group.rightBar-card
             .panel.panel-primary
@@ -73,17 +75,25 @@
                     .topRightBtn.topRightBtn-1(type='button', ng-click='spanUploadFiles = !spanUploadFiles' data-toggle='collapse', data-target='#uploadFiles', aria-expanded='false', aria-controls='uploadFiles')
                         span.fui-plus(ng-hide="spanUploadFiles")
                         span.fui-cross(ng-show="spanUploadFiles")
+                    .topRightBtn.topRightBtn-2(type='button', ng-click='editDocument = !editDocument', ng-show='nodeData.documents.length > 0')
+                        span.glyphicon.glyphicon-edit(ng-hide="editDocument")
+                        span.fui-cross(ng-show="editDocument")
                 //- input file
                 center#uploadFiles.collapse
-                    .row(style='padding:5px 16px 5px 16px;')
-                        input#input-700.file-loading(name='kartik-input-700[]', type='file', multiple='')
-                        script.
-                            $("#input-700").fileinput({
-                                uploadUrl: "http://localhost/file-upload/", // server upload action
-                                uploadAsync: true,
-                                maxFileCount: 5
-                            });
-                .panel-body
+                    .row
+                        input(type='file', file-model='myFile')
+                        a.btn.btn-success(ng-click='uploadFile(); spanUploadFiles = !spanUploadFiles', type='reset',  data-toggle='collapse', data-target='#uploadFiles', aria-expanded='false', aria-controls='uploadFiles') 上传文件
+                        //- iframe#id_iframe(name='id_iframe', style='', type='hidden')
+                        //- bootstrap file input, it's very cool
+                        //- .row(style='padding:5px 16px 5px 16px;')
+                        //-     input#input-700.file-loading(name='kartik-input-700[]', type='file', multiple='')
+                        //-     script.
+                        //-         $("#input-700").fileinput({
+                        //-             uploadUrl: "/api/uploadFile", // server upload action
+                        //-             uploadAsync: true,
+                        //-             maxFileCount: 1
+                        //-         });
+                .panel-body(ng-show='nodeData.documents.length > 0')
                     .table-responsive
                         table.table
                             thead
@@ -99,20 +109,35 @@
                                         a(type='button', data-toggle='collapse', data-target='#file{{$index + 1}}', aria-expanded='false', aria-controls='file{{$index + 1}}')
                                             | {{document.name}}
                                         div(id='file{{$index + 1}}').collapse
-                                            .btn#preview
+                                            a.btn(href='{{document.url}}')
                                                 span.icon-eye-open
-                                            .btn#download
+                                            a.btn(href='{{document.url}}', download='{{document.name}}')
                                                 span.icon-cloud-download
                                     td {{document.date}}
-                                    td {{document.size}}
+                                    td {{document.size}}B
+                                        .rightIcon.pull-right(ng-click='deleteDocument($index)', ng-show='editDocument')
+                                            span.icon-trash
         //- 计划
         .form-group.rightBar-card
             .panel.panel-primary
                 .panel-heading
-                    h3.panel-title 计划
-                    .topRightBtn.topRightBtn-1
-                        span.fui-plus
-                .panel-body
+                    h3.panel-title 计划                    
+                    .topRightBtn.topRightBtn-1(type='button', ng-click='spanUploadPlan = !spanUploadPlan' data-toggle='collapse', data-target='#uploadPlan', aria-expanded='false', aria-controls='uploadPlan')
+                        span.fui-plus(ng-hide="spanUploadPlan")
+                        span.fui-cross(ng-show="spanUploadPlan")
+                    .topRightBtn.topRightBtn-2(type='button', ng-click='editPlan = !editPlan', ng-show='nodeData.plans.length > 0')
+                        span.glyphicon.glyphicon-edit(ng-hide="editPlan")
+                        span.fui-cross(ng-show="editPlan")
+                //- input plan
+                .panel-body#uploadPlan.collapse
+                    input(type='hidden', ng-model='newPlan[nodeData.plans.length].state', ng-init=false)
+                    input(ng-model='newPlan[nodeData.plans.length].title', type='text', placeholder='计划标题')
+                    textarea.form-control(ng-model='newPlan[nodeData.plans.length].content', rows='3', placeholder='计划内容')
+                    laber 截止时间:
+                    input#dtp_input1(ng-model='newPlan[nodeData.plans.length].deadline')
+                    br     
+                    button.btn.btn-success(type='reset', ng-click='addPlan(newPlan[nodeData.plans.length]); spanUploadPlan = !spanUploadPlan' data-toggle='collapse', data-target='#uploadPlan', aria-expanded='false', aria-controls='uploadPlan') 添加计划
+                .panel-body(ng-show='nodeData.plans.length > 0')
                     .table-responsive
                         table.table
                             thead
@@ -121,30 +146,31 @@
                                     th 任务
                                     th 截止时间
                             tbody
-                                tr.animate-repeat(ng-repeat='plan in nodeData.plans')
+                                tr.animate-repeat(ng-repeat='plan in nodeData.plans track by $index')
                                     td
-                                        input(type='checkbox', ng-model='plan.state', data-toggle='checkbox')
+                                        input(type='checkbox', ng-model='plan.state', data-toggle='checkbox', ng-click='updatePlan()')
                                     td
                                         a(type='button', data-toggle='collapse', data-target='#plan{{$index + 1}}', aria-expanded='false', aria-controls='plan{{$index+1}}') 
                                             span {{plan.title}}
                                         div(id="plan{{$index+1}}").collapse
                                             small {{plan.content}}
                                     td {{plan.deadline}}
+                                        .rightIcon.pull-right(ng-click='deletePlan($index)', ng-show='editPlan')
+                                            span.icon-trash
 
         .form-group.rightBar-card
             .panel.panel-primary
                 .panel-heading
                     h3.panel-title 留言
-                    .topRightBtn.topRightBtn-1(type='button', ng-click='spanQdiscuss = !spanQdiscuss' data-toggle='collapse', data-target='#qdiscuss', aria-expanded='false', aria-controls='qdiscuss')
+                    .topRightBtn.topRightBtn-1(type='button', ng-click='spanQdiscuss = !spanQdiscuss' data-toggle='collapse', data-target='#discuss', aria-expanded='false', aria-controls='discuss')
                         span.fui-plus(ng-hide="spanQdiscuss")
                         span.fui-cross(ng-show="spanQdiscuss")
+                //- 添加留言
+                .panel-body#discuss.collapse
+                    textarea#mesg.message.form-control(ng-model='newCommentContent', contenteditable='true', placeholder='添加新的留言')
+                    .btn.btn-success.submit(type='reset', ng-click='addComment(newCommentContent); spanQdiscuss = !spanQdiscuss' data-toggle='collapse', data-target='#discuss', aria-expanded='false', aria-controls='discuss', ng-show='signedinAlready') 发表
+                    a.btn.btn-danger.submit(ng-hide='signedinAlready', href='/signin') 登陆
                 .panel-body
-                    //- 添加留言
-                    #qdiscuss.collapse
-                        textarea#mesg.message.form-control(contenteditable='true', placeholder='添加新的留言')
-                        .But
-                            span.submit 发表
-                    //- #msgpad.msgCon
                     .bootstrap.snippet
                         .blog-comment
                             ul.comments
@@ -168,12 +194,17 @@ script#commentsItem(type='text/ng-template').
         <p class="meta"> {{comment.date}}
             <a href='{{comment.profile}}'> {{comment.name}}</a> says : 
             <i class="pull-right">
-                <a href='#'>
+                <a type="button" data-toggle="collapse" data-target="#collapseExample{{$index}}" aria-expanded="false" aria-controls="collapseExample{{$index}}">                    
                     <small> Reply</small>
                 </a>
             </i>
         </p>
         <p> {{comment.content}}</p>
+        <div class="collapse" id="collapseExample{{$index}}">
+            <textarea class="form-control", ng-model='newCommentContent[$index]', contenteditable='true', placeholder='添加回复'/>
+            <button type='reset' class = "btn btn-success submit", ng-click='reply(comment, newCommentContent[$index])', data-toggle='collapse', data-target='#collapseExample{{$index}}', aria-expanded='false', aria-controls='collapseExample{{$index}}', ng-show='signedinAlready')> 发表 </button>
+            <a class="btn btn-danger submit", ng-hide='signedinAlready', href='/signin')> 登陆 </a>
+        </div>
     </div>
     <ul class="comments" ng-if="comment.children">
         <li class="clearfix" ng-repeat="comment in comment.children" ng-include="'commentsItem'">

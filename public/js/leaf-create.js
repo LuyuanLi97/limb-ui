@@ -548,7 +548,7 @@ $.get('/api/create.json').done(function() {
                     var rootNode = {
                         "name": initObj.rootname,
                         "value": rootValue,
-                        "children": [ ]
+                        "children": []
                     };
                     json.filename = initObj.filename;
                     json.author = initObj.username;
