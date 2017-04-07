@@ -43,6 +43,16 @@
                 var option = optionConfig(inputData);
                 myCharts.setOption(option);
 
+                // 默认点击根节点
+                var rootValue = inputData.tree[0].value;
+                console.log("rootValue: " + rootValue);
+                $('#getNodeId').val(rootValue);
+                $('#getNodeId').trigger('input'); // Use for Chrome/Firefox/Edge
+                console.log(findPathFromSelfToRoot(rootValue, rootValue).toString());
+                $('#getNodeString').val(findPathFromSelfToRoot(rootValue, rootValue).toString());
+                $('#getNodeString').trigger('input'); // Use for Chrome/Firefox/Edge
+                $('#getNodeDataBtn').click();
+
                 var myCopyContent = {};
 
                 // 上移下移
@@ -164,17 +174,12 @@
                     var value = getValue(ecData);
                     var rootValue = inputData.tree[0].value;
                     console.log("rootValue: " + rootValue);
-                    var input = $('#getNodeId');
-                    input.val(value);
-                    input.trigger('input'); // Use for Chrome/Firefox/Edge
-                    input.trigger('change'); // Use for Chrome/Firefox/Edge + IE11
-
-                    // $('#getNodeId').on("click", function() {
-                    //     console.log("2132123213123");
-                    // });
-                    // $('#getNodeId').trigger("click");
+                    $('#getNodeId').val(value);
+                    $('#getNodeId').trigger('input'); // Use for Chrome/Firefox/Edge
                     console.log(findPathFromSelfToRoot(value, rootValue).toString());
                     $('#getNodeString').val(findPathFromSelfToRoot(value, rootValue).toString());
+                    $('#getNodeString').trigger('input'); // Use for Chrome/Firefox/Edge
+                    $('#getNodeDataBtn').click();
                 });
 
                 //用来存储子节点（供收缩，打开节点使用

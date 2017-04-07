@@ -185,3 +185,7 @@ ol li:last-child a:hover {
 .rightIcon:hover {
     opacity: 1;
 }
+
+i.pull-right a:hover, p a:hover, td a:hover {
+    border-bottom: 1px #1abc9c solid;
+}

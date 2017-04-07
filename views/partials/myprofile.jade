@@ -18,10 +18,10 @@ br
 
             li.active(ng-show="ngChoice == 'leaves'", role='presentation')
                 a(ng-click='ngChoice = "leaves"') Leaves
-                    span.badge 1
+                    span.badge {{fileList.length}}
             li(ng-hide="ngChoice == 'leaves'", role='presentation')
                 a(ng-click='ngChoice = "leaves"') Leaves
-                    span.badge 1
+                    span.badge {{fileList.length}}
 
             li.active(ng-show="ngChoice == 'stars'", role='presentation')
                 a(ng-click='ngChoice = "stars"') Stars
@@ -39,10 +39,18 @@ br
                 a(ng-click='ngChoice = "following"') Following
 
     row(ng-if="ngChoice == 'overview'")
-        p.lead hello world
+        .col-xs-12.col-sm-6
+            p.lead hello world 
+        .col-xs-12.col-sm-6
+            h5 leaves
+            ul
+                li(ng-repeat='filename in fileList')
+                    a(href='/leaf/{{name}}/{{filename}}') {{filename}}
+
 
     row(ng-if="ngChoice == 'leaves'")
-        br
-        ul
-            li(ng-repeat='filename in fileList')
-                a(href='/leaf/{{name}}/{{filename}}') {{filename}}
+        .col-xs-12.col-sm-6
+            br
+            ul
+                li(ng-repeat='filename in fileList')
+                    a(href='/leaf/{{name}}/{{filename}}') {{filename}}

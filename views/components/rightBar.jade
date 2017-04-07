@@ -15,16 +15,16 @@
             span
                 a {{author.tagsNum}} tags
             br
-            a(href='{{author.github}}')
-                span.fui-github GitHub &nbsp;
+            //- a(href='{{author.github}}')
+            //-     span.fui-github GitHub &nbsp;
             a(href='mailto:{{author.mail}}')
-                span.fui-mail {{author.mail}}
+                span.fui-mail {{author.email}}
             br
             br
-
-    input#getNodeId(ng-model="nodeId", type="text")
-    input#getNodeString(ng-model="nodeString", type="text")
-    button.btn.btn-success(type='reset', ng-click='getNodeData()') 点击节点
+    div.hidden
+        input#getNodeId(ng-model="nodeId", type="text")
+        input#getNodeString(ng-model="nodeString", type="text")
+        button#getNodeDataBtn.btn.btn-success(type='reset', ng-click='getNodeData()') 点击节点
 
     //-路径
     ol.breadcrumb
@@ -41,7 +41,7 @@
             .panel.panel-primary
                 .panel-heading
                     h3.panel-title 描述
-                    .topRightBtn.topRightBtn-1(type='button', ng-click='editDescription = !editDescription', data-toggle='collapse', data-target='#updateDescription', aria-expanded='false', aria-controls='updateDescription')
+                    .topRightBtn.topRightBtn-1(ng-show='currentUser.email == author.email', type='button', ng-click='editDescription = !editDescription', data-toggle='collapse', data-target='#updateDescription', aria-expanded='false', aria-controls='updateDescription')
                         span.glyphicon.glyphicon-edit(ng-hide="editDescription")
                         span.fui-cross(ng-show="editDescription")
                 .panel-body#updateDescription.collapse
@@ -54,7 +54,7 @@
             .panel.panel-primary
                 .panel-heading
                     h3.panel-title 笔记
-                    .topRightBtn.topRightBtn-1(type='button', ng-click='spanUpdateNotes = !spanUpdateNotes' data-toggle='collapse', data-target='#uploadNotes', aria-expanded='false', aria-controls='uploadNotes')
+                    .topRightBtn.topRightBtn-1(ng-show='currentUser.email == author.email', type='button', ng-click='spanUpdateNotes = !spanUpdateNotes' data-toggle='collapse', data-target='#uploadNotes', aria-expanded='false', aria-controls='uploadNotes')
                         span.glyphicon.glyphicon-edit(ng-hide="spanUpdateNotes")
                         span.fui-cross(ng-show="spanUpdateNotes")
                 .panel-body.no-padding#uploadNotes.collapse
@@ -67,10 +67,10 @@
             .panel.panel-primary
                 .panel-heading
                     h3.panel-title 资料
-                    .topRightBtn.topRightBtn-1(type='button', ng-click='spanUploadFiles = !spanUploadFiles' data-toggle='collapse', data-target='#uploadFiles', aria-expanded='false', aria-controls='uploadFiles')
+                    .topRightBtn.topRightBtn-1(ng-show='currentUser.email == author.email', type='button', ng-click='spanUploadFiles = !spanUploadFiles' data-toggle='collapse', data-target='#uploadFiles', aria-expanded='false', aria-controls='uploadFiles')
                         span.fui-plus(ng-hide="spanUploadFiles")
                         span.fui-cross(ng-show="spanUploadFiles")
-                    .topRightBtn.topRightBtn-2(type='button', ng-click='editDocument = !editDocument', ng-show='nodeData.documents.length > 0')
+                    .topRightBtn.topRightBtn-2(type='button', ng-click='editDocument = !editDocument', ng-show='nodeData.documents.length > 0 && currentUser.email == author.email')
                         span.glyphicon.glyphicon-edit(ng-hide="editDocument")
                         span.fui-cross(ng-show="editDocument")
                 //- input file
@@ -117,10 +117,10 @@
             .panel.panel-primary
                 .panel-heading
                     h3.panel-title 计划                    
-                    .topRightBtn.topRightBtn-1(type='button', ng-click='spanUploadPlan = !spanUploadPlan' data-toggle='collapse', data-target='#uploadPlan', aria-expanded='false', aria-controls='uploadPlan')
+                    .topRightBtn.topRightBtn-1(ng-show='currentUser.email == author.email', type='button', ng-click='spanUploadPlan = !spanUploadPlan' data-toggle='collapse', data-target='#uploadPlan', aria-expanded='false', aria-controls='uploadPlan')
                         span.fui-plus(ng-hide="spanUploadPlan")
                         span.fui-cross(ng-show="spanUploadPlan")
-                    .topRightBtn.topRightBtn-2(type='button', ng-click='editPlan = !editPlan', ng-show='nodeData.plans.length > 0')
+                    .topRightBtn.topRightBtn-2(type='button', ng-click='editPlan = !editPlan', ng-show='nodeData.plans.length > 0 && currentUser.email == author.email && currentUser.email == author.email')
                         span.glyphicon.glyphicon-edit(ng-hide="editPlan")
                         span.fui-cross(ng-show="editPlan")
                 //- input plan
@@ -129,18 +129,17 @@
                     input(ng-model='newPlan[nodeData.plans.length].title', type='text', placeholder='计划标题')
                     textarea.form-control(ng-model='newPlan[nodeData.plans.length].content', rows='3', placeholder='计划内容')
                     laber 截止时间:
-                    //- .form-group
-                    //-     label.col-md-2.control-label(for='dtp_input1') DateTime Picking
-                    //-     .input-group.date.form_datetime.col-md-5(data-date='1979-09-16T05:25:07Z', data-date-format='dd MM yyyy - HH:ii p', data-link-field='dtp_input1')
-                    //-         input.form-control(size='16', type='text', value='', readonly='')
-                    //-         span.input-group-addon
-                    //-             span.glyphicon.glyphicon-remove
-                    //-         span.input-group-addon
-                    //-             span.glyphicon.glyphicon-th
-                    input#dtp_input1(ng-model='newPlan[nodeData.plans.length].deadline')
+                    .input-group.date.form_datetime.col-md-5(data-date='1979-09-16T05:25:07Z', data-date-format='dd MM yyyy - HH:ii p', data-link-field='dtp_input1')
+                        input.form-control(size='16', type='text', value='', readonly='')
+                        span.input-group-addon
+                            span.glyphicon.glyphicon-remove
+                        span.input-group-addon
+                            span.glyphicon.glyphicon-th
+                    div(hidden)
+                        input#dtp_input1(ng-model='newPlan[nodeData.plans.length].deadline')
                     br
-                    button.btn.btn-success(type='reset', ng-click='addPlan(newPlan[nodeData.plans.length]); spanUploadPlan = !spanUploadPlan' data-toggle='collapse', data-target='#uploadPlan', aria-expanded='false', aria-controls='uploadPlan') 添加计划
-                .panel-body(ng-show='nodeData.plans.length > 0')
+                    button#addPlanBtn.btn.btn-success(type='reset', ng-click='addPlan(newPlan[nodeData.plans.length]); spanUploadPlan = !spanUploadPlan' data-toggle='collapse', data-target='#uploadPlan', aria-expanded='false', aria-controls='uploadPlan') 添加计划
+                .panel-body(ng-show='nodeData.plans.length > 0 && currentUser.email == author.email')
                     .table-responsive
                         table.table
                             thead

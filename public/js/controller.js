@@ -324,6 +324,7 @@ function LeafCtrl($scope, $rootScope, $http, $location, toastr, $window, $routeP
         var newComment = {
             'commentId': Math.floor((Math.random() * 1000) + 1).toString(),
             'name': $scope.currentUser.name,
+            'email': $scope.currentUser.email,
             'profile': '/browse/user/' + $scope.currentUser.email,
             'avatar': $scope.currentUser.avatar,
             'date': new Date().toDateString(),
@@ -340,6 +341,7 @@ function LeafCtrl($scope, $rootScope, $http, $location, toastr, $window, $routeP
         var newComment = {
             'commentId': Math.floor((Math.random() * 1000) + 1).toString(),
             'name': $scope.currentUser.name,
+            'email': $scope.currentUser.email,
             'profile': '/browse/user/' + $scope.currentUser.email,
             'avatar': $scope.currentUser.avatar,
             'date': new Date().toDateString(),
@@ -449,26 +451,26 @@ function BrowseCtrl($scope, $rootScope, $http, $routeParams) {
     // users
     $http.get('/api/browse')
         .then(function(response) {
+            $scope.leaves = [];
+            $scope.users = [];
             $scope.users = response.data;
+            console.log('users: ' + $scope.users);
+            $scope.users.forEach(function(user) {
+                user.fileList.forEach(function(filename) {
+                    var leaf = {
+                        "authorName": user.name,
+                        "fileName": filename,
+                        "type": "leaf"
+                    };
+                    console.log('oneLeaf: ' + leaf);
+                    $scope.leaves.push(leaf);
+                });
+            });
         }, function(error) {
             console.log('Error: ' + error);
         });
 
-    $scope.leaves = [{
-        topic: "web",
-        type: "leaf"
-    }, {
-        topic: "angularJS",
-        type: "leaf local"
-    }];
-
-    $scope.documents = [{
-        documentName: "Operating System week2.pdf",
-        type: "document local"
-    }, {
-        documentName: "News English week3.pdf",
-        type: "document"
-    }];
+    $scope.documents = []; // "type": "document"
 };
 
 function AboutCtrl($scope, $http, $routeParams) {
@@ -492,8 +494,6 @@ app.directive('fileModel', ['$parse', function($parse) {
         }
     };
 }]);
-
-function new_functionCtrl($scope, $http, $location, $routeParams) {}
 
 app.controller('newLeafCtrl', newLeafCtrl);
 

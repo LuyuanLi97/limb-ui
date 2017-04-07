@@ -23,11 +23,6 @@ app.config(function config($locationProvider, $routeProvider) {
         templateUrl: 'partials/about',
         controller: AboutCtrl
     }).
-    when('/new_function', {
-        title: 'New function',
-        templateUrl: 'partials/new_function',
-        controller: new_functionCtrl
-    }).
     when('/browse/user/:userEmail', {
         title: 'My profile',
         templateUrl: 'partials/myprofile',
