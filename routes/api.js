@@ -49,7 +49,7 @@ exports.signup = function(req, res) {
     var user = {
         name: name,
         email: email,
-        password: userModel.createHashPassword(password),
+        password: userModel.createHashPassword(password)
     };
 
     // 用户信息写入数据库

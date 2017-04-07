@@ -3,7 +3,7 @@ var config = require('config');
 var mongoose = require('mongoose'); // mongoose for mongodb
 mongoose.Promise = global.Promise; // solve Mongoose: mpromise (mongoose's default promise library) is deprecated
 mongoose.connect(config.get('mongodb'));
-var bcrypt = require('bcrypt');
+var bcrypt = require('bcryptjs');
 // userModel相当于一个构造函数
 userModel = mongoose.model('userModel', userSchema);
 
@@ -22,7 +22,8 @@ module.exports = {
     },
 
     createHashPassword: function(password) {
-        return bcrypt.hashSync(password, 10);
+        var salt = bcrypt.genSaltSync(10);
+        return bcrypt.hashSync(password, salt);
     },
 
     validHashPassword: function(password, passwordInDB) {
