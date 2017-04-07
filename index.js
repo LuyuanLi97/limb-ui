@@ -8,7 +8,7 @@ var session = require('express-session'); // session
 var bodyParser = require('body-parser'); // pull information from HTML POST (express4)
 var methodOverride = require('method-override'); // simulate DELETE and PUT (express4)
 var config = require('config'); // configuration, will find /config/default.json
-var routes = require('./routes'); // ./routes/index.js
+var routes = require('./routes/index.js'); // ./routes/index.js
 var api = require('./routes/api');
 var autoSignin = require('./routes/autoSignin');
 var marked = require('marked');
@@ -27,6 +27,10 @@ app.use(bodyParser.json()); // parse application/json
 app.use(bodyParser.json({
     type: 'application/vnd.api+json'
 })); // parse application/vnd.api+json as json
+app.use(bodyParser.json({limit: '1mb'}));  //body-parser 解析json格式数据
+app.use(bodyParser.urlencoded({            //此项必须在 bodyParser.json 下面,为参数编码
+  extended: true
+}));
 app.use(methodOverride());
 
 app.use(session(config.get('session')));

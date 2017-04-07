@@ -1,10 +1,12 @@
 'use secret';
 
-var User = require('../lib/mongo').User;
-var UserModel = require('../models/users');
+var userModel = require('../models/userModel');
+var fileModel = require('../models/fileModel');
+var nodeModel = require('../models/nodeModel');
 
 // Sign up
 exports.signup = function(req, res) {
+    var name = req.body.name;
     var email = req.body.email;
     var password = req.body.password;
 
@@ -24,24 +26,34 @@ exports.signup = function(req, res) {
             'message': e.message
         });
     }
-    UserModel.getUserByEmail(email)
+    userModel.getUserByEmail(email)
         .then(function(user) {
             if (user) {
                 return res.json({
                     'status': false,
-                    'message': '用户已存在'
+                    'message': '此邮箱已被用户使用'
+                })
+            }
+        });
+    userModel.getUserByName(name)
+        .then(function(user) {
+            if (user) {
+                return res.json({
+                    'status': false,
+                    'message': '此用户名已被使用'
                 })
             }
         });
 
     // 待写入数据库的用户信息
     var user = {
+        name: name,
         email: email,
-        password: UserModel.createHashPassword(password),
+        password: userModel.createHashPassword(password),
     };
 
     // 用户信息写入数据库
-    UserModel.create(user)
+    userModel.create(user)
         .then(function(user) {
             console.log('注册成功');
             // 将用户信息存入 session
@@ -49,8 +61,10 @@ exports.signup = function(req, res) {
             req.session.user = user;
             return res.json({
                 'status': true,
-                'email': email
-            })
+                'name': name
+            });
+        }).catch(function(err) {
+            console.log("create user fail");
         });
 };
 
@@ -59,13 +73,13 @@ exports.signin = function(req, res) {
     var email = req.body.email;
     var password = req.body.password;
 
-    UserModel.getUserByEmail(email)
+    userModel.getUserByEmail(email)
         .then(function(user) {
             try {
                 if (!user) {
                     throw new Error('用户不存在');
                 }
-                if (!UserModel.validHashPassword(password, user.password)) {
+                if (!userModel.validHashPassword(password, user.password)) {
                     throw new Error('邮箱或密码错误');
                 }
             } catch (e) {
@@ -74,7 +88,7 @@ exports.signin = function(req, res) {
                     'message': e.message
                 });
             }
-            console.log('登陆成功');
+            console.log(user.name + '已登陆');
             delete user.password;
             req.session.user = user;
             return res.json({
@@ -91,8 +105,9 @@ exports.signout = function(req, res, next) {
 };
 
 exports.browse = function(req, res, next) {
-    UserModel.getUsers()
+    userModel.getUsers()
         .then(users => {
+            console.log("users: \n");
             console.log(users);
             res.json(users);
         });
@@ -100,33 +115,23 @@ exports.browse = function(req, res, next) {
 
 exports.myprofile = function(req, res, next) {
     if (!!req.session.user) {
-        UserModel.getUserByEmail(req.session.user.email)
+        userModel.getUserByEmail(req.session.user.email)
             .then(user => {
-                res.json({
-                    'name': user.name,
-                    'avatar': user.avatar,
-                    'email': user.email,
-                    'description': user.description,
-                });
+                res.json(user);
             });
     }
 };
 
 exports.browse.user = function(req, res, next) {
-    UserModel.getUserByEmail(req.params.userEmail)
+    userModel.getUserByEmail(req.params.userEmail)
         .then(user => {
-            res.json({
-                'name': user.name,
-                'avatar': user.avatar,
-                'email': user.email,
-                'description': user.description,
-            });
+            res.json(user);
         });
 };
 
 exports.settings = function(req, res, next) {
     if (!!req.session.user) {
-        UserModel.getUserByEmail(req.session.user.email)
+        userModel.getUserByEmail(req.session.user.email)
             .then(user => {
                 res.json({
                     'name': user.name,
@@ -140,7 +145,7 @@ exports.settings = function(req, res, next) {
 
 exports.checkSignin = function(req, res, next) {
     if (!!req.session.user) {
-        UserModel.getUserByEmail(req.session.user.email)
+        userModel.getUserByEmail(req.session.user.email)
             .then(user => {
                 console.log('avatar:' + user.avatar);
                 res.json({
@@ -158,34 +163,35 @@ exports.checkSignin = function(req, res, next) {
 
 // Update profile
 exports.updateProfile = function(req, res, next) {
-    var MyUser = User;
+    console.log("req.body: \n");
+    console.log(req.body);
     if (req.body.name) {
-        MyUser.update({
+        userModel.update({
             email: req.session.user.email
         }, {
             name: req.body.name
         }, function(error) {});
     };
     if (req.body.email) {
-        MyUser.update({
+        userModel.update({
             email: req.session.user.email
         }, {
             email: req.body.email
         }, function(error) {});
-        UserModel.getUserByEmail(req.body.email)
+        userModel.getUserByEmail(req.body.email)
             .then(user => {
                 req.session.user = user;
             });
     };
     if (req.body.description) {
-        MyUser.update({
+        userModel.update({
             email: req.session.user.email
         }, {
             description: req.body.description
         }, function(error) {});
     };
 
-    UserModel.getUserByEmail(req.session.user.email)
+    userModel.getUserByEmail(req.session.user.email)
         .then(user => {
             req.session.user = user;
         });
@@ -195,8 +201,7 @@ exports.updateProfile = function(req, res, next) {
 // Update avatar
 exports.updateAvatar = function(req, res, next) {
     var relativeAddress = 'uploads/' + req.file.filename;
-    var MyUser = User;
-    MyUser.update({
+    userModel.update({
         email: req.session.user.email
     }, {
         avatar: relativeAddress
@@ -212,194 +217,135 @@ exports.updateAccount = function(req, res, next) {
 };
 
 
-exports.getNodeData = function(req, res, next) {
-    if (req.params.nodeId == '模电homework') {
-        return res.json({
-            nodeId: '模电homework',
-            author: {
-                avatar: 'img/avatar.png',
-                profile: '/browse/user/asdunfa@gmail.com',
-                name: 'Larry',
-                description: 'sophomore, at SYSU.',
-                leavesNum: 4,
-                tagsNum: 3,
-                github: 'https://github.com/',
-                mail: 'larry@gmail.com'
-            },
-            nodeString: ['作业汇总', '模电homework'],
-            tags: '未完成,害怕',
-            description: "模电，亦称‘魔电’。",
-            notes: "我们来看一下这个单词是什么意思。——郭东亮",
-            documents: [{
-                name: 'first.css',
-                date: '13, Mar, 2017',
-                size: '1kb'
-            }],
-            plans: [{
-                state: true,
-                title: '作业一',
-                content: '提交到课程网站上互评',
-                deadline: '4, Mar. 2017'
-            }],
-            comments: [{
-                avatar: 'http://bootdey.com/img/Content/user_1.jpg',
-                date: 'Dec 18, 2014 ',
-                name: 'chroslen',
-                profile: '/browse/user/chroslen@gmail.com',
-                content: '我爱学习'
-            }]
+// 获取节点的数据（根据即节点ID）
+exports.node = function(req, res, next) {
+    nodeModel.getNodeByNodeId(req.params.nodeId)
+        .then(function(node) {
+            if (node) {
+                console.log('get and do not need to create: ' + node);
+                return res.json(node);
+            }
+            // 如果不存在此节点，则创建之
+            if (!node) {
+                var newNode = {
+                    nodeId: req.params.nodeId,
+                    authorEmail: req.session.user.email
+                };
+                nodeModel.create(newNode)
+                    .then(function(newNodeResult) {
+                        console.log(newNodeResult);
+                        console.log('创建成功');
+                        return res.json(newNodeResult);
+                    }).catch(function(err) {
+                        console.log("create newNodeResult fail");
+                        return;
+                    });
+            };
         });
-    }
-    if (req.params.nodeId == '课程作业') {
-        return res.json({
-            nodeId: '课程作业',
-            author: {
-                avatar: 'img/avatar.png',
-                profile: '/browse/user/asdunfa@gmail.com',
-                name: 'Larry',
-                description: 'sophomore, at SYSU.',
-                leavesNum: 4,
-                tagsNum: 3,
-                github: 'https://github.com/',
-                mail: 'larry@gmail.com'
-            },
-            nodeString: ['作业汇总', 'web2.0', '课程作业'],
-            tags: '未完成,school',
-            description: "this is a description.",
-            notes: "Lato is free web-font designed by Lukasz Dziedzic from Warsaw. Here you can feel the color, size, line height and margins between paragraphs. Don’t forget to underline your links, they are an important visual marker for users.",
-            documents: [{
-                name: '06-physics.pdf',
-                date: '17, Mar, 2017',
-                size: '2Mb'
-            }, {
-                name: 'Jacob.css',
-                date: '13, Mar, 2017',
-                size: '1kb'
-            }, {
-                name: 'Larry.rmvb',
-                date: '15, Mar, 2017',
-                size: '234Mb'
-            }],
-            plans: [{
-                state: true,
-                title: '实验一',
-                content: '到实验室完成实验一',
-                deadline: '4, Mar. 2017'
-            }, {
-                state: false,
-                title: '实验二',
-                content: '到实验室完成实验二',
-                deadline: '11, Mar. 2017'
-            }],
-            comments: [{
-                avatar: 'http://bootdey.com/img/Content/user_1.jpg',
-                date: 'Dec 18, 2014 ',
-                name: 'chroslen',
-                profile: '/browse/user/chroslen@gmail.com',
-                content: '作业好多，感觉要gg'
-            }]
-        });
-    } else if (req.params.nodeId == 'web2.0') {
-        return res.json({
-            nodeId: 'web2.0',
-            author: {
-                avatar: 'img/avatar.png',
-                profile: '/browse/user/asdunfa@gmail.com',
-                name: 'Larry',
-                description: 'sophomore, at SYSU.',
-                leavesNum: 4,
-                tagsNum: 3,
-                github: 'https://github.com/',
-                mail: 'larry@gmail.com'
-            },
-            nodeString: ['作业汇总', 'web2.0'],
-            tags: '未完成, 王青',
-            description: "web课程,大二上",
-            notes: "此时 chrome 横空出世，将 ie 和火狐干翻在地。——王青",
-            documents: [{
-                name: 'first.css',
-                date: '13, Mar, 2017',
-                size: '1kb'
-            }, {
-                name: '真正的coder.mp4',
-                date: '15, Mar, 2017',
-                size: '234Mb'
-            }],
-            plans: [{
-                state: true,
-                title: '作业一',
-                content: '提交到课程网站上互评',
-                deadline: '4, Mar. 2017'
-            }],
-            comments: [{
-                avatar: 'http://bootdey.com/img/Content/user_1.jpg',
-                date: 'Dec 18, 2014 ',
-                name: 'chroslen',
-                profile: '/browse/user/chroslen@gmail.com',
-                content: '王青老师好强壮啊'
-            }, {
-                avatar: 'http://bootdey.com/img/Content/user_2.jpg',
-                date: 'Dec 19, 2014 ',
-                name: 'Asdunfa',
-                profile: '/browse/user/asdunfa@gmail.com',
-                content: '链接出了问题，真正的coder的视频还在吗',
-                children: [{
-                    avatar: 'http://bootdey.com/img/Content/user_3.jpg',
-                    date: 'Dec 19, 2014 ',
-                    name: 'guest',
-                    profile: '/browse/user/asdunfa@gmail.com',
-                    content: '同求'
-                }]
-            }]
-        });
-    } else {
-        return res.json({
-            nodeId: '作业汇总',
-            author: {
-                avatar: 'img/avatar.png',
-                profile: '/browse/user/asdunfa@gmail.com',
-                name: 'Larry',
-                description: 'sophomore, at SYSU.',
-                leavesNum: 4,
-                tagsNum: 3,
-                github: 'https://github.com/',
-                mail: 'larry@gmail.com'
-            },
-            nodeString: ['作业汇总'],
-            tags: 'tags',
-            description: "大二上的所有作业",
-            notes: "# notes \n这是`根节点`，没有选中其他节点就会显示跟节点的数据。",
-            documents: [{
-                name: '学期总结.html',
-                date: '13, Mar, 2017',
-                size: '1kb'
-            }],
-            plans: [{
-                state: true,
-                title: '运动计划',
-                content: '提交到课程网站上互评',
-                deadline: '4, Mar. 2017'
-            }],
-            comments: [{
-                avatar: 'http://bootdey.com/img/Content/user_1.jpg',
-                date: 'Dec 18, 2014 ',
-                name: 'Asdunfa',
-                profile: '/browse/user/asdunfa@gmail.com',
-                content: '沙发'
-            }, {
-                avatar: 'http://bootdey.com/img/Content/user_2.jpg',
-                date: 'Dec 19, 2014 ',
-                name: 'Asdunfa',
-                profile: '/browse/user/asdunfa@gmail.com',
-                content: '我是楼上，不信看我的名字',
-                children: [{
-                    avatar: 'http://bootdey.com/img/Content/user_3.jpg',
-                    date: 'Dec 19, 2014 ',
-                    name: 'Asdunfa',
-                    profile: '/browse/user/asdunfa@gmail.com',
-                    content: '楼主说得有道理'
-                }]
-            }]
-        });
-    };
 };
+
+// 更新笔记
+exports.node.updateNodeData = function(req, res, next) {
+    console.log('----updateNodeData----');
+    console.log(req.body);
+    nodeModel.getNodeByNodeId(req.body.nodeId)
+        .then(response => {
+            console.log(response);
+        });
+    nodeModel.update({
+        nodeId: req.body.nodeId
+    }, {
+        $set: {
+            comments: req.body.comments,
+            plans: req.body.plans,
+            documents: req.body.documents,
+            notes: req.body.notes,
+            description: req.body.description,
+            tags: req.body.tags
+        }
+    }, function(error) {});
+    next();
+};
+
+// 上传文件
+exports.uploadFile = function(req, res, next) {
+    console.log('----uploadFile----');
+    var newDocument = {
+        'name': req.file.originalname,
+        'size': req.file.size,
+        'date': new Date().toDateString(),
+        'url': 'uploads/' + req.file.filename
+    };
+    res.json(newDocument);
+};
+
+exports.getFileFromDatabase = function(req, res, next) {
+    var filename = req.params.filename;
+    var author = req.params.author;
+    var findObj = {
+        "filename": filename,
+        "author": author
+    };
+    fileModel.getDataByFilenameAndAuthor(findObj)
+        .then(function(response) {
+            console.log("I am data: ");
+            console.log(response);
+            res.json(response[0].data);
+        });
+};
+
+exports.saveFileToDatabase = function(req, res, next) {
+    var author = req.session.user.name;
+    var filename = req.params.filename;
+    var newFile = {
+        "author": author,
+        "filename": filename,
+        "isPrivate": false,
+        "data": req.body
+    }
+    // 保存文件
+    fileModel.create(newFile)
+        .then(function(err, data) {
+            if (err) {
+                console.log("save file fail!")
+            } else {
+                console.log("save file successfully!");
+            }
+        });
+
+    // 连接用户和文件
+    userModel.update({
+        "name": author
+    }, {
+        $addToSet: {
+            "fileList": filename
+        }
+    });
+}
+
+exports.isFileNew = function(req, res, next) {
+    var filename = req.params.filename;
+    var author = req.params.author;
+    var findObj = {
+        "filename": filename,
+        "author": author
+    };
+    console.log("I am in isFileNew api!");
+    fileModel.getDataByFilenameAndAuthor(findObj)
+        .then(function(response) {
+            // 没有找到file
+            var isFileNew = (response.toString() === "");
+            console.log(isFileNew);
+            res.json({
+                "isFileNew": isFileNew
+            });
+        });
+}
+
+exports.getCreateJson = function(req, res, next) {
+    res.json({
+        "filename": "",
+        "author": "",
+        "tree": []
+    });
+}

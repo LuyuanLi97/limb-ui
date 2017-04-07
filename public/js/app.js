@@ -1,7 +1,11 @@
 "use strict";
 
+// 导入module
+// ngRoute路由配置
+// toastr消息提醒
 var app = angular.module('myApp', ['ngAnimate', 'ngRoute', 'toastr']);
 
+// routeProvider提供路由配置
 app.config(function config($locationProvider, $routeProvider) {
     $routeProvider.
     when('/', {
@@ -19,20 +23,10 @@ app.config(function config($locationProvider, $routeProvider) {
         templateUrl: 'partials/about',
         controller: AboutCtrl
     }).
-    when('/new_function', {
-        title: 'New function',
-        templateUrl: 'partials/new_function',
-        controller: new_functionCtrl
-    }).
     when('/browse/user/:userEmail', {
         title: 'My profile',
         templateUrl: 'partials/myprofile',
         controller: BrowseUserCtrl
-    }).
-    when('/signup', {
-        title: 'Register',
-        templateUrl: 'partials/signup',
-        controller: SignupCtrl
     }).
     when('/signin', {
         title: 'Signin',
@@ -69,7 +63,7 @@ app.config(function config($locationProvider, $routeProvider) {
         templateUrl: 'partials/leaf',
         controller: LeafCtrl
     }).
-    when('/leaf/:leafId', {
+    when('/leaf/:username/:filename', {
         templateUrl: 'partials/leaf',
         controller: LeafCtrl
     }).
@@ -78,6 +72,7 @@ app.config(function config($locationProvider, $routeProvider) {
         templateUrl: 'partials/settings',
         controller: SettingsCtrl
     }).
+    // 默认路由地址——没有找到的路径自动跳转
     otherwise({
         redirectTo: '/'
     });

@@ -51,9 +51,10 @@ link(rel='stylesheet', href='css/browse.css')
             br
             center.grid
                 .grid-item.animate-repeat(ng-repeat='leaf in leaves | filter : search as filteredLeaves', ng-if="ngfilter == 'all' || ngfilter == 'leaf'")
-                    a(href='/leaf')
+                    a(href='/leaf/{{leaf.authorName}}/{{leaf.fileName}}')
                         .browse-card
-                            h3 {{leaf.topic}}
+                            h3 {{leaf.fileName}}
+                            p by {{leaf.authorName}}
                             span.label.label-success leaf
 
                 .grid-item.animate-repeat(ng-repeat='document in documents | filter : search as filteredDocs', ng-if="ngfilter == 'all' || ngfilter == 'document'")
@@ -75,9 +76,10 @@ link(rel='stylesheet', href='css/browse.css')
             br    
             center.grid
                 .grid-item.animate-repeat(ng-repeat='leaf in leaves | filter : search as filteredLeaves', ng-if="ngfilter == 'all' || ngfilter == 'leaf'")
-                    a(href='/leaf')
+                    a(href='/leaf/{{leaf.authorName}}/{{leaf.fileName}}')
                         .browse-card
-                            h3 {{leaf.topic}}
+                            h3 {{leaf.fileName}}
+                            p by {{leaf.authorName}}
                             span.label.label-success leaf
 
                 .grid-item.animate-repeat(ng-repeat='document in documents | filter : search as filteredDocs', ng-if="ngfilter == 'all' || ngfilter == 'document'")
