@@ -14,9 +14,9 @@ function IndexCtrl($scope, $http, $location, $rootScope, toastr) {
 
 function SigninCtrl($scope, $http, $location, $rootScope, toastr) {
     $scope.ngViewClass = 'page-signin';
-    // $scope.formData = {};
-    // $scope.formData.email = "945484716@qq.com";
-    // $scope.formData.password = "123456";
+    $scope.formData = {};
+    $scope.formData.email = "chroslen@gmail.com";
+    $scope.formData.password = "chroslen";
     $scope.switchToSignup = function() {
         $rootScope.title = 'Register';
     };
@@ -222,17 +222,18 @@ function SignoutCtrl($scope, $http, $location, $rootScope, toastr) {
 // Leaf 页面， 内容为右边栏的处理方法
 function LeafCtrl($scope, $rootScope, $http, $location, toastr, $window, $routeParams) {
 
-    // 刷新页面，能解决 collapse 的一些问题
-    $rootScope.$broadcast('enterLeafPage');
-    $rootScope.$on('enterLeafPage', function() {
-        $window.location.reload();
-    });
+    // // 刷新页面，能解决 collapse 的一些问题
+    // $rootScope.$broadcast('enterLeafPage');
+    // $rootScope.$on('enterLeafPage', function() {
+    //     $window.location.reload();
+    // });
 
     // 如果用户在这个页面刷新，广播能够根据用户的登陆状态修改导航栏的右上角数据
     $rootScope.$broadcast('authenticationChanged');
 
     $scope.username = $routeParams.username;
     $scope.filename = $routeParams.filename;
+
     // 沛东需要给过来的数据
     $scope.nodeIds = []; // 路径 --- perdon
     // $scope.currentNodeId = $scope.clickedNodeId; // 当前被点击节点id 默认读取跟节点数据 --- Perdon
@@ -257,15 +258,14 @@ function LeafCtrl($scope, $rootScope, $http, $location, toastr, $window, $routeP
             console.log('Error: ' + error);
         });
 
-
-    // 添加节点用于测试
-    $scope.addNode = function(nodeId) {
-        $scope.nodeIds.push(nodeId);
-    };
-
     // 选中一个节点时
-    $scope.getNodeData = function(nodeId) {
-        $scope.currentNodeId = nodeId.toString();
+    $scope.getNodeData = function() {
+        console.log("$scope.nodeId: " + $scope.nodeId);
+        console.log("$scope.nodeString: " + $scope.nodeString);
+
+        $scope.nodePath = $scope.nodeString.split(",").reverse();
+        console.log("$scope.nodePath: " + $scope.nodePath);
+        $scope.currentNodeId = $scope.nodeId;
         getNodeDataFormDB();
     };
 
@@ -501,15 +501,15 @@ function newLeafCtrl($scope, $window, $location, $http) {
     $scope.newPublicLeaf = function() {
         var filename = $window.prompt("请输入文件名");
         if (filename == null || filename == "")
-            filename = "file"+Math.random()*10000;
+            filename = "file" + Math.random() * 10000;
         $scope.filename = filename;
         $http.get('/api/myprofile')
-        .then(function(response) {
-            $scope.author = response.data.name;
-            $location.path('leaf/'+$scope.author+'/'+$scope.filename);
-        }, function(error) {
-            console.log('Error: ' + error);
-        });
+            .then(function(response) {
+                $scope.author = response.data.name;
+                $location.path('leaf/' + $scope.author + '/' + $scope.filename);
+            }, function(error) {
+                console.log('Error: ' + error);
+            });
     }
 }
 

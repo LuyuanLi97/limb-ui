@@ -21,17 +21,14 @@
                 span.fui-mail {{author.mail}}
             br
             br
-    input(ng-model='nodeId', type='text', placeholder='nodeId')
-    button.btn.btn-success(type='reset', ng-click='addNode(nodeId)') 添加节点
-    br
-    input(ng-model='nodeString', type='text', placeholder='nodeString')
-    br
 
-    button(ng-repeat='nodeId in nodeIds', ng-click='getNodeData(nodeId)') {{nodeId}}
+    input#getNodeId(ng-model="nodeId", type="text")
+    input#getNodeString(ng-model="nodeString", type="text")
+    button.btn.btn-success(type='reset', ng-click='getNodeData()') 点击节点
 
     //-路径
     ol.breadcrumb
-        li.animate-repeat(ng-repeat='node in nodeString track by $index')
+        li.animate-repeat(ng-repeat='node in nodePath track by $index')
             a(href='#') {{node}}
 
     //- //- 标签
