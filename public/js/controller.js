@@ -7,6 +7,9 @@ function IndexCtrl($scope, $http, $location, $rootScope, toastr) {
     // rootScope里面的变量可以在不同的controller里面通用，而且可以在外面通过$root.变量名访问得到
     $scope.ngViewClass = 'page-home';
     $rootScope.$broadcast('authenticationChanged');
+    $scope.download = function(resource) {
+        window.open(resource);
+    }
 }
 
 function SigninCtrl($scope, $http, $location, $rootScope, toastr) {
@@ -94,7 +97,7 @@ function BrowseUserCtrl($scope, $http, $rootScope, $routeParams) {
             $scope.avatar = data.data.avatar;
             $scope.email = data.data.email;
             $scope.description = data.data.description;
-            $scope.fileList = response.data.fileList;
+            $scope.fileList = data.data.fileList;
         }, function(error) {
             console.log('Error: ' + error);
         });
@@ -274,7 +277,6 @@ function LeafCtrl($scope, $rootScope, $http, $location, toastr, $window) {
                 $http.get('/api/browse/user/' + $scope.nodeData.authorEmail)
                     .then(function(data) {
                         $scope.author = data.data;
-                        console.log('1$scope.author: ' + $scope.author);
                     }, function(error) {
                         console.log('Error: ' + error);
                     });
@@ -297,7 +299,6 @@ function LeafCtrl($scope, $rootScope, $http, $location, toastr, $window) {
     // 添加计划
     $scope.updatePlan = function() {
         updateNodeData('更改计划成功！');
-        getNodeDataFormDB(); // 刷新数据
     };
 
     // 删除计划
@@ -316,6 +317,7 @@ function LeafCtrl($scope, $rootScope, $http, $location, toastr, $window) {
     // 添加评论
     $scope.addComment = function(newCommentContent) {
         var newComment = {
+            'commentId': Math.floor((Math.random() * 1000) + 1).toString(),
             'name': $scope.currentUser.name,
             'profile': '/browse/user/' + $scope.currentUser.email,
             'avatar': $scope.currentUser.avatar,
@@ -331,6 +333,7 @@ function LeafCtrl($scope, $rootScope, $http, $location, toastr, $window) {
     // 添加回复
     $scope.reply = function(comment, newCommentContent) {
         var newComment = {
+            'commentId': Math.floor((Math.random() * 1000) + 1).toString(),
             'name': $scope.currentUser.name,
             'profile': '/browse/user/' + $scope.currentUser.email,
             'avatar': $scope.currentUser.avatar,
@@ -347,13 +350,13 @@ function LeafCtrl($scope, $rootScope, $http, $location, toastr, $window) {
     var updateNodeData = function(info) {
         // 可修改的内容，不能直接post $scope.nodeData, 里面有些值会导致错误
         var leatestNodeData = {
-            nodeId_: $scope.nodeData.nodeId, // nodeId_ means nodeId copy, short form
-            comments_: $scope.nodeData.comments,
-            plans_: $scope.nodeData.plans,
-            documents_: $scope.nodeData.documents,
-            notes_: $scope.nodeData.notes,
-            description_: $scope.nodeData.description,
-            tags_: $scope.nodeData.tags
+            nodeId: $scope.nodeData.nodeId,
+            comments: $scope.nodeData.comments,
+            plans: $scope.nodeData.plans,
+            documents: $scope.nodeData.documents,
+            notes: $scope.nodeData.notes,
+            description: $scope.nodeData.description,
+            tags: $scope.nodeData.tags
         };
         console.log('leatestNodeData: ' + leatestNodeData);
         $http.post('/api/node/updateNodeData', leatestNodeData)

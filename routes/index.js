@@ -74,7 +74,6 @@ module.exports = function(app) {
     app.post('/api/uploadFile', upload.single('file'), api.uploadFile);
 
 
-
     // otherwise
     // app.get('*', function(req, res) {
     //     res.redirect('/');

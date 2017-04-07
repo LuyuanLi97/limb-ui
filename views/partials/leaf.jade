@@ -1,5 +1,6 @@
 link(rel='stylesheet', href='css/discuss.css')
 //- link(rel='stylesheet', href='css/fileinput.css', media='all')
+link(href='css/lib/bootstrap-datetimepicker.min.css', rel='stylesheet', media='screen')
 link(rel='stylesheet', href='css/rightBar.css')
 link(rel='stylesheet', href='css/leaf-main.css')
 link(rel='stylesheet', href='css/dragBar.css')
@@ -14,6 +15,9 @@ script(type='text/javascript', src='js/jquery-3.1.1.js')
 script(type='text/javascript', src='js/echarts-all.js')
 script(type='text/javascript', src='js/leaf-create.js')
 script(type='text/javascript', src='js/dragBar.js')
+script(type='text/javascript', src='js/lib/bootstrap-datetimepicker.min.js') // 时间日期选择器
+script(type='text/javascript', src='js/lib/bootstrap-datetimepicker.fr.js') // 时间日期选择器
+
 script.
     document.getElementById('content').innerHTML =
     marked('# Marked in browser\\n\nRendered by **marked**.');

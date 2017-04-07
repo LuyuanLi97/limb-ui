@@ -248,20 +248,20 @@ exports.node = function(req, res, next) {
 exports.node.updateNodeData = function(req, res, next) {
     console.log('----updateNodeData----');
     console.log(req.body);
-    nodeModel.getNodeByNodeId(req.body.nodeId_)
+    nodeModel.getNodeByNodeId(req.body.nodeId)
         .then(response => {
             console.log(response);
         });
     nodeModel.update({
-        nodeId: req.body.nodeId_
+        nodeId: req.body.nodeId
     }, {
         $set: {
-            comments: req.body.comments_,
-            plans: req.body.plans_,
-            documents: req.body.documents_,
-            notes: req.body.notes_,
-            description: req.body.description_,
-            tags: req.body.tags_
+            comments: req.body.comments,
+            plans: req.body.plans,
+            documents: req.body.documents,
+            notes: req.body.notes,
+            description: req.body.description,
+            tags: req.body.tags
         }
     }, function(error) {});
     next();

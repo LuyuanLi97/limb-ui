@@ -21,7 +21,6 @@
                 span.fui-mail {{author.mail}}
             br
             br
-
     input(ng-model='nodeId', type='text', placeholder='nodeId')
     button.btn.btn-success(type='reset', ng-click='addNode(nodeId)') 添加节点
     br
@@ -35,7 +34,6 @@
         li.animate-repeat(ng-repeat='node in nodeString track by $index')
             a(href='#') {{node}}
 
-    p {{nodeData.tags}}
     //- //- 标签
     //- .tagsinput-primary
     //-     input.tagsinput(name='tagsinput', data-role='tagsinput', ng-model='nodeData.tags')
@@ -99,9 +97,9 @@
                             thead
                                 tr
                                     th #
-                                    th Name
-                                    th Date Modified
-                                    th Size
+                                    th 文件名
+                                    th 修改日期
+                                    th 大小
                             tbody
                                 tr.animate-repeat(ng-repeat='document in nodeData.documents')
                                     th(scope='row') {{$index + 1}}
@@ -109,9 +107,9 @@
                                         a(type='button', data-toggle='collapse', data-target='#file{{$index + 1}}', aria-expanded='false', aria-controls='file{{$index + 1}}')
                                             | {{document.name}}
                                         div(id='file{{$index + 1}}').collapse
-                                            a.btn(href='{{document.url}}')
+                                            a.btn.btn-primary.btn-sm(data-toggle='collapse', data-target='#file{{$index + 1}}', aria-expanded='false', aria-controls='file{{$index + 1}}')
                                                 span.icon-eye-open
-                                            a.btn(href='{{document.url}}', download='{{document.name}}')
+                                            a.btn.btn-primary.btn-sm(target="_self",href='{{document.url}}', download='{{document.name}}',data-toggle='collapse', data-target='#file{{$index + 1}}', aria-expanded='false', aria-controls='file{{$index + 1}}')
                                                 span.icon-cloud-download
                                     td {{document.date}}
                                     td {{document.size}}B
@@ -130,12 +128,20 @@
                         span.fui-cross(ng-show="editPlan")
                 //- input plan
                 .panel-body#uploadPlan.collapse
-                    input(type='hidden', ng-model='newPlan[nodeData.plans.length].state', ng-init=false)
+                    input(type='hidden', ng-model='newPlan[nodeData.plans.length].state')
                     input(ng-model='newPlan[nodeData.plans.length].title', type='text', placeholder='计划标题')
                     textarea.form-control(ng-model='newPlan[nodeData.plans.length].content', rows='3', placeholder='计划内容')
                     laber 截止时间:
+                    //- .form-group
+                    //-     label.col-md-2.control-label(for='dtp_input1') DateTime Picking
+                    //-     .input-group.date.form_datetime.col-md-5(data-date='1979-09-16T05:25:07Z', data-date-format='dd MM yyyy - HH:ii p', data-link-field='dtp_input1')
+                    //-         input.form-control(size='16', type='text', value='', readonly='')
+                    //-         span.input-group-addon
+                    //-             span.glyphicon.glyphicon-remove
+                    //-         span.input-group-addon
+                    //-             span.glyphicon.glyphicon-th
                     input#dtp_input1(ng-model='newPlan[nodeData.plans.length].deadline')
-                    br     
+                    br
                     button.btn.btn-success(type='reset', ng-click='addPlan(newPlan[nodeData.plans.length]); spanUploadPlan = !spanUploadPlan' data-toggle='collapse', data-target='#uploadPlan', aria-expanded='false', aria-controls='uploadPlan') 添加计划
                 .panel-body(ng-show='nodeData.plans.length > 0')
                     .table-responsive
@@ -194,15 +200,15 @@ script#commentsItem(type='text/ng-template').
         <p class="meta"> {{comment.date}}
             <a href='{{comment.profile}}'> {{comment.name}}</a> says : 
             <i class="pull-right">
-                <a type="button" data-toggle="collapse" data-target="#collapseExample{{$index}}" aria-expanded="false" aria-controls="collapseExample{{$index}}">                    
+                <a type="button" data-toggle="collapse" data-target="#collapseExample{{comment.commentId}}" aria-expanded="false" aria-controls="collapseExample{{comment.commentId}}">                    
                     <small> Reply</small>
                 </a>
             </i>
         </p>
         <p> {{comment.content}}</p>
-        <div class="collapse" id="collapseExample{{$index}}">
-            <textarea class="form-control", ng-model='newCommentContent[$index]', contenteditable='true', placeholder='添加回复'/>
-            <button type='reset' class = "btn btn-success submit", ng-click='reply(comment, newCommentContent[$index])', data-toggle='collapse', data-target='#collapseExample{{$index}}', aria-expanded='false', aria-controls='collapseExample{{$index}}', ng-show='signedinAlready')> 发表 </button>
+        <div class="collapse" id="collapseExample{{comment.commentId}}">
+            <textarea class="form-control", ng-model='newCommentContent', contenteditable='true', placeholder='添加回复'/>
+            <button type='reset' class = "btn btn-success submit", ng-click='reply(comment, newCommentContent)', data-toggle='collapse', data-target='#collapseExample{{comment.commentId}}', aria-expanded='false', aria-controls='collapseExample{{comment.commentId}}', ng-show='signedinAlready')> 发表 </button>
             <a class="btn btn-danger submit", ng-hide='signedinAlready', href='/signin')> 登陆 </a>
         </div>
     </div>
@@ -210,3 +216,15 @@ script#commentsItem(type='text/ng-template').
         <li class="clearfix" ng-repeat="comment in comment.children" ng-include="'commentsItem'">
         </li>
     </ul>
+
+script(type="text/javascript").
+    $('.form_datetime').datetimepicker({
+        //language:  'fr',
+        weekStart: 1,
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        forceParse: 0,
+        showMeridian: 1
+    });
