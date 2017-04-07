@@ -58,15 +58,18 @@ module.exports = function(app) {
     app.post('/api/updateAccount', api.updateAccount);
     app.post('/api/updateAvatar', upload.single('file'), api.updateAvatar);
     app.post('/api/saveFileToDatabase/:filename', api.saveFileToDatabase);
+    app.get('/api/isFileNew/:author/:filename', api.isFileNew);
     app.get('/api/getFileFromDatabase/:author/:filename', api.getFileFromDatabase);
-    app.get('/api/getUsernameAndFilename', api.getUsernameAndFilename);
+    // app.get('/api/getUsernameAndFilename', api.getUsernameAndFilename);
     app.get('/api/signout', api.signout);
     app.get('/api/browse', api.browse);
     app.get('/api/myprofile', api.myprofile);
     app.get('/api/browse/user/:userEmail', api.browse.user);
     app.get('/api/settings', api.settings);
     app.get('/api/checkSignin', api.checkSignin);
-    // app.get('/api/*.json', api.getLFromDatabase);
+    // app.get('/api/getNodeData/:nodeId', api.getNodeData);
+    app.get('/api/create.json', api.getCreateJson);
+
 
     app.get('/api/node/:nodeId', api.node);
     app.post('/api/node/updateNodeData', api.node.updateNodeData);

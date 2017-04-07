@@ -14,6 +14,9 @@ function IndexCtrl($scope, $http, $location, $rootScope, toastr) {
 
 function SigninCtrl($scope, $http, $location, $rootScope, toastr) {
     $scope.ngViewClass = 'page-signin';
+    // $scope.formData = {};
+    // $scope.formData.email = "945484716@qq.com";
+    // $scope.formData.password = "123456";
     $scope.switchToSignup = function() {
         $rootScope.title = 'Register';
     };
@@ -217,7 +220,7 @@ function SignoutCtrl($scope, $http, $location, $rootScope, toastr) {
 };
 
 // Leaf 页面， 内容为右边栏的处理方法
-function LeafCtrl($scope, $rootScope, $http, $location, toastr, $window) {
+function LeafCtrl($scope, $rootScope, $http, $location, toastr, $window, $routeParams) {
 
     // 刷新页面，能解决 collapse 的一些问题
     $rootScope.$broadcast('enterLeafPage');
@@ -228,6 +231,8 @@ function LeafCtrl($scope, $rootScope, $http, $location, toastr, $window) {
     // 如果用户在这个页面刷新，广播能够根据用户的登陆状态修改导航栏的右上角数据
     $rootScope.$broadcast('authenticationChanged');
 
+    $scope.username = $routeParams.username;
+    $scope.filename = $routeParams.filename;
     // 沛东需要给过来的数据
     $scope.nodeIds = []; // 路径 --- perdon
     // $scope.currentNodeId = $scope.clickedNodeId; // 当前被点击节点id 默认读取跟节点数据 --- Perdon
@@ -489,6 +494,24 @@ app.directive('fileModel', ['$parse', function($parse) {
 }]);
 
 function new_functionCtrl($scope, $http, $location, $routeParams) {}
+
+app.controller('newLeafCtrl', newLeafCtrl);
+
+function newLeafCtrl($scope, $window, $location, $http) {
+    $scope.newPublicLeaf = function() {
+        var filename = $window.prompt("请输入文件名");
+        if (filename == null || filename == "")
+            filename = "file"+Math.random()*10000;
+        $scope.filename = filename;
+        $http.get('/api/myprofile')
+        .then(function(response) {
+            $scope.author = response.data.name;
+            $location.path('leaf/'+$scope.author+'/'+$scope.filename);
+        }, function(error) {
+            console.log('Error: ' + error);
+        });
+    }
+}
 
 //注册一个过滤器，挂载到任意一个angular.module下，如果自定义过滤器较多，可以提取出来一个公用的过滤器module
 app.filter('to_trusted', ['$sce', function($sce) {
