@@ -82,6 +82,7 @@ function MyprofileCtrl($scope, $http, $rootScope) {
             $scope.email = response.data.email;
             $scope.description = response.data.description;
             $scope.fileList = response.data.fileList;
+            $rootScope.title = $scope.name;
         }, function(error) {
             // 重定向到错误页面
             // $location.url('error');
@@ -101,6 +102,7 @@ function BrowseUserCtrl($scope, $http, $rootScope, $routeParams) {
             $scope.email = data.data.email;
             $scope.description = data.data.description;
             $scope.fileList = data.data.fileList;
+            $rootScope.title = 'Browse · ' + $scope.name;
         }, function(error) {
             console.log('Error: ' + error);
         });
@@ -233,13 +235,9 @@ function LeafCtrl($scope, $rootScope, $http, $location, toastr, $window, $routeP
 
     $scope.username = $routeParams.username;
     $scope.filename = $routeParams.filename;
+    $rootScope.title = $routeParams.username + ' · ' + $routeParams.filename;
 
-    // 沛东需要给过来的数据
-    $scope.nodeIds = []; // 路径 --- perdon
-    // $scope.currentNodeId = $scope.clickedNodeId; // 当前被点击节点id 默认读取跟节点数据 --- Perdon
-    // getNodeDataFormDB();
     $scope.currentNodeId; // 当前节点id
-
     $scope.currentUser; // 当前用户
 
     // 当前用户身份 - 用于检验用户权限
