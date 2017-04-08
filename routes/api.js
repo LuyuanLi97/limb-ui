@@ -303,6 +303,8 @@ exports.saveFileToDatabase = function(req, res, next) {
     };
 
     var newfile = {
+        "author": author,
+        "filename": filename,
         "data": req.body
     };
 
