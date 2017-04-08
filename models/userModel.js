@@ -50,4 +50,8 @@ module.exports = {
             }
         });
     }
+
+    // getFile: function(filename) {
+    //     return userModel.find({""})
+    // }
 };

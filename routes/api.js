@@ -297,30 +297,38 @@ exports.getFileFromDatabase = function(req, res, next) {
 exports.saveFileToDatabase = function(req, res, next) {
     var author = req.session.user.name;
     var filename = req.params.filename;
-    var newFile = {
+    var myfile = {
         "author": author,
-        "filename": filename,
-        "isPrivate": false,
+        "filename": filename
+    };
+
+    var newfile = {
         "data": req.body
-    }
+    };
+
     // 保存文件
-    fileModel.create(newFile)
-        .then(function(err, data) {
-            if (err) {
-                console.log("save file fail!")
+    fileModel.getDataByFilenameAndAuthor(myfile)
+        .then(function(response) {
+            console.log("放回了什么:");
+            console.log(response);
+            if (response.toString() != "") {
+                // 文件已存在
+                console.log("文件不是第一次存的");
+                fileModel.updateFile(myfile, newfile);
             } else {
-                console.log("save file successfully!");
+                // 文件第一次存
+                fileModel.create(newfile);
+                // 连接用户和文件
+                userModel.update({
+                    "name": author
+                }, {
+                    $addToSet: {
+                        "fileList": filename
+                    }
+                });
             }
         });
 
-    // 连接用户和文件
-    userModel.update({
-        "name": author
-    }, {
-        $addToSet: {
-            "fileList": filename
-        }
-    });
 }
 
 exports.isFileNew = function(req, res, next) {

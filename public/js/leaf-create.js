@@ -80,7 +80,7 @@
 
                         var newNodeName = window.prompt("请输入你要添加的节点的名字:");
                         var thisValue = ecData.data.value;
-                        var current = findCurr(thisValue);
+                        var current = findCurrentNodeByValue(thisValue);
                         var currentChildren = current.children;
                         var selfValue = getRandomValue();
                         var newObj = {
@@ -537,6 +537,8 @@
 
                 $('#save').on('click', function() {
                     inputData.filename = filename;
+                    console.log("I am inputData:");
+                    console.log(inputData);
                     $.post('/api/saveFileToDatabase/' + filename, inputData);
                     alert("保存成功!");
                 });
