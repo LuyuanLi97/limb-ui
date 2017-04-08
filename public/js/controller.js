@@ -15,8 +15,8 @@ function IndexCtrl($scope, $http, $location, $rootScope, toastr) {
 function SigninCtrl($scope, $http, $location, $rootScope, toastr) {
     $scope.ngViewClass = 'page-signin';
     $scope.formData = {};
-    $scope.formData.email = "945484716@qq.com";
-    $scope.formData.password = "123456";
+    $scope.formData.email = "example@qq.com";
+    $scope.formData.password = "example";
     $scope.switchToSignup = function() {
         $rootScope.title = 'Register';
     };
