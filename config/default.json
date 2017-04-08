@@ -6,7 +6,9 @@
           "cookie": {
               "maxAge": 86400000
           },
-          "user": {}
+          "user": {},
+          "resave": true,
+          "saveUninitialized":true
     },
     // 远程数据库，不可见(除Perdon和圆圆外使用)
     "mongodb": "mongodb://chroslen:chroslen@ds155150.mlab.com:55150/leafdb"
