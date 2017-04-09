@@ -16,6 +16,12 @@ head
     link(rel='stylesheet', type='text/css', href='sweetalert/dist/sweetalert.css')
     link(rel='stylesheet', type='text/css', href='angular-toastr/angular-toastr.css')
     link(href='css/ngAnimation.css', rel='stylesheet')
+
+body
+    include components/menuBar
+
+    #ngview.view-frame(ng-view, class='{{ngViewClass}}')
+
     script(src='Flat-UI-master/dist/js/vendor/html5shiv.js')
     script(src='Flat-UI-master/dist/js/vendor/respond.min.js')
     script(src='sweetalert/dist/sweetalert.min.js')
@@ -33,8 +39,4 @@ head
     script(src='Flat-UI-master/dist/js/flat-ui.min.js')
     script(type='text/javascript', src='angular-toastr/angular-toastr.tpls.js')    
     script(type='text/javascript', src='js/menuBar.js')
-
-body
-    include components/menuBar
-
-    #ngview.view-frame(ng-view, class='{{ngViewClass}}')
+    script(type='text/javascript', src='js/echarts-all.js')

@@ -1,29 +1,90 @@
-#main-intro {}
-
-.vertical-align {
-    display: flex;
-    align-items: center;
+#signin {
+    background-color: #495a80;
 }
 
-h2 {
-    font-weight: 200;
-    color: #16a085;
+form.form-login {
+    padding: 20px 0;
+    position: relative;
+    z-index: 2;
 }
 
-h2 small {
-    color: gray;
-    margin-left: 10px;
+form input.input-login {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    outline: 0;
+    border: none;
+    background-color: #303b54;
+    width: 250px;
+    border-radius: 3px;
+    padding: 10px 15px;
+    margin: 0 auto 10px auto;
+    display: block;
+    text-align: center;
+    font-size: 18px;
+    color: white;
+    -webkit-transition-duration: 0.25s;
+    transition-duration: 0.25s;
+    font-weight: 300;
+}
+
+form input.input-login:hover {
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+form input.input-login:focus {
+    background-color: white;
+    width: 300px;
+    color: #53e3a6;
+}
+
+form button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    outline: 0;
+    background-color: white;
+    border: 0;
+    padding: 10px 15px;
+    color: #53e3a6;
+    border-radius: 3px;
+    width: 250px;
+    cursor: pointer;
+    font-size: 18px;
+    -webkit-transition-duration: 0.25s;
+    transition-duration: 0.25s;
+}
+
+form button:hover {
+    background-color: #f5f7f9;
+}
+
+a.login-link {
+    font-size: 16px;
+    color: white !important;
+}
+
+a.login-link:hover {
+    color: #53e3a6!important;
 }
 
 p.lead {
-    color: #ded9d9;
+    color: white;
 }
 
-.main-part {
-    height: 70%;
+a#login-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    outline: 0;
+    background-color: #53e3a6;
+    border: 0;
+    padding: 10px 15px;
+    color: white;
+    border-radius: 3px;
+    width: 250px;
+    cursor: pointer;
+    font-size: 18px;
+    -webkit-transition-duration: 0.25s;
+    transition-duration: 0.25s;
 }
-
-#main-part1 {}
-
-
-/*bg of main-intro start*/
