@@ -10,6 +10,56 @@ function IndexCtrl($scope, $http, $location, $rootScope, toastr) {
     $scope.download = function(resource) {
         window.open(resource);
     }
+
+    $scope.switchToSignup = function() {
+        $rootScope.title = 'Register';
+    };
+    $scope.switchToSignin = function() {
+        $rootScope.title = 'Signin';
+    };
+    $scope.signup = function() {
+        swal({
+            title: $scope.formData.email + " ?",
+            text: "请再次检查您的邮箱. \n",
+            type: "info",
+            showCancelButton: true,
+            cancelButtonText: "取消",
+            confirmButtonColor: "#8cd4f5",
+            confirmButtonText: "注册!",
+            closeOnConfirm: false,
+            html: false
+        }, function() {
+            $http.post('/api/signup', $scope.formData)
+                .then(function(data) {
+                    if (data.data.status) {
+                        $rootScope.$broadcast('authenticationChanged');
+                        swal('注册成功!', 'Hi, ' + data.data.name + '!\nLeaf已向您发送一封验证邮件，为了您的安全，请尽快完成验证。\n接下来将自动为您登陆.', 'success');
+                        $location.path('/myprofile');
+                    } else {
+                        swal('注册失败!', data.data.message, 'error');
+                    }
+                }, function(error) {
+                    swal('注册失败!', '未知错误', 'error');
+                    console.log('Error: ' + error);
+                });
+        });
+    };
+    $scope.signin = function() {
+        $http.post('/api/signin', $scope.formData)
+            .then(function(data) {
+                if (data.data.status) {
+                    $rootScope.$broadcast('authenticationChanged');
+                    // swal('登陆成功!', 'Hi, ' + data.data.email + ' !', 'success');
+                    toastr.success('登陆成功!');
+                    $location.path('/myprofile');
+                } else {
+                    swal('登陆失败!', data.data.message, 'error');
+                }
+            }, function(error) {
+                swal('登陆失败!', '未知错误', 'error');
+                console.log('Error: ' + error);
+            });
+    };
 }
 
 function SigninCtrl($scope, $http, $location, $rootScope, toastr) {
