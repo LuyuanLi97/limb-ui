@@ -49,9 +49,9 @@
                         a.dropdown-toggle(href='', data-toggle='dropdown')
                             span.fui-plus
                             b.caret
-                        ul.dropdown-menu
+                        ul.dropdown-menu(ng-controller="newLeafCtrl")
                             li
-                                a(href='/leaf') new public leaf
+                                a(ng-click="newPublicLeaf()") new public leaf
                             li
                                 a(href='/leaf') new private leaf
                             //- li

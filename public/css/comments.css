@@ -9,10 +9,6 @@ hr {
     border-top: 1px solid #FFFFFF;
 }
 
-a:hover {
-    border-bottom: 1px #1abc9c solid;
-}
-
 .container.bootstrap.snippet {
     width: 100%;
 }

@@ -47,7 +47,7 @@
     left: 100px;
 }
 
-.btn, .btn-primary, .btn-sm {
+.btn-primary, .btn-sm {
     margin: 2px;
     color: gray;
     background-color: white;
@@ -63,7 +63,7 @@
     background: transparent;
 }
 
-.btn:hover, .btn-primary:hover, .btn-sm:hover {
+.btn-primary:hover, .btn-sm:hover {
     color: white;
     background-color: #222;
 }
