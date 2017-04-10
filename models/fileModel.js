@@ -30,8 +30,3 @@ module.exports = {
         });
     }
 };
-
-// this.getDataByFilenameAndAuthor(myfile)
-//             .then(function(response) {
-//                 console.log("I am in updateFile!");
-//                 console.log(newfile);

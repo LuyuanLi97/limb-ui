@@ -151,6 +151,8 @@
                         var cloneObj = JSON.parse(JSON.stringify(myCopyContent));
                         cloneObj = recurChangeValuesForObject(cloneObj);
                         if (myCopyContent != null) {
+                            if (current.children == undefined)
+                                current.children = [];
                             current.children.push(cloneObj);
                         }
                         myCharts.clear();
@@ -521,7 +523,7 @@
 
                 function recurChangeValuesForObject(cloneObj) {
                     // 无孩子
-                    if (cloneObj.children.length == 0) {
+                    if (cloneObj.children == undefined) {
                         cloneObj.value = getRandomValue();
                     } else {
                         cloneObj.value = getRandomValue();

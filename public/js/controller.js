@@ -497,17 +497,41 @@ app.controller('newLeafCtrl', newLeafCtrl);
 
 function newLeafCtrl($scope, $window, $location, $http) {
     $scope.newPublicLeaf = function() {
+        var fileNULL = false;
         var filename = $window.prompt("请输入文件名");
-        if (filename == null || filename == "")
-            filename = "file" + Math.random() * 10000;
-        $scope.filename = filename;
-        $http.get('/api/myprofile')
-            .then(function(response) {
-                $scope.author = response.data.name;
-                $location.path('leaf/' + $scope.author + '/' + $scope.filename);
-            }, function(error) {
-                console.log('Error: ' + error);
-            });
+        if (filename == null || filename == "") {
+            fileNULL = true;
+        }
+        if (!fileNULL) {
+            $scope.filename = filename;
+            $http.get('/api/myprofile')
+                .then(function(response) {
+                    $scope.author = response.data.name;
+                    $http.get('/api/getFileFromDatabase'+'/'+$scope.author+'/'+$scope.filename)
+                        .then(function(response) {
+                            var file = response.data;
+                            // 返回是一个对象
+                            // 文件存在
+                            if (JSON.stringify(file) != "{}") {
+                                $window.alert("已有相同文件名，创建失败");
+                                // 提示用户可以打开同名文件
+                                if ($window.confirm("你需要打开已存在的名字是 \'"+$scope.filename+"\' 的文件吗?")) {
+                                    console.log("confirm yes!");
+                                    $location.path('leaf/' + $scope.author + '/' + $scope.filename);
+                                }
+                            } else {
+                                console.log("不存在该文件");
+                                $location.path('leaf/' + $scope.author + '/' + $scope.filename);
+                            }
+                        }).catch(function(err) {
+                            console.log("err"+err);
+                        });
+                }, function(error) {
+                    console.log('Error: ' + error);
+                });
+        } else {
+            $window.alert("创建文件失败，请检查文件名是否为空");
+        }
     }
 }
 

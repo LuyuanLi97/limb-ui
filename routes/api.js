@@ -290,7 +290,13 @@ exports.getFileFromDatabase = function(req, res, next) {
         .then(function(response) {
             console.log("I am data: ");
             console.log(response);
-            res.json(response[0].data);
+            if (response.toString() != 0) {
+                res.json(response[0].data);
+            } else {
+                res.json({});
+            }
+            console.log("I can return...");
+            return response;
         });
 };
 
