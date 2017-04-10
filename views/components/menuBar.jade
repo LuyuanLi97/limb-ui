@@ -31,8 +31,6 @@
                             a(href='/browse') user
                         li
                             a(href='/browse') local
-                        li
-                            a(href='/new_function') new_function
             form.navbar-form.navbar-left(role='search').hidden-xs
                 .form-group.has-feedback
                     .input-group
@@ -43,7 +41,7 @@
             div(ng-controller='checkSigninCtrl', ng-model='signedin')
                 a.menuSignin(href='/signin', ng-hide='signedin')
                     form
-                        button(href='/signin') Register / Sign In
+                        button(href='/signin') 注册 / 登陆
                 ul.nav.navbar-nav.navbar-right(ng-show='signedin')
                     li.dropdown
                         a.dropdown-toggle(href='', data-toggle='dropdown')
@@ -54,14 +52,6 @@
                                 a(ng-click="newPublicLeaf()") new public leaf
                             li
                                 a(href='/leaf') new private leaf
-                            //- li
-                            //-     a(href='/leaf') open file
-                            //- li
-                            //-     a(href='/leaf') delete this leaf
-                            //- li.divider
-                            //- li
-                            //-     a(href='/leaf') recently opened &nbsp;
-                            //-         span.label.label-info 5
                     li.dropdown
                         a.dropdown-toggle(href='', data-toggle='dropdown')
                             span
