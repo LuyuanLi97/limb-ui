@@ -282,7 +282,9 @@ function LeafCtrl($scope, $rootScope, $http, $location, toastr, $window, $routeP
 
     // 如果用户在这个页面刷新，广播能够根据用户的登陆状态修改导航栏的右上角数据
     $rootScope.$broadcast('authenticationChanged');
-
+    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
+        console.log("路由变了");
+    });
     $scope.username = $routeParams.username;
     $scope.filename = $routeParams.filename;
     $rootScope.title = $routeParams.username + ' · ' + $routeParams.filename;

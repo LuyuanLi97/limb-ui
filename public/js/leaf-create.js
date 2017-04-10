@@ -385,69 +385,69 @@
                     // }, 200);
                 }
 
-                function findCurrentNodeByValue(value) {
-                    // 是否找到相应节点
-                    var _option = option;
-                    var len1 = _option.series[0].data.length;
-                    var d1 = _option.series[0].data; //所有的d*在下面代码中均为使用到。
-                    var _value = value;
-                    // 开始循环_option中的信息，用来查找当前点击的节点
-                    // console.log("len1="+len1);
-                    for (var j = 0; j < len1; j++) {
-                        // 从第一个节点开始找
-                        if (_option.series[0].data[j].value == _value) {
-                            // console.log('I am in the first node!');
-                            return _option.series[0].data[j];
-                        }
-                        if (_option.series[0].data[j].children) { //若存在子节点
-                            var len2 = _option.series[0].data[j].children.length;
-                            var d2 = _option.series[0].data[j].children;
-                            for (var k = 0; k < len2; k++) {
-                                //根据value判断节点是否是当前所点击的节点，
-                                if (_option.series[0].data[j].children[k].value == _value) {
-                                    // console.log(_option.series[0].data[j].children[k]);
-                                    // console.log('I am in the second node!');
-                                    return _option.series[0].data[j].children[k];
-                                }
-                                // 如果还有儿子
-                                if (_option.series[0].data[j].children[k].children) {
-                                    var len3 = _option.series[0].data[j].children[k].children.length;
-                                    var d3 = _option.series[0].data[j].children[k].children;
-                                    for (var l = 0; l < len3; l++) {
-                                        if (_option.series[0].data[j].children[k].children[l].value == _value) {
-                                            // console.log(_option.series[0].data[j].children[k].children[l]);
-                                            // console.log('I am in the third node!');
-                                            return _option.series[0].data[j].children[k].children[l];
-                                        }
-                                        if (_option.series[0].data[j].children[k].children[l].children) {
-                                            var len4 = _option.series[0].data[j].children[k].children[l].children.length;
-                                            var d4 = _option.series[0].data[j].children[k].children[l].children;
-                                            for (var m = 0; m < len4; m++) {
-                                                if (_option.series[0].data[j].children[k].children[l].children[m].value == _value) {
-                                                    // console.log('I am in the fourth node!');
-                                                    return option.series[0].data[j].children[k].children[l].children[m];
-                                                }
-                                                if (_option.series[0].data[j].children[k].children[l].children[m].children) {
-                                                    var len5 = _option.series[0].data[j].children[k].children[l].children[m].children.length;
-                                                    var d5 = _option.series[0].data[j].children[k].children[l].children[m].children;
-                                                    for (var n = 0; n < len5; n++) {
-                                                        /**
-                                                         * 最后一层循环
-                                                         * 若有需要，可扩充
-                                                         */
-                                                        if (_option.series[0].data[j].children[k].children[l].children[m].children[n].value == _value) {
-                                                            return _option.series[0].data[j].children[k].children[l].children[m].children[n];
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                // function findCurrentNodeByValue(value) {
+                //     // 是否找到相应节点
+                //     var _option = option;
+                //     var len1 = _option.series[0].data.length;
+                //     var d1 = _option.series[0].data; //所有的d*在下面代码中均为使用到。
+                //     var _value = value;
+                //     // 开始循环_option中的信息，用来查找当前点击的节点
+                //     // console.log("len1="+len1);
+                //     for (var j = 0; j < len1; j++) {
+                //         // 从第一个节点开始找
+                //         if (_option.series[0].data[j].value == _value) {
+                //             // console.log('I am in the first node!');
+                //             return _option.series[0].data[j];
+                //         }
+                //         if (_option.series[0].data[j].children) { //若存在子节点
+                //             var len2 = _option.series[0].data[j].children.length;
+                //             var d2 = _option.series[0].data[j].children;
+                //             for (var k = 0; k < len2; k++) {
+                //                 //根据value判断节点是否是当前所点击的节点，
+                //                 if (_option.series[0].data[j].children[k].value == _value) {
+                //                     // console.log(_option.series[0].data[j].children[k]);
+                //                     // console.log('I am in the second node!');
+                //                     return _option.series[0].data[j].children[k];
+                //                 }
+                //                 // 如果还有儿子
+                //                 if (_option.series[0].data[j].children[k].children) {
+                //                     var len3 = _option.series[0].data[j].children[k].children.length;
+                //                     var d3 = _option.series[0].data[j].children[k].children;
+                //                     for (var l = 0; l < len3; l++) {
+                //                         if (_option.series[0].data[j].children[k].children[l].value == _value) {
+                //                             // console.log(_option.series[0].data[j].children[k].children[l]);
+                //                             // console.log('I am in the third node!');
+                //                             return _option.series[0].data[j].children[k].children[l];
+                //                         }
+                //                         if (_option.series[0].data[j].children[k].children[l].children) {
+                //                             var len4 = _option.series[0].data[j].children[k].children[l].children.length;
+                //                             var d4 = _option.series[0].data[j].children[k].children[l].children;
+                //                             for (var m = 0; m < len4; m++) {
+                //                                 if (_option.series[0].data[j].children[k].children[l].children[m].value == _value) {
+                //                                     // console.log('I am in the fourth node!');
+                //                                     return option.series[0].data[j].children[k].children[l].children[m];
+                //                                 }
+                //                                 if (_option.series[0].data[j].children[k].children[l].children[m].children) {
+                //                                     var len5 = _option.series[0].data[j].children[k].children[l].children[m].children.length;
+                //                                     var d5 = _option.series[0].data[j].children[k].children[l].children[m].children;
+                //                                     for (var n = 0; n < len5; n++) {
+                //                                         /**
+                //                                          * 最后一层循环
+                //                                          * 若有需要，可扩充
+                //                                          */
+                //                                         if (_option.series[0].data[j].children[k].children[l].children[m].children[n].value == _value) {
+                //                                             return _option.series[0].data[j].children[k].children[l].children[m].children[n];
+                //                                         }
+                //                                     }
+                //                                 }
+                //                             }
+                //                         }
+                //                     }
+                //                 }
+                //             }
+                //         }
+                //     }
+                // }
 
                 function findParentNodeByValue(value) {
                     // 是否找到相应节点
@@ -511,13 +511,63 @@
                     }
                 }
 
+                function findParentNodeByValue(value) {
+                    var data = option.series[0].data[0];
+                    // console.log(data);
+                    // console.log(callFindCurrentNode(data, value));
+                    return callFindParentNode(data, value);
+                }
+
+                function callFindParentNode(data, value) {
+                    // 防止出现undefined的情况
+                    if (data.children == undefined)
+                        data.children = [];
+                    for (let i = 0; i < data.children.length; i++) {
+                        if (data.children[i].value == value) {
+                            return data;
+                        } else {
+                            var result = callFindParentNode(data.children[i], value);
+                            if (result != undefined)
+                                return result;
+                        }
+                    }
+                }
+
+                function findCurrentNodeByValue(value) {
+                    var data = option.series[0].data[0];
+                    // console.log(data);
+                    // console.log(callFindCurrentNode(data, value));
+                    return callFindCurrentNode(data, value);
+                }
+
+                function callFindCurrentNode(data, value) {
+                    if (data.value == value) {
+                        return data;
+                    } else {
+                        if (data.children == undefined)
+                            data.children = [];
+                        for (let i = 0; i < data.children.length; i++) {
+                            console.log(data.children.length);
+                            console.log(data.children[i]);
+                            var result = callFindCurrentNode(data.children[i], value);
+                            if (result != undefined)
+                                return result;
+                        }
+                    }
+                }
+
                 function findNameByValue(value) {
                     // console.log(value);
                     // console.log(findCurrentNodeByValue(value));
                     return findCurrentNodeByValue(value).name;
                 }
 
+                function isNULL(data) {
+                    return JSON.stringify(data) == '[]' || data == null || data == undefined || JSON.stringify(data) == '{}';
+                }
+
                 function findPathFromSelfToRoot(value, rootValue) {
+                    console.log("value in path:"+value);
                     var path = [];
                     var selfValue = value;
                     path.push(findNameByValue(selfValue));
@@ -663,7 +713,7 @@
                 $(window).on("beforeunload", function() {
                     $("#save").trigger("click");
                     return "系统将会为你自动保存";
-                })
+                });
             });
         });
     });
