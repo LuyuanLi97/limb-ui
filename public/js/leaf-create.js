@@ -153,7 +153,14 @@
                         if (myCopyContent != null) {
                             if (current.children == undefined)
                                 current.children = [];
-                            current.children.push(cloneObj);
+                            // console.log("myCopyContent:");
+                            // console.log(myCopyContent);
+                            // myCopyContent为空不执行
+                            if ($.isEmptyObject(myCopyContent)) {
+                                alert("请你先选中被复制节点");
+                            } else {
+                                current.children.push(cloneObj);
+                            }
                         }
                         myCharts.clear();
                         myCharts.setOption(option);
@@ -165,7 +172,7 @@
 
                     // 取消注册的事件，十分关键！
                     $('#main').on('click', function() {
-                        console.log("I am in the main!!!");
+                        // console.log("I am in the main!!!");
                         $('button#create').off();
                         $('button#delete').off();
                         $('button#SBContent').off();
@@ -175,10 +182,10 @@
                     });
                     var value = getValue(ecData);
                     var rootValue = inputData.tree[0].value;
-                    console.log("rootValue: " + rootValue);
+                    // console.log("rootValue: " + rootValue);
                     $('#getNodeId').val(value);
                     $('#getNodeId').trigger('input'); // Use for Chrome/Firefox/Edge
-                    console.log(findPathFromSelfToRoot(value, rootValue).toString());
+                    // console.log(findPathFromSelfToRoot(value, rootValue).toString());
                     $('#getNodeString').val(findPathFromSelfToRoot(value, rootValue).toString());
                     $('#getNodeString').trigger('input'); // Use for Chrome/Firefox/Edge
                     $('#getNodeDataBtn').click();
@@ -389,7 +396,7 @@
                     for (var j = 0; j < len1; j++) {
                         // 从第一个节点开始找
                         if (_option.series[0].data[j].value == _value) {
-                            console.log('I am in the first node!');
+                            // console.log('I am in the first node!');
                             return _option.series[0].data[j];
                         }
                         if (_option.series[0].data[j].children) { //若存在子节点
@@ -399,7 +406,7 @@
                                 //根据value判断节点是否是当前所点击的节点，
                                 if (_option.series[0].data[j].children[k].value == _value) {
                                     // console.log(_option.series[0].data[j].children[k]);
-                                    console.log('I am in the second node!');
+                                    // console.log('I am in the second node!');
                                     return _option.series[0].data[j].children[k];
                                 }
                                 // 如果还有儿子
@@ -409,7 +416,7 @@
                                     for (var l = 0; l < len3; l++) {
                                         if (_option.series[0].data[j].children[k].children[l].value == _value) {
                                             // console.log(_option.series[0].data[j].children[k].children[l]);
-                                            console.log('I am in the third node!');
+                                            // console.log('I am in the third node!');
                                             return _option.series[0].data[j].children[k].children[l];
                                         }
                                         if (_option.series[0].data[j].children[k].children[l].children) {
@@ -417,7 +424,7 @@
                                             var d4 = _option.series[0].data[j].children[k].children[l].children;
                                             for (var m = 0; m < len4; m++) {
                                                 if (_option.series[0].data[j].children[k].children[l].children[m].value == _value) {
-                                                    console.log('I am in the fourth node!');
+                                                    // console.log('I am in the fourth node!');
                                                     return option.series[0].data[j].children[k].children[l].children[m];
                                                 }
                                                 if (_option.series[0].data[j].children[k].children[l].children[m].children) {
@@ -505,8 +512,8 @@
                 }
 
                 function findNameByValue(value) {
-                    console.log(value);
-                    console.log(findCurrentNodeByValue(value));
+                    // console.log(value);
+                    // console.log(findCurrentNodeByValue(value));
                     return findCurrentNodeByValue(value).name;
                 }
 
@@ -539,10 +546,14 @@
 
                 $('#save').on('click', function() {
                     inputData.filename = filename;
-                    console.log("I am inputData:");
-                    console.log(inputData);
-                    $.post('/api/saveFileToDatabase/' + filename, inputData);
-                    alert("保存成功!");
+                    // console.log("I am inputData:");
+                    // console.log(inputData);
+                    if (!isOnlyRoot(option)) {
+                        $.post('/api/saveFileToDatabase/' + filename, inputData);
+                        alert("保存成功!");
+                    } else {
+                        alert("保存失败，不允许仅有根节点");
+                    }
                 });
 
                 function up() {
@@ -644,12 +655,15 @@
                     return option;
                 }
 
-                // 确保用户已经保存
-                window.onbeforeunload = function() {
-                    console.log("A!???");
-                    return "确认保存了吗?";
-                };
+                function isOnlyRoot(option) {
+                    // console.log("I am in root!");
+                    return option.series[0].data[0].children.length == 0;
+                }
 
+                $(window).on("beforeunload", function() {
+                    $("#save").trigger("click");
+                    return "系统将会为你自动保存";
+                })
             });
         });
     });
