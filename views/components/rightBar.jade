@@ -40,6 +40,7 @@
         .form-group.rightBar-card
             .panel.panel-primary
                 .panel-heading
+                    span.icon-pencil
                     h3.panel-title 描述
                     .topRightBtn.topRightBtn-1(ng-show='currentUser.email == author.email', type='button', ng-click='editDescription = !editDescription', data-toggle='collapse', data-target='#updateDescription', aria-expanded='false', aria-controls='updateDescription')
                         span.glyphicon.glyphicon-edit(ng-hide="editDescription")
@@ -53,6 +54,7 @@
         .form-group
             .panel.panel-primary
                 .panel-heading
+                    span.icon-book
                     h3.panel-title 笔记
                     .topRightBtn.topRightBtn-1(ng-show='currentUser.email == author.email', type='button', ng-click='spanUpdateNotes = !spanUpdateNotes' data-toggle='collapse', data-target='#uploadNotes', aria-expanded='false', aria-controls='uploadNotes')
                         span.glyphicon.glyphicon-edit(ng-hide="spanUpdateNotes")
@@ -66,6 +68,7 @@
         .form-group.rightBar-card
             .panel.panel-primary
                 .panel-heading
+                    span.icon-file
                     h3.panel-title 资料
                     .topRightBtn.topRightBtn-1(ng-show='currentUser.email == author.email', type='button', ng-click='spanUploadFiles = !spanUploadFiles' data-toggle='collapse', data-target='#uploadFiles', aria-expanded='false', aria-controls='uploadFiles')
                         span.fui-plus(ng-hide="spanUploadFiles")
@@ -113,9 +116,10 @@
                                         .rightIcon.pull-right(ng-click='deleteDocument($index)', ng-show='editDocument')
                                             span.icon-trash
         //- 计划
-        .form-group.rightBar-card
+        .form-group.rightBar-card(ng-show='currentUser.email == author.email')
             .panel.panel-primary
                 .panel-heading
+                    span.icon-calendar
                     h3.panel-title 计划                    
                     .topRightBtn.topRightBtn-1(ng-show='currentUser.email == author.email', type='button', ng-click='spanUploadPlan = !spanUploadPlan' data-toggle='collapse', data-target='#uploadPlan', aria-expanded='false', aria-controls='uploadPlan')
                         span.fui-plus(ng-hide="spanUploadPlan")
@@ -139,7 +143,7 @@
                         input#dtp_input1(ng-model='newPlan[nodeData.plans.length].deadline')
                     br
                     button#addPlanBtn.btn.btn-success(type='reset', ng-click='addPlan(newPlan[nodeData.plans.length]); spanUploadPlan = !spanUploadPlan' data-toggle='collapse', data-target='#uploadPlan', aria-expanded='false', aria-controls='uploadPlan') 添加计划
-                .panel-body(ng-show='nodeData.plans.length > 0 && currentUser.email == author.email')
+                .panel-body(ng-show='nodeData.plans.length > 0')
                     .table-responsive
                         table.table
                             thead
@@ -163,6 +167,7 @@
         .form-group.rightBar-card
             .panel.panel-primary
                 .panel-heading
+                    span.icon-comments
                     h3.panel-title 留言
                     .topRightBtn.topRightBtn-1(type='button', ng-click='spanQdiscuss = !spanQdiscuss' data-toggle='collapse', data-target='#discuss', aria-expanded='false', aria-controls='discuss')
                         span.fui-plus(ng-hide="spanQdiscuss")

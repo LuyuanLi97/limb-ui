@@ -510,7 +510,6 @@ function BrowseCtrl($scope, $rootScope, $http, $routeParams) {
                         "fileName": filename,
                         "type": "leaf"
                     };
-                    console.log('oneLeaf: ' + leaf);
                     $scope.leaves.push(leaf);
                 });
             });
@@ -557,7 +556,7 @@ function newLeafCtrl($scope, $window, $location, $http) {
             $http.get('/api/myprofile')
                 .then(function(response) {
                     $scope.author = response.data.name;
-                    $http.get('/api/getFileFromDatabase'+'/'+$scope.author+'/'+$scope.filename)
+                    $http.get('/api/getFileFromDatabase' + '/' + $scope.author + '/' + $scope.filename)
                         .then(function(response) {
                             var file = response.data;
                             // 返回是一个对象
@@ -565,7 +564,7 @@ function newLeafCtrl($scope, $window, $location, $http) {
                             if (JSON.stringify(file) != "{}") {
                                 $window.alert("已有相同文件名，创建失败");
                                 // 提示用户可以打开同名文件
-                                if ($window.confirm("你需要打开已存在的名字是 \'"+$scope.filename+"\' 的文件吗?")) {
+                                if ($window.confirm("你需要打开已存在的名字是 \'" + $scope.filename + "\' 的文件吗?")) {
                                     console.log("confirm yes!");
                                     $location.path('leaf/' + $scope.author + '/' + $scope.filename);
                                 }
@@ -574,7 +573,7 @@ function newLeafCtrl($scope, $window, $location, $http) {
                                 $location.path('leaf/' + $scope.author + '/' + $scope.filename);
                             }
                         }).catch(function(err) {
-                            console.log("err"+err);
+                            console.log("err" + err);
                         });
                 }, function(error) {
                     console.log('Error: ' + error);

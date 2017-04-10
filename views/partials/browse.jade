@@ -41,11 +41,6 @@ link(rel='stylesheet', href='css/browse.css')
                         a(ng-click='ngfilter = "user"') user 
                             span.badge {{filteredUsers.length}}
 
-                    li(ng-hide="ngfilter == 'local' || ngfilter-menu == 'local'")
-                        a(ng-click='ngfilter = "local"') local
-                    li.active(ng-show="ngfilter == 'local' || ngfilter-menu == 'local'")
-                        a(ng-click='ngfilter = "local"') local
-
         // with filter list
         .col-xs-12.col-sm-9(ng-hide="withFilters")
             br
