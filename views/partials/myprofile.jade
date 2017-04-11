@@ -25,6 +25,11 @@ br
 
             li.active(ng-show="ngChoice == 'stars'", role='presentation')
                 a(ng-click='ngChoice = "stars"') Stars
+                .col-xs-12.col-sm-6
+                ul
+                    li(ng-repeat='starFile in starList')
+                        a(href='/leaf/{{starFile.author}}/{{starFile.filename}}') {{starFile.filename}}-{{starFile.author}}
+
             li(ng-hide="ngChoice == 'stars'", role='presentation')
                 a(ng-click='ngChoice = "stars"') Stars
 

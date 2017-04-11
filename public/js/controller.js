@@ -65,8 +65,8 @@ function IndexCtrl($scope, $http, $location, $rootScope, toastr) {
 function SigninCtrl($scope, $http, $location, $rootScope, toastr) {
     $scope.ngViewClass = 'page-signin';
     $scope.formData = {};
-    $scope.formData.email = "example@qq.com";
-    $scope.formData.password = "example";
+    $scope.formData.email = "945484716@qq.com";
+    $scope.formData.password = "123456";
     $scope.switchToSignup = function() {
         $rootScope.title = 'Register';
     };
@@ -132,6 +132,7 @@ function MyprofileCtrl($scope, $http, $rootScope) {
             $scope.email = response.data.email;
             $scope.description = response.data.description;
             $scope.fileList = response.data.fileList;
+            $scope.starList = response.data.starList;
             $rootScope.title = $scope.name;
         }, function(error) {
             // 重定向到错误页面
