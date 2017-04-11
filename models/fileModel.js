@@ -28,5 +28,13 @@ module.exports = {
             if (err)
                 console.log("updateFile error");
         });
+    },
+    remove: function(myfile) {
+        // console.log(myfile);
+        // console.log("I am in remove");
+        fileModel.remove(myfile, function(err) {
+            if (err)
+                console.log("remove err:"+err);
+        });
     }
 };

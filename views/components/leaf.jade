@@ -57,6 +57,12 @@
         button#save.btn.btn-primary.btn-sm.btn-tool
             span.glyphicon.glyphicon-cloud-upload
                 span.hidden-xs 保存
+        //- button#deleteFile.btn.btn-primary.btn-sm.btn-tool
+        //-     span.glyphicon.glyphicon-cloud-upload
+        //-         span.hidden-xs 删除文件
+        //- button#changeFilename.btn.btn-primary.btn-sm.btn-tool
+        //-     span.glyphicon.glyphicon-cloud-upload
+        //-         span.hidden-xs 修改文件名
         button.toggleRightBar.btn.btn-primary.btn-sm.btn-tool(ng-click="showRightBar = !showRightBar")
             span.icon-columns(ng-show="showRightBar")
             span.icon-fullscreen(ng-hide="showRightBar")
@@ -66,6 +72,7 @@
                 span.hidden-xs
             span.icon-double-angle-up(ng-hide="showTools")
                 span.hidden-xs 
+
 
 div.hidden
     input#getUsername(value="{{username}}", type="hidden")

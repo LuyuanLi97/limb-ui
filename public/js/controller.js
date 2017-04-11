@@ -65,8 +65,10 @@ function IndexCtrl($scope, $http, $location, $rootScope, toastr) {
 function SigninCtrl($scope, $http, $location, $rootScope, toastr) {
     $scope.ngViewClass = 'page-signin';
     $scope.formData = {};
-    $scope.formData.email = "example@qq.com";
-    $scope.formData.password = "example";
+    // $scope.formData.email = "945484716@qq.com";
+    // $scope.formData.password = "123456";
+    $scope.formData.email = "chros@qq.com";
+    $scope.formData.password = "chrosl";
     $scope.switchToSignup = function() {
         $rootScope.title = 'Register';
     };
@@ -121,7 +123,7 @@ function SigninCtrl($scope, $http, $location, $rootScope, toastr) {
 /*
     获取用户资料
 */
-function MyprofileCtrl($scope, $http, $rootScope) {
+function MyprofileCtrl($scope, $http, $window, $location, $rootScope, toastr) {
     // console.log("myprofile");
     // console.log("params:"+$stateParams.username);
     $rootScope.$broadcast('authenticationChanged');
@@ -132,12 +134,25 @@ function MyprofileCtrl($scope, $http, $rootScope) {
             $scope.email = response.data.email;
             $scope.description = response.data.description;
             $scope.fileList = response.data.fileList;
+            $scope.starList = response.data.starList;
             $rootScope.title = $scope.name;
         }, function(error) {
             // 重定向到错误页面
             // $location.url('error');
+            $location.path('/');
             console.log('Error: ' + error);
         });
+
+    $scope.deleteLeaf = function(filename) {
+        var leafData = {
+            "filename": filename
+        };
+        if (confirm("你确定要删除吗?")) {
+            $.post('/api/deleteFile', leafData);
+            toastr.success("删除成功!");
+            $window.location.reload();
+        }
+    };
 };
 
 /*
@@ -282,7 +297,9 @@ function LeafCtrl($scope, $rootScope, $http, $location, toastr, $window, $routeP
 
     // 如果用户在这个页面刷新，广播能够根据用户的登陆状态修改导航栏的右上角数据
     $rootScope.$broadcast('authenticationChanged');
-
+    // $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
+    //     console.log("路由变了");
+    // });
     $scope.username = $routeParams.username;
     $scope.filename = $routeParams.filename;
     $rootScope.title = $routeParams.username + ' · ' + $routeParams.filename;
@@ -325,6 +342,9 @@ function LeafCtrl($scope, $rootScope, $http, $location, toastr, $window, $routeP
         console.log("$scope.nodeString: " + $scope.nodeString);
 
         $scope.nodePath = $scope.nodeString.split(",").reverse();
+        if ($scope.nodePath.length > 3) { // 3 node path
+            $scope.nodePath = $scope.nodePath.slice($scope.nodePath.length - 3);
+        }
         console.log("$scope.nodePath: " + $scope.nodePath);
         $scope.currentNodeId = $scope.nodeId;
         getNodeDataFormDB();
