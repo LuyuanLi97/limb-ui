@@ -338,6 +338,69 @@ exports.saveFileToDatabase = function(req, res, next) {
         });
 }
 
+exports.deleteFile = function(req, res, next) {
+    var author = req.session.user.name;
+    var filename = req.body.filename;
+    var myfile = {
+        "author": author,
+        "filename": filename
+    };
+
+    return fileModel.getDataByFilenameAndAuthor(myfile)
+        .then(function(response) {
+            // console.log("放回了什么:");
+            // console.log(response);
+            if (response.toString() != "") {
+                // 文件存在
+                // console.log("文件不是第一次存的");
+                // 删除文件
+                fileModel.remove(myfile);
+                userModel.update({
+                    "name": author
+                }, {
+                    $pull: {
+                        "fileList": filename
+                    }
+                });
+            }
+        });
+}
+
+// exports.changeFilename = function(req, res, next) {
+//     var username = req.session.user.name;
+//     var oldFilename = req.params.filename;
+//     var newFilename = req.body.filename;
+//     var myfile = {
+//         "author": username,
+//         "filename": filename
+//     };
+
+//     var newfile = {
+//         "author": username,
+//         "filename": newFilename
+//     }
+
+//     fileModel.getDataByFilenameAndAuthor(myfile)
+//         .then(function(response) {
+//             // console.log("放回了什么:");
+//             // console.log(response);
+//             if (response.toString() != "") {
+//                 // fileModel里面修改
+//                 fileModel.updateFile(myfile, newfile);
+//                 // 用户里面改
+//                 userModel.update({
+//                     "name": username,
+//                     "fileList": oldFilename
+//                 }, {
+//                     $set: {
+//                         "fileList.$": newFilename
+//                     }
+//                 });
+//             }
+//         });
+
+// }
+
 exports.cloneFile = function(req, res, next) {
     var username = req.session.user.name;
     var filename = req.body.filename;
@@ -360,8 +423,8 @@ exports.cloneFile = function(req, res, next) {
             // console.log(response);
             if (response.toString() != "") {
                 // 文件已存在
-                // console.log("文件不是第一次存的");
-                fileModel.updateFile(myfile, newfile);
+                console.log("文件不是第一次存的");
+                fileModel.updateFile({"author": username, "filename": filename+"-"+author}, newfile);
             } else {
                 // 文件第一次存
                 fileModel.create(newfile);

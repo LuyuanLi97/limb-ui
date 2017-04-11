@@ -500,6 +500,26 @@
                     alert("克隆成功!");
                 });
 
+                // 删除文件
+                $('#deleteFile').on('click', function() {
+                    inputData.filename = filename;
+                    console.log("I am inputData in star:");
+                    console.log(inputData);
+                    if (confirm("你确定要删除吗?")) {
+                        $.post('/api/deleteFile', inputData);
+                        alert("删除成功!");
+                    }
+                });
+
+                // 修改文件名
+                // $('#changeFilename').on('click', function() {
+                //     inputData.filename = filename;
+                //     console.log("I am inputData in star:");
+                //     console.log(inputData);
+                //     $.post('/api/changeFilename', inputData);
+                //     alert("修改文件名成功!");
+                // });
+
                 function up() {
                     console.log("up!");
                     $('#main').css('top', function(index, value) {
@@ -605,7 +625,7 @@
                 }
 
                 $(window).on("beforeunload", function() {
-                    $("#save").trigger("click");
+                    // $("#save").trigger("click");
                     return "系统将会为你自动保存";
                 });
             });
