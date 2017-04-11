@@ -306,6 +306,10 @@ function LeafCtrl($scope, $rootScope, $http, $location, toastr, $window, $routeP
             console.log('Error: ' + error);
         });
 
+    $scope.alertSaved = function() {
+        toastr.success('已自动保存！');
+    }
+
     // 选中一个节点时
     $scope.getNodeData = function() {
         console.log("$scope.nodeId: " + $scope.nodeId);

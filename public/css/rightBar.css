@@ -71,11 +71,12 @@ p {
     transition-duration: 1s;
 }
 
-.breadcrumb:hover, .tagsinput-primary:hover, .rightBar-card:hover {
+
+/*.breadcrumb:hover, .tagsinput-primary:hover, .rightBar-card:hover {
     transform: translate(0px, -3px);
     box-shadow: 0px 1px 5px gray;
     transition-duration: 0s;
-}
+}*/
 
 #authorInfoContainer {
     background-color: #222;
@@ -176,7 +177,10 @@ ol li:last-child a:hover {
 /*panel-body padding*/
 
 .panel-body {
-    padding: 7px;
+    padding-left: 7px;
+    padding-right: 7px;
+    padding-top: 0;
+    padding-bottom: 0;
 }
 
 .no-padding {
@@ -206,13 +210,22 @@ ol li:last-child a:hover {
 }
 
 .rightIcon {
+    opacity: 0;
+}
+
+tr:hover .rightIcon {
     opacity: 0.3;
 }
 
-.rightIcon:hover {
+tr:hover .rightIcon:hover {
+    color: red;
     opacity: 1;
 }
 
 i.pull-right a:hover, p a:hover, td a:hover {
     border-bottom: 1px #1abc9c solid;
+}
+
+textarea.form-control {
+    border-radius: 0;
 }

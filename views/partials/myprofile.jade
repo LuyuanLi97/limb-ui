@@ -1,3 +1,4 @@
+link(rel='stylesheet', href='css/myprofile.css')
 br
 .col-sm-3.col-xs-12
     img.bg#myicon(src='{{avatar}}', alt='icon')
@@ -18,15 +19,10 @@ br
 
             li.active(ng-show="ngChoice == 'leaves'", role='presentation')
                 a(ng-click='ngChoice = "leaves"') Leaves
-                    span.badge {{filteredLocalLeaves.length}}
+                    span.badge {{fileList.length}}
             li(ng-hide="ngChoice == 'leaves'", role='presentation')
                 a(ng-click='ngChoice = "leaves"') Leaves
-                    span.badge {{filteredLocalLeaves.length}}
-
-            li.active(ng-show="ngChoice == 'teams'", role='presentation')
-                a(ng-click='ngChoice = "teams"') Teams
-            li(ng-hide="ngChoice == 'teams'", role='presentation')
-                a(ng-click='ngChoice = "teams"') Teams
+                    span.badge {{fileList.length}}
 
             li.active(ng-show="ngChoice == 'stars'", role='presentation')
                 a(ng-click='ngChoice = "stars"') Stars
@@ -49,12 +45,13 @@ br
         .col-xs-12.col-sm-6
             h5 leaves
             div.leaves
-                .leafCard.animate-repeat(ng-repeat='filename in fileList | filter : search as filteredLocalLeaves')
+                .animate-repeat(ng-repeat='filename in fileList | filter:search as filteredLocalLeaves')
                     a(href='/leaf/{{name}}/{{filename}}') {{filename}}
-
 
     row(ng-if="ngChoice == 'leaves'")
-        .col-xs-12.col-sm-6
+        .col-xs-12
             div.leaves
-                .leafCard.animate-repeat(ng-repeat='filename in fileList | filter : search as filteredLocalLeaves')
-                    a(href='/leaf/{{name}}/{{filename}}') {{filename}}
+            .leafCard.animate-repeat(ng-repeat='filename in fileList | filter : search as filteredLocalLeaves')
+                a(href='/leaf/{{name}}/{{filename}}') {{filename}}
+                .rightIcon.pull-right(ng-click='editLeaf($index)')
+                    span.glyphicon.glyphicon-edit
