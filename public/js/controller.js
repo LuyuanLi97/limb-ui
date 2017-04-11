@@ -310,6 +310,15 @@ function LeafCtrl($scope, $rootScope, $http, $location, toastr, $window, $routeP
         toastr.success('已自动保存！');
     }
 
+    // 提醒保存（如果是作者的话）
+    $scope.$on('$locationChangeStart', function(event) {
+        if ($scope.currentUser.name == $scope.username) {
+            var answer = confirm("确认已经保存了吗？");
+            if (!answer) {
+                event.preventDefault();
+            }
+        }
+    });
     // 选中一个节点时
     $scope.getNodeData = function() {
         console.log("$scope.nodeId: " + $scope.nodeId);

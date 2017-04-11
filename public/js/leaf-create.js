@@ -660,6 +660,7 @@
                     return option.series[0].data[0].children.length == 0;
                 }
 
+                // 刷新的时候
                 $(window).on("beforeunload", function() {
                     // getUsername 是获得当前文件的作者名，getCurrentUsername 是当前操作者名
                     console.log("'beforeunload: =========='" + $("#getCurrentUsername").val() + " " + $("#getUsername").val());

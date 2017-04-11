@@ -51,7 +51,11 @@ br
     row(ng-if="ngChoice == 'leaves'")
         .col-xs-12
             div.leaves
+            br
             .leafCard.animate-repeat(ng-repeat='filename in fileList | filter : search as filteredLocalLeaves')
                 a(href='/leaf/{{name}}/{{filename}}') {{filename}}
-                .rightIcon.pull-right(ng-click='editLeaf($index)')
+                .rightIcon.pull-right(ng-click='editLeaf = !editLeaf')
                     span.glyphicon.glyphicon-edit
+                br
+                .rightIcon.trashIcon.pull-right(ng-click='deleteLeaf($index)', ng-show='editLeaf')
+                    span.icon-trash

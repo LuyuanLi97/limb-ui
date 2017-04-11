@@ -22,3 +22,7 @@
 .leafCard:hover .rightIcon:hover {
     opacity: 1;
 }
+
+.trashIcon:hover {
+    color: red;
+}
