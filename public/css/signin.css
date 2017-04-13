@@ -1,0 +1,33 @@
+body {
+    background-color: #f3f3f3;
+}
+
+#menu, .topArea, .navbar-inverse {
+    display: none;
+}
+
+
+/*#line {
+    height: 7px !important;
+    background: #2dbe60 !important;
+}*/
+
+.header>a {
+    font-size: 40px;
+    color: #2dbe60;
+}
+
+.header img {
+    width: 36px;
+    height: 36px;
+}
+
+.login-form {
+    background: white;
+    border-radius: 6px;
+    box-shadow: 0 0 1px gray;
+}
+
+.login-form .login-field {
+    background-color: #f3f3f3;
+}

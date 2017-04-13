@@ -2,29 +2,6 @@ link(rel='stylesheet', href='css/about/style.css')
 link(rel='stylesheet', href='css/about/animate.min.css')
 link(rel='stylesheet', href='css/homePage.css')
 
-#signin
-    center.container
-        .col-sm-7
-            h1.lead Leaf
-            p.lead 让你的碎片化知识脉络分明
-        .col-sm-5
-            form.form-login.visible-xs
-                a#login-button(href='/signin') 登陆
-                br
-            form.form-login.hidden-xs
-                input.input-login(type='text', value='', placeholder='用户名', ng-model='formData.name', ng-show="signingUp")
-                input.input-login(type='email', value='', placeholder='邮箱', ng-model='formData.email')
-                input.input-login(type='password', value='', placeholder='密码', ng-model='formData.password')
-                div(ng-hide="signingUp")
-                    button#login-button(type='submit', ng-click='signin()') 登陆
-                    a.login-link(ng-click='signingUp = !signingUp; switchToSignup()') 新用户?
-                    a.login-link(href='#') 忘记密码?
-                div(ng-show="signingUp")
-                    button#login-button(type='submit', ng-click='signup()') 注册
-                    a.login-link(ng-click='signingUp = !signingUp; switchToSignin()') 已经有了一个账户? 
-                    link(rel='stylesheet', href='css/homePage.css')
-                    link(rel='stylesheet', href='css/about/style.css')
-                    link(rel='stylesheet', href='css/about/animate.min.css')
 #members.section
     .container
         h2 Leaf
@@ -124,23 +101,3 @@ link(rel='stylesheet', href='css/homePage.css')
         center.row
             a.btn-success.btn.btn-primary(href='/signin') Get Started
 include ../components/footer
-//- script(src='js/about/wow.min.js')
-//- script(src='js/about/classie.js')
-//- script.
-//-     function init() {
-//-     window.addEventListener('scroll', function(e) {
-//-     var distanceY = window.pageYOffset || document.documentElement.scrollTop,
-//-     shrinkOn = 300,
-//-     header = document.querySelector("header");
-//-     if (distanceY > shrinkOn) {
-//-     classie.add(header, "smaller");
-//-     } else {
-//-     if (classie.has(header, "smaller")) {
-//-     classie.remove(header, "smaller");
-//-     }
-//-     }
-//-     });
-//-     }
-//-     window.onload = init();
-//- script(type='text/javascript').
-//-     new WOW().init();

@@ -6,7 +6,7 @@ html, body {
 
 #ngview {
     width: 100%;
-    height: calc(100% - 53px);
+    height: calc(100% - 60px);
     overflow: scroll;
 }
 

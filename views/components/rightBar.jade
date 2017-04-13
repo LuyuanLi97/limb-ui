@@ -1,11 +1,9 @@
 #leaf-right-bar
     #authorInfoContainer
-        a#authorInfoBtn.btn.btn-inverse(type='button', ng-click='spanAuthor = !spanAuthor', data-toggle='collapse', data-target='#authorInfo', aria-expanded='false', aria-controls='authorInfo') 
-            span.fui-plus(ng-hide="spanAuthor") &nbsp;SHOW AUTHOR
-            span.fui-cross(ng-show="spanAuthor") &nbsp;HIDE AUTHOR
+        #authorInfoBtn.btn.btn-inverse(type='button', data-toggle='collapse', data-target='#authorInfo', aria-expanded='false', aria-controls='authorInfo') 
 
         //- 作者信息
-        center#authorInfo.collapse
+        center#authorInfo.collapse(data-toggle='collapse', data-target='#authorInfo', aria-expanded='false', aria-controls='authorInfo')
             br
             img#myicon.bg(src='{{author.avatar}}', alt='icon')
             h5 

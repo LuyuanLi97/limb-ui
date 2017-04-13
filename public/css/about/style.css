@@ -162,11 +162,6 @@ abbr, abbr[title] {
     border: none;
 }
 
-a {
-    color: #1c1c1c;
-    text-decoration: none;
-}
-
 strong {
     font-weight: normal;
 }
