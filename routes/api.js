@@ -366,40 +366,46 @@ exports.deleteFile = function(req, res, next) {
         });
 }
 
-// exports.changeFilename = function(req, res, next) {
-//     var username = req.session.user.name;
-//     var oldFilename = req.params.filename;
-//     var newFilename = req.body.filename;
-//     var myfile = {
-//         "author": username,
-//         "filename": filename
-//     };
+exports.changeFilename = function(req, res, next) {
+    var username = req.session.user.name;
+    var oldFilename = req.params.filename;
+    var newFilename = req.body.filename;
 
-//     var newfile = {
-//         "author": username,
-//         "filename": newFilename
-//     }
+    var myfile = {
+        "author": username,
+        "filename": oldFilename
+    };
 
-//     fileModel.getDataByFilenameAndAuthor(myfile)
-//         .then(function(response) {
-//             // console.log("放回了什么:");
-//             // console.log(response);
-//             if (response.toString() != "") {
-//                 // fileModel里面修改
-//                 fileModel.updateFile(myfile, newfile);
-//                 // 用户里面改
-//                 userModel.update({
-//                     "name": username,
-//                     "fileList": oldFilename
-//                 }, {
-//                     $set: {
-//                         "fileList.$": newFilename
-//                     }
-//                 });
-//             }
-//         });
+    console.log("I am old filename: "+oldFilename);
+    console.log("I am new filename: "+newFilename);
+    var newfile = {
+        "author": username,
+        "filename": newFilename
+    }
 
-// }
+    return fileModel.getDataByFilenameAndAuthor(myfile)
+        .then(function(response) {
+            // console.log("放回了什么:");
+            // console.log(response);
+            if (response.toString() != "") {
+                // fileModel里面修改
+                fileModel.updateFile(myfile, newfile);
+                // 用户里面改
+                userModel.update({
+                    "name": username,
+                    "fileList": oldFilename,
+                    "$atomic": "true"
+                }, {
+                    $set: {
+                        "fileList.$": newFilename
+                    }
+                });
+            } else {
+                res.json("haha!");
+            }
+        });
+
+}
 
 exports.cloneFile = function(req, res, next) {
     var username = req.session.user.name;
@@ -409,7 +415,6 @@ exports.cloneFile = function(req, res, next) {
         "author": username,
         "filename": filename
     };
-
     var newfile = {
         "author": username,
         "filename": filename+"-"+author,

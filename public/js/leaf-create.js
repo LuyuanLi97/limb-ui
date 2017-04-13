@@ -512,13 +512,18 @@
                 });
 
                 // 修改文件名
-                // $('#changeFilename').on('click', function() {
-                //     inputData.filename = filename;
-                //     console.log("I am inputData in star:");
-                //     console.log(inputData);
-                //     $.post('/api/changeFilename', inputData);
-                //     alert("修改文件名成功!");
-                // });
+                $('#changeFilename').on('click', function() {
+                    var newFilename = prompt("新的文件名：");
+                    if (newFilename) {
+                        inputData.filename = newFilename;
+                        $.post('/api/changeFilename/'+filename, inputData)
+                            .done(function(json) {
+                                console.log("I am successfully!");
+                            });
+                        alert("修改文件名成功!");
+                        // location.path('leaf/'+username+'/'+newFilename);
+                    }
+                });
 
                 function up() {
                     console.log("up!");

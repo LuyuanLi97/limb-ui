@@ -61,7 +61,7 @@ module.exports = function(app) {
     app.post('/api/cloneFile', api.cloneFile);
     app.post('/api/starFile', api.starFile);
     app.post('/api/deleteFile', api.deleteFile);
-    // app.post('/api/changeFilename', api.changeFilename);
+    app.post('/api/changeFilename/:filename', api.changeFilename);
     app.get('/api/isFileNew/:author/:filename', api.isFileNew);
     app.get('/api/getFileFromDatabase/:author/:filename', api.getFileFromDatabase);
     // app.get('/api/getUsernameAndFilename', api.getUsernameAndFilename);
