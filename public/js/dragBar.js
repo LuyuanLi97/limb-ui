@@ -25,4 +25,17 @@ $(function() {
         // stop resizing
         isResizing = false;
     });
+
+    function span() {
+        left.css('right', '0px');
+        right.css('width', '0px');
+        $('.toggleRightBar').one('click', hide);
+    }
+
+    function hide() {
+        left.css('right', '40%');
+        right.css('width', '40%');
+        $('.toggleRightBar').one('click', span);
+    }
+    $('.toggleRightBar').one('click', span);
 });

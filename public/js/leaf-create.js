@@ -135,10 +135,10 @@
                         // console.log(ecData.name);
                         var thisValue = ecData.data.value;
                         var current = findCurrentNodeByValue(thisValue);
-                        // console.log("copy:");
+                        // ole.log("copy:");
                         // 深复制
                         myCopyContent = JSON.parse(JSON.stringify(current));
-                        // console.log(myCopyContent);
+                        // ole.log(myCopyContent);
                         // $('#copyContent').off();
                         $('#main').trigger('click');
                     });
@@ -153,8 +153,8 @@
                         if (myCopyContent != null) {
                             if (current.children == undefined)
                                 current.children = [];
-                            // console.log("myCopyContent:");
-                            // console.log(myCopyContent);
+                            // ole.log("myCopyContent:");
+                            // ole.log(myCopyContent);
                             // myCopyContent为空不执行
                             if ($.isEmptyObject(myCopyContent)) {
                                 alert("请你先选中被复制节点");
@@ -172,7 +172,7 @@
 
                     // 取消注册的事件，十分关键！
                     $('#main').on('click', function() {
-                        // console.log("I am in the main!!!");
+                        // ole.log("I am in the main!!!");
                         $('button#create').off();
                         $('button#delete').off();
                         $('button#SBContent').off();
@@ -182,10 +182,10 @@
                     });
                     var value = getValue(ecData);
                     var rootValue = inputData.tree[0].value;
-                    // console.log("rootValue: " + rootValue);
+                    // ole.log("rootValue: " + rootValue);
                     $('#getNodeId').val(value);
                     $('#getNodeId').trigger('input'); // Use for Chrome/Firefox/Edge
-                    // console.log(findPathFromSelfToRoot(value, rootValue).toString());
+                    // ole.log(findPathFromSelfToRoot(value, rootValue).toString());
                     $('#getNodeString').val(findPathFromSelfToRoot(value, rootValue).toString());
                     $('#getNodeString').trigger('input'); // Use for Chrome/Firefox/Edge
                     $('#getNodeDataBtn').click();
@@ -197,12 +197,12 @@
                 var TimeFn = 0;
                 // 处理单击收缩扩张
                 function SBContent(event) {
-                    // console.log(ecData);
+                    // ole.log(ecData);
                     // Clear Last timeout
                     // clearTimeout(TimeFn);
                     // TimeFn = setTimeout(function(){
                     var _name = event.data.name; //当前点击节点的名称
-                    // console.log(findCurrentNodeByName(_name));
+                    // ole.log(findCurrentNodeByName(_name));
                     // if(_posarr) {
                     //     var _posarr=null;
                     // }
@@ -441,7 +441,7 @@
                 }
 
                 function findPathFromSelfToRoot(value, rootValue) {
-                    console.log("value in path:"+value);
+                    console.log("value in path:" + value);
                     var path = [];
                     var selfValue = value;
                     path.push(findNameByValue(selfValue));
@@ -501,15 +501,15 @@
                 });
 
                 // 删除文件
-                $('#deleteFile').on('click', function() {
-                    inputData.filename = filename;
-                    console.log("I am inputData in star:");
-                    console.log(inputData);
-                    if (confirm("你确定要删除吗?")) {
-                        $.post('/api/deleteFile', inputData);
-                        alert("删除成功!");
-                    }
-                });
+                // $('#deleteFile').on('click', function() {
+                //     inputData.filename = filename;
+                //     console.log("I am inputData in star:");
+                //     console.log(inputData);
+                //     if (confirm("你确定要删除吗?")) {
+                //         $.post('/api/deleteFile', inputData);
+                //         alert("删除成功!");
+                //     }
+                // });
 
                 // 修改文件名
                 $('#changeFilename').on('click', function() {
@@ -629,8 +629,14 @@
                     return option.series[0].data[0].children.length == 0;
                 }
 
+                // 刷新的时候
                 $(window).on("beforeunload", function() {
-                    // $("#save").trigger("click");
+                    // getUsername 是获得当前文件的作者名，getCurrentUsername 是当前操作者名
+                    console.log("'beforeunload: =========='" + $("#getCurrentUsername").val() + " " + $("#getUsername").val());
+                    if ($("#getCurrentUsername").val() == $("#getUsername").val()) {
+                        $("#save").trigger("click");
+                        $("#alertSaved").click(); // 异步提示已保存
+                    }
                     return "系统将会为你自动保存";
                 });
             });

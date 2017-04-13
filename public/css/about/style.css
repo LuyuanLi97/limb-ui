@@ -175,10 +175,6 @@ strong {
     text-align: center;
 }
 
-small {
-    font-size: 1em;
-}
-
 h2 {
     font-family: "Microsoft YaHei", Georgia, Times, serif;
     font-size: 1em;
@@ -1143,14 +1139,14 @@ section:last-child {
 }
 
 .lead-creative-banner {
-    /*font-family: "Merriweather";*/
+    /* font-family: "Merriweather"; */
     font-style: normal;
     font-weight: 400;
-    font-size: 20px;
+    font-size: 16px;
     text-align: center;
-    word-spacing: 4px;
+    word-spacing: 3px;
     letter-spacing: .8px;
-    line-height: 50px;
+    line-height: 30px;
 }
 
 h2 {

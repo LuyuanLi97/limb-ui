@@ -15,8 +15,6 @@
             span
                 a {{author.tagsNum}} tags
             br
-            //- a(href='{{author.github}}')
-            //-     span.fui-github GitHub &nbsp;
             a(href='mailto:{{author.mail}}')
                 span.fui-mail {{author.email}}
             br
@@ -39,12 +37,13 @@
         //- 描述
         .form-group.rightBar-card
             .panel.panel-primary
-                .panel-heading
+                .panel-heading(ng-click='editDescription = !editDescription', data-toggle='collapse', data-target='#updateDescription', aria-expanded='false', aria-controls='updateDescription')
+                    span.icon-pencil
                     h3.panel-title 描述
-                    .topRightBtn.topRightBtn-1(ng-show='currentUser.email == author.email', type='button', ng-click='editDescription = !editDescription', data-toggle='collapse', data-target='#updateDescription', aria-expanded='false', aria-controls='updateDescription')
+                    .topRightBtn.topRightBtn-1
                         span.glyphicon.glyphicon-edit(ng-hide="editDescription")
                         span.fui-cross(ng-show="editDescription")
-                .panel-body#updateDescription.collapse
+                .panel-body.no-padding#updateDescription.collapse(ng-show='currentUser.email == author.email')
                     textarea.form-control(ng-model='nodeData.description', rows='3', placeholder='添加描述')
                     button.btn.btn-success(ng-click='updateDescription(); editDescription = !editDescription', data-toggle='collapse', data-target='#updateDescription', aria-expanded='false', aria-controls='updateDescription') 更新描述
                 .panel-body(ng-hide="editDescription")
@@ -52,12 +51,13 @@
         //- Notes
         .form-group
             .panel.panel-primary
-                .panel-heading
+                .panel-heading(ng-click='spanUpdateNotes = !spanUpdateNotes' data-toggle='collapse', data-target='#uploadNotes', aria-expanded='false', aria-controls='uploadNotes')
+                    span.icon-book
                     h3.panel-title 笔记
-                    .topRightBtn.topRightBtn-1(ng-show='currentUser.email == author.email', type='button', ng-click='spanUpdateNotes = !spanUpdateNotes' data-toggle='collapse', data-target='#uploadNotes', aria-expanded='false', aria-controls='uploadNotes')
+                    .topRightBtn.topRightBtn-1
                         span.glyphicon.glyphicon-edit(ng-hide="spanUpdateNotes")
                         span.fui-cross(ng-show="spanUpdateNotes")
-                .panel-body.no-padding#uploadNotes.collapse
+                .panel-body.no-padding#uploadNotes.collapse(ng-show='currentUser.email == author.email')
                     textarea.form-control(rows='7', autofocus='', data-provide='markdown', ng-model="nodeData.notes", placeholder='在这里写下笔记') 
                     button.btn.btn-success(ng-click='updateNotes(); spanUpdateNotes = !spanUpdateNotes', data-toggle='collapse', data-target='#uploadNotes', aria-expanded='false', aria-controls='uploadNotes') 提交笔记
                 .panel-body(ng-hide="spanUpdateNotes")
@@ -65,16 +65,14 @@
         //- documents
         .form-group.rightBar-card
             .panel.panel-primary
-                .panel-heading
+                .panel-heading(ng-click='spanUploadFiles = !spanUploadFiles' data-toggle='collapse', data-target='#uploadFiles', aria-expanded='false', aria-controls='uploadFiles')
+                    span.icon-file
                     h3.panel-title 资料
-                    .topRightBtn.topRightBtn-1(ng-show='currentUser.email == author.email', type='button', ng-click='spanUploadFiles = !spanUploadFiles' data-toggle='collapse', data-target='#uploadFiles', aria-expanded='false', aria-controls='uploadFiles')
+                    .topRightBtn.topRightBtn-1
                         span.fui-plus(ng-hide="spanUploadFiles")
                         span.fui-cross(ng-show="spanUploadFiles")
-                    .topRightBtn.topRightBtn-2(type='button', ng-click='editDocument = !editDocument', ng-show='nodeData.documents.length > 0 && currentUser.email == author.email')
-                        span.glyphicon.glyphicon-edit(ng-hide="editDocument")
-                        span.fui-cross(ng-show="editDocument")
                 //- input file
-                center#uploadFiles.collapse
+                center#uploadFiles.collapse(ng-show='currentUser.email == author.email')
                     .row
                         input(type='file', file-model='myFile')
                         a.btn.btn-success(ng-click='uploadFile(); spanUploadFiles = !spanUploadFiles', type='reset',  data-toggle='collapse', data-target='#uploadFiles', aria-expanded='false', aria-controls='uploadFiles') 上传文件
@@ -110,19 +108,17 @@
                                                 span.icon-cloud-download
                                     td {{document.date}}
                                     td {{document.size}}B
-                                        .rightIcon.pull-right(ng-click='deleteDocument($index)', ng-show='editDocument')
+                                        .rightIcon.pull-right(ng-click='deleteDocument($index)')
                                             span.icon-trash
         //- 计划
-        .form-group.rightBar-card
+        .form-group.rightBar-card(ng-show='currentUser.email == author.email')
             .panel.panel-primary
-                .panel-heading
+                .panel-heading(ng-click='spanUploadPlan = !spanUploadPlan' data-toggle='collapse', data-target='#uploadPlan', aria-expanded='false', aria-controls='uploadPlan')
+                    span.icon-calendar
                     h3.panel-title 计划                    
-                    .topRightBtn.topRightBtn-1(ng-show='currentUser.email == author.email', type='button', ng-click='spanUploadPlan = !spanUploadPlan' data-toggle='collapse', data-target='#uploadPlan', aria-expanded='false', aria-controls='uploadPlan')
+                    .topRightBtn.topRightBtn-1
                         span.fui-plus(ng-hide="spanUploadPlan")
                         span.fui-cross(ng-show="spanUploadPlan")
-                    .topRightBtn.topRightBtn-2(type='button', ng-click='editPlan = !editPlan', ng-show='nodeData.plans.length > 0 && currentUser.email == author.email && currentUser.email == author.email')
-                        span.glyphicon.glyphicon-edit(ng-hide="editPlan")
-                        span.fui-cross(ng-show="editPlan")
                 //- input plan
                 .panel-body#uploadPlan.collapse
                     input(type='hidden', ng-model='newPlan[nodeData.plans.length].state')
@@ -139,7 +135,7 @@
                         input#dtp_input1(ng-model='newPlan[nodeData.plans.length].deadline')
                     br
                     button#addPlanBtn.btn.btn-success(type='reset', ng-click='addPlan(newPlan[nodeData.plans.length]); spanUploadPlan = !spanUploadPlan' data-toggle='collapse', data-target='#uploadPlan', aria-expanded='false', aria-controls='uploadPlan') 添加计划
-                .panel-body(ng-show='nodeData.plans.length > 0 && currentUser.email == author.email')
+                .panel-body(ng-show='nodeData.plans.length > 0')
                     .table-responsive
                         table.table
                             thead
@@ -157,12 +153,13 @@
                                         div(id="plan{{$index+1}}").collapse
                                             small {{plan.content}}
                                     td {{plan.deadline}}
-                                        .rightIcon.pull-right(ng-click='deletePlan($index)', ng-show='editPlan')
+                                        .rightIcon.pull-right(ng-click='deletePlan($index)')
                                             span.icon-trash
 
         .form-group.rightBar-card
             .panel.panel-primary
-                .panel-heading
+                .panel-heading(ng-click='spanQdiscuss = !spanQdiscuss' data-toggle='collapse', data-target='#discuss', aria-expanded='false', aria-controls='discuss')
+                    span.icon-comments
                     h3.panel-title 留言
                     .topRightBtn.topRightBtn-1(type='button', ng-click='spanQdiscuss = !spanQdiscuss' data-toggle='collapse', data-target='#discuss', aria-expanded='false', aria-controls='discuss')
                         span.fui-plus(ng-hide="spanQdiscuss")

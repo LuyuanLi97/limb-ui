@@ -1,3 +1,4 @@
+link(rel='stylesheet', href='css/myprofile.css')
 br
 .col-sm-3.col-xs-12
     img.bg#myicon(src='{{avatar}}', alt='icon')
@@ -25,13 +26,11 @@ br
 
             li.active(ng-show="ngChoice == 'stars'", role='presentation')
                 a(ng-click='ngChoice = "stars"') Stars
-                .col-xs-12.col-sm-6
-                ul
-                    li(ng-repeat='starFile in starList')
-                        a(href='/leaf/{{starFile.author}}/{{starFile.filename}}') {{starFile.filename}}-{{starFile.author}}
+                    span.badge {{starList.length}}
 
             li(ng-hide="ngChoice == 'stars'", role='presentation')
                 a(ng-click='ngChoice = "stars"') Stars
+                    span.badge {{starList.length}}
 
             li.active(ng-show="ngChoice == 'followers'", role='presentation')
                 a(ng-click='ngChoice = "followers"') Followers
@@ -48,14 +47,35 @@ br
             p.lead hello world 
         .col-xs-12.col-sm-6
             h5 leaves
-            ul
-                li(ng-repeat='filename in fileList')
+            div.leaves
+                .animate-repeat(ng-repeat='filename in fileList | filter:search as filteredLocalLeaves')
                     a(href='/leaf/{{name}}/{{filename}}') {{filename}}
-
 
     row(ng-if="ngChoice == 'leaves'")
-        .col-xs-12.col-sm-6
+        .col-xs-12
+            div.leaves
             br
-            ul
-                li(ng-repeat='filename in fileList')
-                    a(href='/leaf/{{name}}/{{filename}}') {{filename}}
+            .leafCard.animate-repeat(ng-repeat='filename in fileList | filter : search as filteredLocalLeaves')
+                a(href='/leaf/{{name}}/{{filename}}') {{filename}}
+                .rightIcon.pull-right(ng-click='editLeaf = !editLeaf')
+                    span.icon-gear
+                br
+                .rightIcon.trashIcon.pull-right(ng-click='modifyLeafName(filename)', ng-show='editLeaf')
+                    span.glyphicon.glyphicon-edit
+                br
+                .rightIcon.trashIcon.pull-right(ng-click='deleteLeaf(filename)', ng-show='editLeaf')
+                    span.icon-trash
+                    .col-xs-12.col-sm-6
+
+    row(ng-if="ngChoice == 'stars'")
+        .col-xs-12
+            .leafCard.animate-repeat(ng-repeat='starFile in starList | filter : search as filteredStarFile')
+                a(href='/leaf/{{starFile.author}}/{{starFile.filename}}')
+                    h5{{starFile.filename}}
+                    | by{{starFile.author}}
+                .rightIcon.pull-right(ng-click='editStarLeaf = !editStarLeaf')
+                    span.icon-gear
+                br
+                .rightIcon.trashIcon.pull-right(ng-click='deleteStarLeaf(filename)', ng-show='editStarLeaf')
+                    span.icon-trash
+                    .col-xs-12.col-sm-6

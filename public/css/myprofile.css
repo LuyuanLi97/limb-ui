@@ -1,0 +1,28 @@
+.leafCard {
+    padding: 7px;
+    margin: 5px;
+    width: 200px;
+    height: 100px;
+    position: relative;
+    background-color: white;
+    transition-duration: 1s;
+    border-radius: 2px;
+    box-shadow: 0px 1px 7px #a4a5a7;
+    float: left;
+}
+
+.rightIcon {
+    opacity: 0;
+}
+
+.leafCard:hover .rightIcon {
+    opacity: 0.3;
+}
+
+.leafCard:hover .rightIcon:hover {
+    opacity: 1;
+}
+
+.trashIcon:hover {
+    color: red;
+}

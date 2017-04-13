@@ -15,10 +15,10 @@ link(rel='stylesheet', href='css/browse.css')
 
                     li(ng-hide="ngfilter == 'all' || ngfilter-menu == 'all'")
                         a(ng-click='ngfilter = "all"', ng-init='ngfilter="all"') all
-                            span.badge {{filteredUsers.length + filteredLeaves.length + filteredDocs.length}}
+                            span.badge {{filteredUsers.length + filteredLeaves.length}}
                     li.active(ng-show="ngfilter == 'all' || ngfilter-menu == 'all'")
                         a(ng-click='ngfilter = "all"', ng-init='ngfilter="all"') all
-                            span.badge {{filteredUsers.length + filteredLeaves.length + filteredDocs.length}}
+                            span.badge {{filteredUsers.length + filteredLeaves.length}}
 
                     li(ng-hide="ngfilter == 'leaf' || ngfilter-menu == 'leaf'")
                         a(ng-click='ngfilter = "leaf"') leaf
@@ -27,13 +27,6 @@ link(rel='stylesheet', href='css/browse.css')
                         a(ng-click='ngfilter = "leaf"') leaf
                             span.badge {{filteredLeaves.length}}
 
-                    li(ng-hide="ngfilter == 'document' || ngfilter-menu == 'document'")
-                        a(ng-click='ngfilter = "document"') document
-                            span.badge {{filteredDocs.length}}            
-                    li.active(ng-show="ngfilter == 'document' || ngfilter-menu == 'document'")
-                        a(ng-click='ngfilter = "document"') document
-                            span.badge {{filteredDocs.length}}
-
                     li(ng-hide="ngfilter == 'user' || ngfilter-menu == 'user'")
                         a(ng-click='ngfilter = "user"') user 
                             span.badge {{filteredUsers.length}}
@@ -41,29 +34,18 @@ link(rel='stylesheet', href='css/browse.css')
                         a(ng-click='ngfilter = "user"') user 
                             span.badge {{filteredUsers.length}}
 
-                    li(ng-hide="ngfilter == 'local' || ngfilter-menu == 'local'")
-                        a(ng-click='ngfilter = "local"') local
-                    li.active(ng-show="ngfilter == 'local' || ngfilter-menu == 'local'")
-                        a(ng-click='ngfilter = "local"') local
-
         // with filter list
         .col-xs-12.col-sm-9(ng-hide="withFilters")
             br
             center.grid
-                .grid-item.animate-repeat(ng-repeat='leaf in leaves | filter : search as filteredLeaves', ng-if="ngfilter == 'all' || ngfilter == 'leaf'")
+                .grid-item.animate-repeat(ng-repeat='leaf in leaves | filter : {fileName:search} as filteredLeaves', ng-if="ngfilter == 'all' || ngfilter == 'leaf'")
                     a(href='/leaf/{{leaf.authorName}}/{{leaf.fileName}}')
                         .browse-card
                             h3 {{leaf.fileName}}
                             p by {{leaf.authorName}}
                             span.label.label-success leaf
 
-                .grid-item.animate-repeat(ng-repeat='document in documents | filter : search as filteredDocs', ng-if="ngfilter == 'all' || ngfilter == 'document'")
-                    a(href='/leaf')
-                        .browse-card
-                            h3 {{document.documentName}}
-                            span.label.label-warning document
-
-                .grid-item.animate-repeat(ng-repeat='user in users | filter : search as filteredUsers', ng-if="ngfilter == 'all' || ngfilter == 'user'")
+                .grid-item.animate-repeat(ng-repeat='user in users | filter : {name:search} as filteredUsers', ng-if="ngfilter == 'all' || ngfilter == 'user'")
                     a(href='/browse/user/{{user.email}}')
                         .browse-card
                             img(src="{{user.avatar}}")
@@ -75,20 +57,14 @@ link(rel='stylesheet', href='css/browse.css')
         .col-xs-12.col-sm-12(ng-show="withFilters")
             br    
             center.grid
-                .grid-item.animate-repeat(ng-repeat='leaf in leaves | filter : search as filteredLeaves', ng-if="ngfilter == 'all' || ngfilter == 'leaf'")
+                .grid-item.animate-repeat(ng-repeat='leaf in leaves | filter : {fileName:search} as filteredLeaves', ng-if="ngfilter == 'all' || ngfilter == 'leaf'")
                     a(href='/leaf/{{leaf.authorName}}/{{leaf.fileName}}')
                         .browse-card
                             h3 {{leaf.fileName}}
                             p by {{leaf.authorName}}
                             span.label.label-success leaf
 
-                .grid-item.animate-repeat(ng-repeat='document in documents | filter : search as filteredDocs', ng-if="ngfilter == 'all' || ngfilter == 'document'")
-                    a(href='/leaf')
-                        .browse-card
-                            h3 {{document.documentName}}
-                            span.label.label-warning document
-
-                .grid-item.animate-repeat(ng-repeat='user in users | filter : search as filteredUsers', ng-if="ngfilter == 'all' || ngfilter == 'user'")
+                .grid-item.animate-repeat(ng-repeat='user in users | filter : {name:search} as filteredUsers', ng-if="ngfilter == 'all' || ngfilter == 'user'")
                     a(href='/browse/user/{{user.email}}')
                         .browse-card
                             img(src="{{user.avatar}}")
