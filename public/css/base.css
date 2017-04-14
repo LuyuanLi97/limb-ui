@@ -18,5 +18,10 @@ img.bg {
     max-width: 200px;
 }
 
+img.md {
+    width: 100%;
+    max-width: 160px;
+}
+
 
 /*my profile and setting end*/

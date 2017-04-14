@@ -67,8 +67,8 @@ function SigninCtrl($scope, $http, $location, $rootScope, toastr) {
     $scope.formData = {};
     // $scope.formData.email = "945484716@qq.com";
     // $scope.formData.password = "123456";
-    $scope.formData.email = "chros@qq.com";
-    $scope.formData.password = "chrosl";
+    $scope.formData.email = "chroslen@gmail.com";
+    $scope.formData.password = "chroslen";
     $scope.switchToSignup = function() {
         $rootScope.title = 'Register';
     };

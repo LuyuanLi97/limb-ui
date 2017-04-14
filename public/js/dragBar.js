@@ -27,15 +27,22 @@ $(function() {
     });
 
     function span() {
-        left.css('right', '0px');
-        right.css('width', '0px');
+        left.css('right', '40%');
+        right.css('width', '40%');
         $('.toggleRightBar').one('click', hide);
     }
 
     function hide() {
-        left.css('right', '40%');
-        right.css('width', '40%');
+        left.css('right', '0px');
+        right.css('width', '0px');
         $('.toggleRightBar').one('click', span);
     }
     $('.toggleRightBar').one('click', span);
+
+    var el = document.querySelectorAll('.hamburger');
+    for (i = 0; i <= el.length; i++) {
+        el[i].addEventListener('click', function() {
+            this.classList.toggle('active');
+        }, false);
+    }
 });
