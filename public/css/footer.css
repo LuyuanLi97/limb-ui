@@ -1,31 +1,30 @@
 #footer {
     width: 100%;
+    height: 60px;
     position: relative;
     z-index: 1000;
-    background-color: #282C34;
-}
-
-.footer1 {
-    height: 97px;
-}
-
-.footer2 {
-    height: 120px;
-}
-
-span img {
-    width: 20px;
-    height: 20px;
+    background-color: #f3f3f3;
 }
 
 small, small a {
     font-weight: 100;
-    color: #bfc7cd;
     transition-delay: 0.1s;
+    color: gray !important;
+    margin-left: 3px;
+    margin-right: 3px;
 }
 
 small a:hover {
-    color: #16a085;
-    border-bottom: 1px #1abc9c solid;
+    text-decoration: underline;
     transition-delay: 0s;
+}
+
+.left {
+    float: left;
+    padding: 14px;
+}
+
+.right {
+    float: right;
+    padding: 14px;
 }

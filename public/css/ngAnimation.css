@@ -120,21 +120,21 @@
 @keyframes scaleUp {
     from {
         opacity: 0.3;
-        transform: scale(0.8);
+        transform: scale(1.1);
     }
 }
 
 @-moz-keyframes scaleUp {
     from {
         opacity: 0.3;
-        -moz-transform: scale(0.8);
+        -moz-transform: scale(1.1);
     }
 }
 
 @-webkit-keyframes scaleUp {
     from {
         opacity: 0.3;
-        -webkit-transform: scale(0.8);
+        -webkit-transform: scale(1.1);
     }
 }
 

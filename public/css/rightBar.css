@@ -1,3 +1,29 @@
+.panel-heading span {
+    margin-right: 5px;
+}
+
+.panel-heading h3 {
+    display: inline;
+    font-weight: 100;
+    font-size: 16px;
+}
+
+h1 {
+    font-size: 40px;
+}
+
+h2 {
+    font-size: 36px;
+}
+
+h3 {
+    font-size: 30px;
+}
+
+p {
+    font-size: 16px;
+}
+
 #leaf-right-bar {
     box-shadow: inset 3px 0 7px #7d7978;
     padding: 0px;
@@ -26,10 +52,11 @@
     background-color: white;
     color: gray;
     border: none;
+    padding: 5px 10px;
 }
 
-h3 {
-    font-weight: 100;
+.panel-primary:hover>.panel-heading {
+    color: green;
 }
 
 .panel-body {
@@ -44,24 +71,27 @@ h3 {
     transition-duration: 1s;
 }
 
-.breadcrumb:hover, .tagsinput-primary:hover, .rightBar-card:hover {
+
+/*.breadcrumb:hover, .tagsinput-primary:hover, .rightBar-card:hover {
     transform: translate(0px, -3px);
     box-shadow: 0px 1px 5px gray;
     transition-duration: 0s;
-}
+}*/
 
 #authorInfoContainer {
-    background-color: #222;
-    color: #999;
+    background-color: #f3f3f3;
+    color: black;
+    margin-top: -12px;
 }
 
 #authorInfo {
-    box-shadow: inset 0 -10px 10px black;
+    box-shadow: inset 0 -3px 7px #e8e8e8;
 }
 
 #authorInfoBtn {
     width: 100%;
-    background-color: #222;
+    height: 27px;
+    background-color: #f3f3f3;
     margin: 0;
     border: none;
 }
@@ -69,7 +99,7 @@ h3 {
 #goToLeafBtn {
     float: right;
     width: 20%;
-    background-color: #222;
+    background-color: #f3f3f3;
 }
 
 .breadcrumb, .tagsinput-primary, .form-horizontal .form-group {
@@ -135,11 +165,11 @@ ol li:last-child a:hover {
 /*markdown editor*/
 
 .md-editor.md-fullscreen-mode .md-header {
-    top: 53px !important;
+    top: 60px !important;
 }
 
 .md-editor.md-fullscreen-mode {
-    top: 53px !important;
+    top: 60px !important;
 }
 
 
@@ -149,7 +179,10 @@ ol li:last-child a:hover {
 /*panel-body padding*/
 
 .panel-body {
-    padding: 7px;
+    padding-left: 7px;
+    padding-right: 7px;
+    padding-top: 0;
+    padding-bottom: 0;
 }
 
 .no-padding {
@@ -179,13 +212,22 @@ ol li:last-child a:hover {
 }
 
 .rightIcon {
+    opacity: 0;
+}
+
+tr:hover .rightIcon {
     opacity: 0.3;
 }
 
-.rightIcon:hover {
+tr:hover .rightIcon:hover {
+    color: red;
     opacity: 1;
 }
 
 i.pull-right a:hover, p a:hover, td a:hover {
     border-bottom: 1px #1abc9c solid;
+}
+
+textarea.form-control {
+    border-radius: 0;
 }

@@ -1,7 +1,27 @@
-#toolBar
-    button#toolToggle.btn.btn-primary.btn-sm.btn-tool(type='button', ng-click="showTools = !showTools", data-toggle='collapse', data-target='#toolList', aria-expanded='false', aria-controls='toolList')
-        span.icon-angle-down(ng-show="showTools")
-        span.icon-angle-up(ng-hide="showTools")
+// for vistor
+#toolBar(ng-hide='currentUser.name == username')
+    #toolList1.collapse.in
+        button#star.btn.btn-primary.btn-sm.btn-tool(ng-click="stared = !stared", ng-show='signedinAlready')
+            span.icon-star-empty(ng-hide="stared")
+                span.hidden-xs 收藏
+            span.icon-star(ng-show="stared")
+                span.hidden-xs 取消收藏
+        button#share.btn.btn-primary.btn-sm.btn-tool(ng-show='signedinAlready')
+            span.icon-share-alt
+                span.hidden-xs 分享
+        button#clone.btn.btn-primary.btn-sm.btn-tool(ng-show='signedinAlready')
+            span.icon-sitemap
+                span.hidden-xs 克隆
+        button.toggleRightBar.btn.btn-primary.btn-sm.btn-tool(ng-click="showRightBar = !showRightBar")
+            span.icon-columns(ng-show="showRightBar")
+            span.icon-fullscreen(ng-hide="showRightBar")
+    span
+        button#toolToggleForVistor.btn.btn-primary.btn-sm.btn-tool(type='button', ng-click="showTools = !showTools", data-toggle='collapse', data-target='#toolList1', aria-expanded='false', aria-controls='toolList1', ng-show='signedinAlready')
+            span.icon-double-angle-down(ng-show="showTools")
+            span.icon-double-angle-up(ng-hide="showTools")
+
+// for author
+#toolBar(ng-show='currentUser.name == username')
     #toolList.collapse.in
         button#up.btn.btn-primary.btn-sm.btn-tool
             span.glyphicon.glyphicon-arrow-up
@@ -37,9 +57,22 @@
         button#save.btn.btn-primary.btn-sm.btn-tool
             span.glyphicon.glyphicon-cloud-upload
                 span.hidden-xs 保存
-        input#getUsername(value="{{username}}", type="hidden")
-        input#getFilename(value="{{filename}}", type="hidden")
+        button.toggleRightBar.btn.btn-primary.btn-sm.btn-tool(ng-click="showRightBar = !showRightBar")
+            span.icon-columns(ng-show="showRightBar")
+            span.icon-fullscreen(ng-hide="showRightBar")
+    span
+        button#toolToggleForAuthor.btn.btn-primary.btn-sm.btn-tool(type='button', ng-click="showTools = !showTools", data-toggle='collapse', data-target='#toolList', aria-expanded='false', aria-controls='toolList')
+            span.icon-double-angle-down(ng-show="showTools")
+                span.hidden-xs
+            span.icon-double-angle-up(ng-hide="showTools")
+                span.hidden-xs 
 
+
+div.hidden
+    input#getUsername(value="{{username}}", type="hidden")
+    input#getFilename(value="{{filename}}", type="hidden")
+    input#getCurrentUsername(value="{{currentUser.name}}", type="hidden")
+    button#alertSaved(ng-click='alertSaved()', type="hidden")
 
 
 #parent

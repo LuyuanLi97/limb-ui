@@ -1,27 +1,27 @@
-link(rel='stylesheet', type='text/css', href='css/signinAndRegister.css')
-.wrapper
-    .container
-        h1 Welcome to Leaf
-        form.form-login
-            input.input-login(type='text', value='', placeholder='用户名', ng-model='formData.name', ng-show="signingUp")
-            input.input-login(type='email', value='', placeholder='邮箱', ng-model='formData.email')
-            input.input-login(type='password', value='', placeholder='密码', ng-model='formData.password')
-            div(ng-hide="signingUp")
-                button#login-button(type='submit', ng-click='signin()') 登陆
-                a.login-link(ng-click='signingUp = !signingUp; switchToSignup()') 新用户?
-                a.login-link(href='#') 忘记密码?
-            div(ng-show="signingUp")
-                button#login-button(type='submit', ng-click='signup()') 注册
-                a.login-link(ng-click='signingUp = !signingUp; switchToSignin()') 已经有了一个账户? 
-    ul.bg-bubbles
-        li
-        li
-        li
-        li
-        li
-        li
-        li
-        li
-        li
-        li
-include ../components/footer
+link(rel='stylesheet', type='text/css', href='css/signin.css')
+
+.header
+    a.navbar-brand(href='/') 
+        img(src='img/leaf.png')
+        | &nbsp; Leaf &nbsp;
+.login-screen
+    .login-form
+        .form-group
+            input#login-name.form-control.login-field(type='text', value='', placeholder='用户名', ng-model='formData.name', ng-show="signingUp")
+            label.login-field-icon.fui-user
+
+        .form-group
+            input#login-email.form-control.login-field(type='email', value='', placeholder='邮箱', ng-model='formData.email')
+            label.login-field-icon.fui-mail
+
+        .form-group
+            input#login-pass.form-control.login-field(type='password', value='', placeholder='密码', ng-model='formData.password')
+            label.login-field-icon.fui-lock
+
+        div(ng-hide="signingUp")
+            a.btn.btn-primary.btn-lg.btn-block(type='submit', ng-click='signin()') 登陆
+            a.login-link(ng-click='signingUp = !signingUp; switchToSignup()') 新用户?
+            a.login-link(href='#') 忘记密码?
+        div(ng-show="signingUp")
+            a.btn.btn-primary.btn-lg.btn-block(type='submit', ng-click='signup()') 注册
+            a.login-link(ng-click='signingUp = !signingUp; switchToSignin()') 已经有了一个账户? 
