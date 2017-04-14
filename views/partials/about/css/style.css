@@ -19,17 +19,13 @@ Text Domain: creative
     /* height: auto; */
 }
 
-img {
-    height: 300px;
-    width: 500px;
-}
 
 .white{
     color: white;
 }
 
 .section {
-    padding: 6em 0;
+    padding: 3em 0;
 }
 
 
@@ -1051,7 +1047,6 @@ section:last-child {
     font-style: normal;
     font-weight: 400;
     font-size: 26px;
-    text-align: center;
     word-spacing: 4px;
     letter-spacing: .8px;
     line-height: 50px;
@@ -1355,7 +1350,7 @@ h2 {
 }
 
 #members {
-    background-color: #fff;
+    background-color: #1abc9c;
 }
 
 #members strong {
