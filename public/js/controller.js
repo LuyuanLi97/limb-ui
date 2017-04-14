@@ -10,13 +10,65 @@ function IndexCtrl($scope, $http, $location, $rootScope, toastr) {
     $scope.download = function(resource) {
         window.open(resource);
     }
+
+    $scope.switchToSignup = function() {
+        $rootScope.title = 'Register';
+    };
+    $scope.switchToSignin = function() {
+        $rootScope.title = 'Signin';
+    };
+    $scope.signup = function() {
+        swal({
+            title: $scope.formData.email + " ?",
+            text: "请再次检查您的邮箱. \n",
+            type: "info",
+            showCancelButton: true,
+            cancelButtonText: "取消",
+            confirmButtonColor: "#8cd4f5",
+            confirmButtonText: "注册!",
+            closeOnConfirm: false,
+            html: false
+        }, function() {
+            $http.post('/api/signup', $scope.formData)
+                .then(function(data) {
+                    if (data.data.status) {
+                        $rootScope.$broadcast('authenticationChanged');
+                        swal('注册成功!', 'Hi, ' + data.data.name + '!\nLeaf已向您发送一封验证邮件，为了您的安全，请尽快完成验证。\n接下来将自动为您登陆.', 'success');
+                        $location.path('/myprofile');
+                    } else {
+                        swal('注册失败!', data.data.message, 'error');
+                    }
+                }, function(error) {
+                    swal('注册失败!', '未知错误', 'error');
+                    console.log('Error: ' + error);
+                });
+        });
+    };
+    $scope.signin = function() {
+        $http.post('/api/signin', $scope.formData)
+            .then(function(data) {
+                if (data.data.status) {
+                    $rootScope.$broadcast('authenticationChanged');
+                    // swal('登陆成功!', 'Hi, ' + data.data.email + ' !', 'success');
+                    toastr.success('登陆成功!');
+                    $location.path('/myprofile');
+                } else {
+                    swal('登陆失败!', data.data.message, 'error');
+                }
+            }, function(error) {
+                swal('登陆失败!', '未知错误', 'error');
+                console.log('Error: ' + error);
+            });
+    };
 }
 
 function SigninCtrl($scope, $http, $location, $rootScope, toastr) {
     $scope.ngViewClass = 'page-signin';
     $scope.formData = {};
-    $scope.formData.email = "example@qq.com";
-    $scope.formData.password = "example";
+    // $scope.formData.email = "945484716@qq.com";
+    // $scope.formData.password = "123456";
+    $scope.formData.email = "chros@qq.com";
+    $scope.formData.password = "chrosl";
     $scope.switchToSignup = function() {
         $rootScope.title = 'Register';
     };
@@ -71,7 +123,7 @@ function SigninCtrl($scope, $http, $location, $rootScope, toastr) {
 /*
     获取用户资料
 */
-function MyprofileCtrl($scope, $http, $rootScope) {
+function MyprofileCtrl($scope, $http, $window, $location, $rootScope, toastr) {
     // console.log("myprofile");
     // console.log("params:"+$stateParams.username);
     $rootScope.$broadcast('authenticationChanged');
@@ -82,12 +134,25 @@ function MyprofileCtrl($scope, $http, $rootScope) {
             $scope.email = response.data.email;
             $scope.description = response.data.description;
             $scope.fileList = response.data.fileList;
+            $scope.starList = response.data.starList;
             $rootScope.title = $scope.name;
         }, function(error) {
             // 重定向到错误页面
             // $location.url('error');
+            $location.path('/');
             console.log('Error: ' + error);
         });
+
+    $scope.deleteLeaf = function(filename) {
+        var leafData = {
+            "filename": filename
+        };
+        if (confirm("你确定要删除吗?")) {
+            $.post('/api/deleteFile', leafData);
+            toastr.success("删除成功!");
+            $window.location.reload();
+        }
+    };
 };
 
 /*
@@ -232,7 +297,9 @@ function LeafCtrl($scope, $rootScope, $http, $location, toastr, $window, $routeP
 
     // 如果用户在这个页面刷新，广播能够根据用户的登陆状态修改导航栏的右上角数据
     $rootScope.$broadcast('authenticationChanged');
-
+    // $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
+    //     console.log("路由变了");
+    // });
     $scope.username = $routeParams.username;
     $scope.filename = $routeParams.filename;
     $rootScope.title = $routeParams.username + ' · ' + $routeParams.filename;
@@ -256,12 +323,28 @@ function LeafCtrl($scope, $rootScope, $http, $location, toastr, $window, $routeP
             console.log('Error: ' + error);
         });
 
+    $scope.alertSaved = function() {
+        toastr.success('已自动保存！');
+    }
+
+    // 提醒保存（如果是作者的话）
+    $scope.$on('$locationChangeStart', function(event) {
+        if ($scope.currentUser.name == $scope.username) {
+            var answer = confirm("确认已经保存了吗？");
+            if (!answer) {
+                event.preventDefault();
+            }
+        }
+    });
     // 选中一个节点时
     $scope.getNodeData = function() {
         console.log("$scope.nodeId: " + $scope.nodeId);
         console.log("$scope.nodeString: " + $scope.nodeString);
 
         $scope.nodePath = $scope.nodeString.split(",").reverse();
+        if ($scope.nodePath.length > 3) { // 3 node path
+            $scope.nodePath = $scope.nodePath.slice($scope.nodePath.length - 3);
+        }
         console.log("$scope.nodePath: " + $scope.nodePath);
         $scope.currentNodeId = $scope.nodeId;
         getNodeDataFormDB();
@@ -460,7 +543,6 @@ function BrowseCtrl($scope, $rootScope, $http, $routeParams) {
                         "fileName": filename,
                         "type": "leaf"
                     };
-                    console.log('oneLeaf: ' + leaf);
                     $scope.leaves.push(leaf);
                 });
             });
@@ -497,17 +579,41 @@ app.controller('newLeafCtrl', newLeafCtrl);
 
 function newLeafCtrl($scope, $window, $location, $http) {
     $scope.newPublicLeaf = function() {
+        var fileNULL = false;
         var filename = $window.prompt("请输入文件名");
-        if (filename == null || filename == "")
-            filename = "file" + Math.random() * 10000;
-        $scope.filename = filename;
-        $http.get('/api/myprofile')
-            .then(function(response) {
-                $scope.author = response.data.name;
-                $location.path('leaf/' + $scope.author + '/' + $scope.filename);
-            }, function(error) {
-                console.log('Error: ' + error);
-            });
+        if (filename == null || filename == "") {
+            fileNULL = true;
+        }
+        if (!fileNULL) {
+            $scope.filename = filename;
+            $http.get('/api/myprofile')
+                .then(function(response) {
+                    $scope.author = response.data.name;
+                    $http.get('/api/getFileFromDatabase' + '/' + $scope.author + '/' + $scope.filename)
+                        .then(function(response) {
+                            var file = response.data;
+                            // 返回是一个对象
+                            // 文件存在
+                            if (JSON.stringify(file) != "{}") {
+                                $window.alert("已有相同文件名，创建失败");
+                                // 提示用户可以打开同名文件
+                                if ($window.confirm("你需要打开已存在的名字是 \'" + $scope.filename + "\' 的文件吗?")) {
+                                    console.log("confirm yes!");
+                                    $location.path('leaf/' + $scope.author + '/' + $scope.filename);
+                                }
+                            } else {
+                                console.log("不存在该文件");
+                                $location.path('leaf/' + $scope.author + '/' + $scope.filename);
+                            }
+                        }).catch(function(err) {
+                            console.log("err" + err);
+                        });
+                }, function(error) {
+                    console.log('Error: ' + error);
+                });
+        } else {
+            $window.alert("创建文件失败，请检查文件名是否为空");
+        }
     }
 }
 

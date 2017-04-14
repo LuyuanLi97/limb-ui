@@ -290,7 +290,13 @@ exports.getFileFromDatabase = function(req, res, next) {
         .then(function(response) {
             console.log("I am data: ");
             console.log(response);
-            res.json(response[0].data);
+            if (response.toString() != 0) {
+                res.json(response[0].data);
+            } else {
+                res.json({});
+            }
+            console.log("I can return...");
+            return response;
         });
 };
 
@@ -330,6 +336,135 @@ exports.saveFileToDatabase = function(req, res, next) {
                 });
             }
         });
+}
+
+exports.deleteFile = function(req, res, next) {
+    var author = req.session.user.name;
+    var filename = req.body.filename;
+    var myfile = {
+        "author": author,
+        "filename": filename
+    };
+
+    return fileModel.getDataByFilenameAndAuthor(myfile)
+        .then(function(response) {
+            // console.log("放回了什么:");
+            // console.log(response);
+            if (response.toString() != "") {
+                // 文件存在
+                // console.log("文件不是第一次存的");
+                // 删除文件
+                fileModel.remove(myfile);
+                userModel.update({
+                    "name": author
+                }, {
+                    $pull: {
+                        "fileList": filename
+                    }
+                });
+            }
+        });
+}
+
+exports.changeFilename = function(req, res, next) {
+    var username = req.session.user.name;
+    var oldFilename = req.params.filename;
+    var newFilename = req.body.filename;
+
+    var myfile = {
+        "author": username,
+        "filename": oldFilename
+    };
+
+    console.log("I am old filename: "+oldFilename);
+    console.log("I am new filename: "+newFilename);
+    var newfile = {
+        "author": username,
+        "filename": newFilename
+    }
+
+    return fileModel.getDataByFilenameAndAuthor(myfile)
+        .then(function(response) {
+            // console.log("放回了什么:");
+            // console.log(response);
+            if (response.toString() != "") {
+                // fileModel里面修改
+                fileModel.updateFile(myfile, newfile);
+                // 用户里面改
+                userModel.update({
+                    "name": username,
+                    "fileList": oldFilename,
+                    "$atomic": "true"
+                }, {
+                    $set: {
+                        "fileList.$": newFilename
+                    }
+                });
+            } else {
+                res.json("haha!");
+            }
+        });
+
+}
+
+exports.cloneFile = function(req, res, next) {
+    var username = req.session.user.name;
+    var filename = req.body.filename;
+    var author = req.body.author;
+    var myfile = {
+        "author": username,
+        "filename": filename
+    };
+    var newfile = {
+        "author": username,
+        "filename": filename+"-"+author,
+        "data": req.body
+    };
+
+    // 保存文件
+    fileModel.getDataByFilenameAndAuthor(myfile)
+        .then(function(response) {
+            // console.log("放回了什么:");
+            // console.log(response);
+            if (response.toString() != "") {
+                // 文件已存在
+                console.log("文件不是第一次存的");
+                fileModel.updateFile({"author": username, "filename": filename+"-"+author}, newfile);
+            } else {
+                // 文件第一次存
+                fileModel.create(newfile);
+                // 连接用户和文件
+                userModel.update({
+                    "name": username
+                }, {
+                    $addToSet: {
+                        "fileList": newfile.filename
+                    }
+                });
+            }
+        });
+}
+
+exports.starFile = function(req, res, next) {
+    var username = req.session.user.name;
+    var author = req.body.author;
+    var filename = req.body.filename;
+
+    console.log(username);
+    console.log(author);
+    console.log(filename);
+
+    // 增加到user的starList
+    userModel.update({
+        "name": username
+    }, {
+        $addToSet: {
+            "starList": {
+                "author": author,
+                "filename" : filename
+            }
+        }
+    });
 
 }
 
@@ -359,3 +494,5 @@ exports.getCreateJson = function(req, res, next) {
         "tree": []
     });
 }
+
+
