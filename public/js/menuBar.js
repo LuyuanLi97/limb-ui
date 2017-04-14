@@ -3,6 +3,6 @@ $(".dropdown").hover(
         $(this).addClass("open");
     },
     function() {
-        $(this).delay(8000).removeClass("open");
+        $(this).removeClass("open");
     }
 );

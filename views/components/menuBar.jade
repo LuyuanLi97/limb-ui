@@ -9,10 +9,13 @@
                 img(src='img/leaf.png')
                 | &nbsp; Leaf &nbsp;
             .phoneSearchBar.visible-xs
-                form
-                    input.form-control.phoneSearchBarFormCtrl(type='search', placeholder='Search Leaf', ng-model='search', ng-show='clickSearch')
-                    a(href='/browse', ng-click='clickSearch = !clickSearch')
-                        span.fui-search
+                form.navbar-form.navbar-left(role='search').show-xs
+                    .form-group.has-feedback
+                        .input-group
+                            input.form-control(type='search', placeholder='搜索', ng-model='search')
+                            a.browseIconBg(href='/browse')
+                                span.fui-search
+
         // Collect the nav links, forms, and other content for toggling
         #bs-example-navbar-collapse-1.collapse.navbar-collapse
             a.menuBrowse(href='/browse') browse

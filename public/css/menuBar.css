@@ -97,10 +97,10 @@
 
 .menuToggle {
     position: absolute;
-    color: white;
+    color: #2dbe60;
     font-size: 20px;
-    top: 8px;
-    right: 18px;
+    top: 12px;
+    right: 20px;
 }
 
 
@@ -121,29 +121,18 @@
 
 .phoneSearchBar {
     position: absolute;
-    top: 8px;
-    right: 52px;
-    height: 36px;
-    border-radius: 18px;
-}
-
-.phoneSearchBar>input, .phoneSearchBarFormCtrl {
-    position: absolute;
-    border: none;
-    border-radius: 0px;
-    border-bottom: 1px gray solid;
-    background: transparent;
-    color: #1abc9c;
-    right: 30px;
-    height: 36px;
-    width: 150px;
+    right: 60px;
 }
 
 .phoneSearchBar a {
     position: absolute;
-    right: 0px;
+    right: 10px;
     font-size: 20px;
-    color: white;
+    color: #2dbe60;
+}
+
+.navbar-form {
+    margin: 0;
 }
 
 
@@ -205,10 +194,10 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
 
 .browseIconBg {
     position: absolute;
-    right: 12px;
+    right: 10px;
     top: 5px;
     opacity: 0;
-    transition: 0.5s;
+    transition: 0.3s;
 }
 
 
@@ -249,6 +238,19 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
 @media only screen and (max-width: 750px) {
     .menuSignin form button {
         float: left !important;
+    }
+    .navbar-inverse .navbar-form .form-control, .navbar-inverse .navbar-form .select2-search input[type="text"] {
+        width: 90px;
+        -webkit-transition: width ease-in-out 0.5s;
+        /* Safari */
+        transition: width ease-in-out 0.5s;
+    }
+    .navbar-inverse .navbar-form .form-control:focus, .navbar-inverse .navbar-form .select2-search input[type="text"]:focus {
+        width: 180px;
+    }
+    .browseIconBg {
+        position: absolute;
+        right: 30px;
     }
 }
 

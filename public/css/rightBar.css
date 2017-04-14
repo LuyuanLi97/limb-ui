@@ -25,12 +25,11 @@ p {
 }
 
 #leaf-right-bar {
-    box-shadow: inset 3px 0 7px #7d7978;
+    /*box-shadow: inset 3px 0 7px #7d7978;*/
     padding: 0px;
     font-size: 16px;
     height: 100%;
     overflow: auto;
-    background: linear-gradient(70deg, #b889ef, #97d0e1);
     position: relative;
     z-index: 100 !important;
 }
@@ -56,7 +55,7 @@ p {
 }
 
 .panel-primary:hover>.panel-heading {
-    color: green;
+    color: #2dbe60;
 }
 
 .panel-body {
@@ -81,7 +80,7 @@ p {
 #authorInfoContainer {
     background-color: #f3f3f3;
     color: black;
-    margin-top: -12px;
+    margin-top: -17px;
 }
 
 #authorInfo {
@@ -91,9 +90,10 @@ p {
 #authorInfoBtn {
     width: 100%;
     height: 27px;
-    background-color: #f3f3f3;
+    background-color: #2dbe60;
     margin: 0;
     border: none;
+    border-radius: 0;
 }
 
 #goToLeafBtn {

@@ -10,7 +10,7 @@
     left: 0;
     top: 0;
     bottom: 0;
-    right: 100px;
+    right: 0;
     background: white;
 }
 
@@ -19,7 +19,7 @@
     right: 0;
     top: 0;
     bottom: 0;
-    width: 40%;
+    width: 0;
 }
 
 #drag {
@@ -41,7 +41,7 @@
         position: relative;
         height: 100%;
         width: 100%;
-        border-top: gray 10px solid;
+        border-top: #2dbe60 10px solid;
     }
     #drag {
         display: none;

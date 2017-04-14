@@ -1,22 +1,32 @@
 // for vistor
 #toolBar(ng-hide='currentUser.name == username')
     #toolList1.collapse.in
+        button#up.btn.btn-primary.btn-sm.btn-tool
+            span.glyphicon.glyphicon-arrow-up
+                span.hidden-xs.hidden-sm 上移
+        button#left.btn.btn-primary.btn-sm.btn-tool
+            span.glyphicon.glyphicon-arrow-left
+                span.hidden-xs.hidden-sm 左移
         button#star.btn.btn-primary.btn-sm.btn-tool(ng-click="stared = !stared", ng-show='signedinAlready')
             span.icon-star-empty(ng-hide="stared")
                 span.hidden-xs 收藏
             span.icon-star(ng-show="stared")
                 span.hidden-xs 取消收藏
-        button#share.btn.btn-primary.btn-sm.btn-tool(ng-show='signedinAlready')
-            span.icon-share-alt
-                span.hidden-xs 分享
+        br
+        button#down.btn.btn-primary.btn-sm.btn-tool
+            span.glyphicon.glyphicon-arrow-down
+                span.hidden-xs.hidden-sm 下移
+        button#right.btn.btn-primary.btn-sm.btn-tool
+            span.glyphicon.glyphicon-arrow-right
+                span.hidden-xs.hidden-sm 右移
         button#clone.btn.btn-primary.btn-sm.btn-tool(ng-show='signedinAlready')
             span.icon-sitemap
                 span.hidden-xs 克隆
-        button.toggleRightBar.btn.btn-primary.btn-sm.btn-tool(ng-click="showRightBar = !showRightBar")
-            span.icon-columns(ng-show="showRightBar")
-            span.icon-fullscreen(ng-hide="showRightBar")
+        button#share.btn.btn-primary.btn-sm.btn-tool(ng-show='signedinAlready')
+            span.icon-share-alt
+                span.hidden-xs 分享
     span
-        button#toolToggleForVistor.btn.btn-primary.btn-sm.btn-tool(type='button', ng-click="showTools = !showTools", data-toggle='collapse', data-target='#toolList1', aria-expanded='false', aria-controls='toolList1', ng-show='signedinAlready')
+        button#toolToggleForVistor.btn.btn-primary.btn-sm.btn-tool(type='button', ng-click="showTools = !showTools", data-toggle='collapse', data-target='#toolList1', aria-expanded='false', aria-controls='toolList1')
             span.icon-double-angle-down(ng-show="showTools")
             span.icon-double-angle-up(ng-hide="showTools")
 
@@ -57,9 +67,6 @@
         button#save.btn.btn-primary.btn-sm.btn-tool
             span.glyphicon.glyphicon-cloud-upload
                 span.hidden-xs 保存
-        button.toggleRightBar.btn.btn-primary.btn-sm.btn-tool(ng-click="showRightBar = !showRightBar")
-            span.icon-columns(ng-show="showRightBar")
-            span.icon-fullscreen(ng-hide="showRightBar")
     span
         button#toolToggleForAuthor.btn.btn-primary.btn-sm.btn-tool(type='button', ng-click="showTools = !showTools", data-toggle='collapse', data-target='#toolList', aria-expanded='false', aria-controls='toolList')
             span.icon-double-angle-down(ng-show="showTools")
@@ -67,6 +74,8 @@
             span.icon-double-angle-up(ng-hide="showTools")
                 span.hidden-xs 
 
+button.hamburger.hamburger-arrow-right.toggleRightBar
+    span.icon
 
 div.hidden
     input#getUsername(value="{{username}}", type="hidden")
